@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model
 {
@@ -23,19 +23,28 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'price' => 'integer',
+        'price'          => 'decimal:2',
         'estimated_days' => 'integer',
         'is_best_seller' => 'boolean',
-        'is_active' => 'boolean',
+        'is_active'      => 'boolean',
     ];
 
+    /** Relasi gambar, default urut ASC by sort_order */
+    public function images(): HasMany
+    {
+        return $this->hasMany(ProductImage::class, 'product_id')
+            ->orderBy('sort_order', 'asc');
+    }
+
+    /** Relasi kategori (pivot: product_categories) */
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class, 'product_categories', 'product_id', 'category_id');
     }
 
-    public function images(): HasMany
+    /** Scope produk aktif (opsional) */
+    public function scopeActive($q)
     {
-        return $this->hasMany(ProductImage::class, 'product_id');
+        return $q->where('is_active', true);
     }
 }

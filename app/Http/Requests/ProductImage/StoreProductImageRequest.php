@@ -8,33 +8,22 @@ class StoreProductImageRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return true; // protect via route middleware (auth)
     }
 
     public function rules(): array
     {
         return [
-            // input field 'image' per catatan: required image types jpeg,png,webp, max ~2MB
-            'image' => 'required|file|image|mimes:jpeg,png,webp|max:2048',
-            'sort_order' => 'sometimes|integer|min:0',
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'image.required' => 'Gambar produk wajib diunggah.',
-            'image.image' => 'File harus berupa gambar.',
-            'image.mimes' => 'Tipe gambar tidak didukung. Gunakan jpeg, png, atau webp.',
-            'image.max' => 'Ukuran gambar maksimal 2MB.',
+            'image'      => ['required', 'image', 'mimes:jpeg,png,webp', 'max:2048'],
+            'sort_order' => ['sometimes', 'integer', 'min:0'],
         ];
     }
 
     public function attributes(): array
     {
         return [
-            'image' => 'gambar produk',
-            'sort_order' => 'urutan gambar',
+            'image'      => 'gambar produk',
+            'sort_order' => 'urutan',
         ];
     }
 }

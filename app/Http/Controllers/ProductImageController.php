@@ -3,123 +3,144 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\QueryException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Requests\ProductImage\StoreProductImageRequest;
-use App\Services\Catalog\ProductImageService;
 use App\Models\Product;
+use App\Models\ProductImage;
+use Illuminate\Support\Facades\Storage;
 
 class ProductImageController extends Controller
 {
-    protected ProductImageService $productImageService;
-
-    public function __construct(ProductImageService $productImageService)
-    {
-        $this->productImageService = $productImageService;
-    }
-
     /**
-     * List images for a product.
-     *
-     * 200 -> data: [ { id, url, is_cover? }, ... ]
-     * 404 -> product not found
+     * GET /catalog/products/{product}/images
+     * List images of a product (public).
      */
     public function index(int $productId)
     {
         $product = Product::find($productId);
         if (! $product) {
-            return response()->json(['message' => 'Not Found'], 404);
+            return response()->json(['message' => 'Product not found.'], 404);
         }
 
-        $images = $this->productImageService->listByProduct($productId);
+        $images = ProductImage::where('product_id', $productId)
+            ->orderBy('sort_order', 'asc')
+            ->get()
+            ->map(function ($img) {
+                return [
+                    'id'        => $img->id,
+                    'url'       => $img->url, // sudah publik jika accessor di model dibuat
+                    'sort_order'=> $img->sort_order,
+                ];
+            });
 
-        return response()->json(['data' => $images->values()->all()], 200);
+        return response()->json(['data' => $images]);
     }
 
     /**
-     * Store an uploaded product image.
-     *
-     * 201 -> created with data
-     * 404 -> product not found
+     * POST /admin/products/{product}/images
+     * Upload new image for product.
      */
     public function store(StoreProductImageRequest $request, int $productId)
     {
         $product = Product::find($productId);
         if (! $product) {
-            return response()->json(['message' => 'Not Found'], 404);
+            return response()->json(['message' => 'Product not found.'], 404);
         }
 
         $file = $request->file('image');
-
-        $options = [];
-        if ($request->filled('sort_order')) {
-            $options['sort_order'] = (int)$request->input('sort_order');
-        }
-        if (Schema::hasColumn('product_images', 'is_cover') && $request->filled('is_cover')) {
-            $options['is_cover'] = (bool)$request->input('is_cover');
-        }
+        $path = $file->store('products', 'public');
 
         try {
-            $created = $this->productImageService->store($productId, $file, $options);
-            return response()->json(['data' => $created], 201);
+            $image = ProductImage::create([
+                'product_id' => $productId,
+                'url'        => $path,
+                'sort_order' => $request->input('sort_order', 0),
+            ]);
+
+            return response()->json([
+                'message' => 'Image uploaded successfully.',
+                'data'    => [
+                    'id'         => $image->id,
+                    'url'        => $image->url, // accessor → URL publik
+                    'sort_order' => $image->sort_order,
+                ],
+            ], 201);
         } catch (QueryException $e) {
-            return response()->json(['message' => 'Could not create image'], 500);
-        } catch (\Throwable $e) {
-            return response()->json(['message' => 'Server Error'], 500);
+            return response()->json([
+                'message' => 'Database error while saving image.',
+                'error'   => $e->getMessage(),
+            ], 500);
         }
     }
 
     /**
-     * Delete product image.
-     *
-     * 204 -> deleted
-     * 404 -> product or image not found
+     * DELETE /admin/products/{product}/images/{image}
+     * Delete image from storage & database.
      */
     public function destroy(int $productId, int $imageId)
     {
         $product = Product::find($productId);
         if (! $product) {
-            return response()->json(null, 404);
+            return response()->json(['message' => 'Product not found.'], 404);
+        }
+
+        $image = ProductImage::where('product_id', $productId)->find($imageId);
+        if (! $image) {
+            return response()->json(['message' => 'Image not found.'], 404);
         }
 
         try {
-            $deleted = $this->productImageService->delete($productId, $imageId);
-            if (! $deleted) {
-                return response()->json(null, 404);
+            // Hapus file dari disk jika masih ada
+            if (Storage::disk('public')->exists($image->url)) {
+                Storage::disk('public')->delete($image->url);
             }
-            return response()->json(null, 204);
+
+            $image->delete();
+            return response()->noContent(); // 204 tanpa body
         } catch (QueryException $e) {
-            return response()->json(['message' => 'Resource cannot be deleted due to constraint'], 409);
-        } catch (\Throwable $e) {
-            return response()->json(['message' => 'Server Error'], 500);
+            $code = $e->errorInfo[1] ?? null;
+            if (in_array($code, [1451, 547])) {
+                return response()->json([
+                    'message' => 'Cannot delete image, referenced by another record.',
+                ], 409);
+            }
+
+            return response()->json([
+                'message' => 'Database error while deleting image.',
+                'error'   => $e->getMessage(),
+            ], 500);
         }
     }
 
     /**
-     * Set image as cover (optional endpoint).
-     *
-     * 200 -> data: { id, url, is_cover }
-     * 404 -> product or image not found OR feature not available
+     * POST /admin/products/{product}/images/{image}/set-cover
+     * Set image as cover (only if column is_cover exists).
      */
     public function setCover(int $productId, int $imageId)
     {
+        if (! Schema::hasColumn('product_images', 'is_cover')) {
+            return response()->json([
+                'message' => 'Feature not supported: `is_cover` column not found.',
+            ], 400);
+        }
+
         $product = Product::find($productId);
         if (! $product) {
-            return response()->json(['message' => 'Not Found'], 404);
+            return response()->json(['message' => 'Product not found.'], 404);
         }
 
-        if (! Schema::hasColumn('product_images', 'is_cover')) {
-            return response()->json(['message' => 'Not Found'], 404);
+        $image = ProductImage::where('product_id', $productId)->find($imageId);
+        if (! $image) {
+            return response()->json(['message' => 'Image not found.'], 404);
         }
 
-        try {
-            $result = $this->productImageService->setCover($productId, $imageId);
-            return response()->json(['data' => $result], 200);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(null, 404);
-        } catch (\Throwable $e) {
-            return response()->json(['message' => 'Server Error'], 500);
-        }
+        DB::transaction(function () use ($productId, $imageId) {
+            ProductImage::where('product_id', $productId)->update(['is_cover' => false]);
+            ProductImage::where('id', $imageId)->update(['is_cover' => true]);
+        });
+
+        return response()->json(['message' => 'Cover image set successfully.']);
     }
 }

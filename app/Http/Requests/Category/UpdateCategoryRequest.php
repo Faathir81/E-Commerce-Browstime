@@ -9,37 +9,24 @@ class UpdateCategoryRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return true; // protect via route middleware (auth)
     }
 
     public function rules(): array
     {
-        $category = $this->route('category');
-        $categoryId = is_object($category) ? ($category->id ?? null) : $category;
-
-        $slugRule = Rule::unique('categories', 'slug');
-        if ($categoryId !== null) {
-            $slugRule = $slugRule->ignore($categoryId);
-        }
+        $categoryId = (int) $this->route('category');
 
         return [
-            'name' => 'sometimes|required|string|max:255',
+            'name' => ['sometimes', 'string', 'max:100'],
             'slug' => [
                 'sometimes',
-                'required',
                 'string',
-                'max:255',
-                $slugRule,
+                'max:120',
+                'alpha_dash',
+                Rule::unique('categories', 'slug')
+                    ->ignore($categoryId)
+                    ->whereNull('deleted_at'),
             ],
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'name.required' => 'Nama kategori wajib diisi.',
-            'slug.required' => 'Slug wajib diisi.',
-            'slug.unique' => 'Slug sudah digunakan.',
         ];
     }
 
@@ -47,7 +34,7 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name' => 'nama kategori',
-            'slug' => 'slug',
+            'slug' => 'slug kategori',
         ];
     }
 }

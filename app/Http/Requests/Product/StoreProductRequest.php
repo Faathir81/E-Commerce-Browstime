@@ -9,45 +9,46 @@ class StoreProductRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return true; // protect via route middleware (auth)
     }
 
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'slug' => [
+            'name'           => ['required', 'string', 'max:150'],
+            'slug'           => [
                 'required',
                 'string',
-                'max:255',
-                Rule::unique('products', 'slug'),
+                'max:180',
+                'alpha_dash',
+                Rule::unique('products', 'slug')->whereNull('deleted_at'),
             ],
-            'price' => 'required|numeric|min:0',
-            'category_id' => 'required|integer|exists:categories,id',
-            // other safe fields if present in DB can be provided as nullable
-            'short_label' => 'sometimes|nullable|string|max:255',
-            'description' => 'sometimes|nullable|string',
-            'estimated_days' => 'sometimes|nullable|integer|min:0',
-            'is_best_seller' => 'sometimes|boolean',
-            'is_active' => 'sometimes|boolean',
+            'short_label'    => ['nullable', 'string', 'max:50'],
+            'description'    => ['nullable', 'string'],
+            'price'          => ['required', 'numeric', 'min:0'],
+            'estimated_days' => ['required', 'integer', 'min:1'],
+            'is_best_seller' => ['sometimes', 'boolean'],
+            'is_active'      => ['sometimes', 'boolean'],
+
+            // M:N categories via pivot product_categories
+            'categories'     => ['sometimes', 'array'],
+            'categories.*'   => ['integer', 'distinct', 'exists:categories,id'],
         ];
     }
 
-    public function messages(): array
+    protected function prepareForValidation(): void
     {
-        return [
-            'slug.unique' => 'Slug sudah digunakan.',
-            'category_id.exists' => 'Kategori tidak ditemukan.',
-        ];
+        $this->merge([
+            'is_best_seller' => filter_var($this->input('is_best_seller', false), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+            'is_active'      => filter_var($this->input('is_active', true), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+        ]);
     }
 
     public function attributes(): array
     {
         return [
-            'name' => 'nama produk',
-            'slug' => 'slug produk',
-            'price' => 'harga',
-            'category_id' => 'kategori',
+            'short_label'    => 'label singkat',
+            'estimated_days' => 'estimasi hari',
         ];
     }
 }

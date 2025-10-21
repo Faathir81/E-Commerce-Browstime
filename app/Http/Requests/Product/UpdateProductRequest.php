@@ -9,53 +9,55 @@ class UpdateProductRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return true; // protect via route middleware (auth)
     }
 
     public function rules(): array
     {
-        $product = $this->route('product');
-        $productId = is_object($product) ? ($product->id ?? null) : $product;
-
-        $slugRule = Rule::unique('products', 'slug');
-        if ($productId !== null) {
-            $slugRule = $slugRule->ignore($productId);
-        }
+        $productId = (int) $this->route('product');
 
         return [
-            'name' => 'sometimes|required|string|max:255',
-            'slug' => [
+            'name'           => ['sometimes', 'string', 'max:150'],
+            'slug'           => [
                 'sometimes',
-                'required',
                 'string',
-                'max:255',
-                $slugRule,
+                'max:180',
+                'alpha_dash',
+                Rule::unique('products', 'slug')
+                    ->ignore($productId)
+                    ->whereNull('deleted_at'),
             ],
-            'price' => 'sometimes|required|numeric|min:0',
-            'category_id' => 'sometimes|required|integer|exists:categories,id',
-            'short_label' => 'sometimes|nullable|string|max:255',
-            'description' => 'sometimes|nullable|string',
-            'estimated_days' => 'sometimes|nullable|integer|min:0',
-            'is_best_seller' => 'sometimes|boolean',
-            'is_active' => 'sometimes|boolean',
+            'short_label'    => ['sometimes', 'nullable', 'string', 'max:50'],
+            'description'    => ['sometimes', 'nullable', 'string'],
+            'price'          => ['sometimes', 'numeric', 'min:0'],
+            'estimated_days' => ['sometimes', 'integer', 'min:1'],
+            'is_best_seller' => ['sometimes', 'boolean'],
+            'is_active'      => ['sometimes', 'boolean'],
+
+            'categories'     => ['sometimes', 'array'],
+            'categories.*'   => ['integer', 'distinct', 'exists:categories,id'],
         ];
     }
 
-    public function messages(): array
+    protected function prepareForValidation(): void
     {
-        return [
-            'slug.unique' => 'Slug sudah digunakan.',
-            'category_id.exists' => 'Kategori tidak ditemukan.',
-        ];
+        $mapBool = static fn ($v) => filter_var($v, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+        $payload = $this->all();
+        if ($this->has('is_best_seller')) {
+            $payload['is_best_seller'] = $mapBool($this->input('is_best_seller'));
+        }
+        if ($this->has('is_active')) {
+            $payload['is_active'] = $mapBool($this->input('is_active'));
+        }
+        $this->replace($payload);
     }
 
     public function attributes(): array
     {
         return [
-            'name' => 'nama produk',
-            'slug' => 'slug produk',
-            'price' => 'harga',
-            'category_id' => 'kategori',
+            'short_label'    => 'label singkat',
+            'estimated_days' => 'estimasi hari',
         ];
     }
 }

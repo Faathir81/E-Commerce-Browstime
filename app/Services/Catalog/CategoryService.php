@@ -2,67 +2,39 @@
 
 namespace App\Services\Catalog;
 
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use App\Models\Category;
 
 class CategoryService
 {
-    /**
-     * List categories.
-     *
-     * @return Collection
-     */
-    public function list(): Collection
+    public function store(array $data): Category
     {
-        return Category::all();
+        return Category::create($data);
+    }
+
+    public function update(int $id, array $data): ?Category
+    {
+        $cat = Category::find($id);
+        if (! $cat) return null;
+
+        $cat->update($data);
+        return $cat;
     }
 
     /**
-     * Create category.
-     *
-     * @param array $data
-     * @return Category
+     * Hapus kategori hanya jika tidak dipakai produk.
+     * - Return false jika tidak ditemukan.
+     * - Throw \RuntimeException('in_use') kalau masih direferensikan.
      */
-    public function create(array $data): Category
+    public function destroy(int $id): bool
     {
-        return DB::transaction(function () use ($data) {
-            return Category::create($data);
-        });
-    }
+        $cat = Category::withCount('products')->find($id);
+        if (! $cat) return false;
 
-    /**
-     * Update category.
-     *
-     * @param int $id
-     * @param array $data
-     * @return Category
-     */
-    public function update(int $id, array $data): Category
-    {
-        return DB::transaction(function () use ($id, $data) {
-            $category = Category::findOrFail($id);
-            $category->update($data);
-            return $category->refresh();
-        });
-    }
-
-    /**
-     * Delete category.
-     *
-     * @param int $id
-     * @return bool
-     */
-    public function delete(int $id): bool
-    {
-        $category = Category::find($id);
-        if (! $category) {
-            return false;
+        if ($cat->products_count > 0) {
+            throw new \RuntimeException('in_use');
         }
 
-        return DB::transaction(function () use ($category) {
-            $category->delete();
-            return true;
-        });
+        $cat->delete();
+        return true;
     }
 }

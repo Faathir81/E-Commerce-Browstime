@@ -6,14 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 
-/**
- * @property-read string|null $url
- */
 class ProductImage extends Model
 {
     protected $fillable = [
         'product_id',
-        'url',
+        'url',        // simpan PATH relatif di DB (mis: products/abc.jpg)
         'sort_order',
     ];
 
@@ -21,29 +18,34 @@ class ProductImage extends Model
         'sort_order' => 'integer',
     ];
 
-    protected $appends = ['url'];
-
+    /** Relasi balik ke product */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
 
-    public function getUrlAttribute(?string $value): ?string
+    /**
+     * Accessor: kembalikan URL publik.
+     * - Jika value sudah absolut (http/https), kembalikan apa adanya.
+     * - Jika relatif, buatkan URL dari disk 'public'.
+     */
+    public function getUrlAttribute($value): string
     {
-        if (empty($value)) {
-            return null;
-        }
+        if (! $value) return $value;
 
-        if (preg_match('#^https?://#i', $value) || str_starts_with($value, '//')) {
+        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
             return $value;
         }
 
-        return Storage::disk('public')->url(ltrim($value, '/'));
-    }
+        /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
+        $disk = \Illuminate\Support\Facades\Storage::disk('public');
 
-    // helper if code calls $image->url() as method
-    public function url(): ?string
+        return $disk->url($value); // sekarang Intelephense nggak akan ngambek
+    }
+    
+    /** Helper untuk dapat URL publik (sama dengan accessor) */
+    public function url(): string
     {
-        return $this->getUrlAttribute($this->attributes['url'] ?? null);
+        return $this->url;
     }
 }

@@ -9,28 +9,20 @@ class StoreCategoryRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return true; // protect via route middleware (auth)
     }
 
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => ['required', 'string', 'max:100'],
             'slug' => [
                 'required',
                 'string',
-                'max:255',
-                Rule::unique('categories', 'slug'),
+                'max:120',
+                'alpha_dash',
+                Rule::unique('categories', 'slug')->whereNull('deleted_at'),
             ],
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'name.required' => 'Nama kategori wajib diisi.',
-            'slug.required' => 'Slug wajib diisi.',
-            'slug.unique' => 'Slug sudah digunakan.',
         ];
     }
 
@@ -38,7 +30,7 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'name' => 'nama kategori',
-            'slug' => 'slug',
+            'slug' => 'slug kategori',
         ];
     }
 }
