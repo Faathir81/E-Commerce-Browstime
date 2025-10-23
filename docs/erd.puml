@@ -1,0 +1,140 @@
+@startuml
+' ERD sederhana untuk MVP MySQL (make-to-order)
+hide circle
+skinparam linetype ortho
+
+entity users {
+  * id : BIGINT
+  --
+  name : VARCHAR(120)
+  email : VARCHAR(191)
+  password : VARCHAR(255)
+  created_at
+  updated_at
+}
+
+entity categories {
+  * id : BIGINT
+  --
+  name : VARCHAR(100)
+  slug : VARCHAR(120)
+  created_at
+  updated_at
+}
+
+entity products {
+  * id : BIGINT
+  --
+  category_id : BIGINT
+  name : VARCHAR(120)
+  slug : VARCHAR(140)
+  price : INT
+  is_active : TINYINT(1)
+  created_at
+  updated_at
+}
+
+entity product_images {
+  * id : BIGINT
+  --
+  product_id : BIGINT
+  url : VARCHAR(255)
+  is_cover : TINYINT(1)
+  created_at
+  updated_at
+}
+
+entity materials {
+  * id : BIGINT
+  --
+  name : VARCHAR(120)
+  unit : VARCHAR(20)
+  created_at
+  updated_at
+}
+
+entity material_stocks {
+  * id : BIGINT
+  --
+  material_id : BIGINT
+  type : ENUM('in','out','adjust')
+  qty : DECIMAL(12,3)
+  note : VARCHAR(191)
+  created_at
+}
+
+entity product_recipes {
+  * id : BIGINT
+  --
+  product_id : BIGINT
+  material_id : BIGINT
+  qty_per_unit : DECIMAL(12,3)
+  created_at
+  updated_at
+}
+
+entity orders {
+  * id : BIGINT
+  --
+  user_id : BIGINT NULL
+  code : VARCHAR(32)
+  status : ENUM('pending','awaiting_payment','paid','processing','shipped','delivered','cancelled')
+  buyer_name : VARCHAR(120)
+  buyer_phone : VARCHAR(32)
+  ship_address : VARCHAR(255)
+  ship_city : VARCHAR(120)
+  ship_postal : VARCHAR(10)
+  shipping_cost : INT
+  subtotal : INT
+  grand_total : INT
+  created_at
+  updated_at
+}
+
+entity order_items {
+  * id : BIGINT
+  --
+  order_id : BIGINT
+  product_id : BIGINT
+  qty : INT
+  price_frozen : INT
+  created_at
+  updated_at
+}
+
+entity payments {
+  * id : BIGINT
+  --
+  order_id : BIGINT
+  method : ENUM('transfer','qris','cash')
+  amount : INT
+  status : ENUM('pending','verified','failed')
+  proof_url : VARCHAR(255) NULL
+  created_at
+  updated_at
+}
+
+entity reviews {
+  * id : BIGINT
+  --
+  user_id : BIGINT NULL
+  product_id : BIGINT
+  order_id : BIGINT
+  rating : TINYINT
+  comment : VARCHAR(255) NULL
+  created_at
+  updated_at
+}
+
+users ||--o{ orders
+categories ||--o{ products
+products ||--o{ product_images
+materials ||--o{ material_stocks
+products ||--o{ product_recipes
+materials ||--o{ product_recipes
+orders ||--o{ order_items
+orders ||--o{ payments
+users ||--o{ reviews
+products ||--o{ reviews
+orders ||--o{ reviews
+@enduml

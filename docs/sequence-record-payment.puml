@@ -1,0 +1,13 @@
+@startuml
+actor Admin
+participant "Admin Panel" as P
+participant "API" as API
+database "MySQL" as DB
+
+Admin -> P: Input payment/verify
+P -> API: POST /payments {order_id, method, amount, proof?}
+API -> DB: INSERT payments(status='verified')
+API -> DB: UPDATE orders SET status='paid' WHERE id=:order_id
+API -> DB: INSERT material_stocks(type='out', qty) for each material in recipe
+API --> P: OK (order now paid; stock reduced)
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+actor Buyer
+participant "Web FE" as FE
+participant "API" as API
+database "MySQL" as DB
+
+Buyer -> FE: Add items to cart
+FE -> API: GET /products/{id}/makeable-qty
+API -> DB: SELECT from v_product_makeable_qty
+API --> FE: qty_available
+
+Buyer -> FE: Checkout
+FE -> API: POST /orders {cart, shipping_info}
+API -> DB: INSERT orders(status=pending)
+API -> DB: INSERT order_items(price_frozen)
+API --> FE: 201 Created + payment instructions (manual/QRIS)
+@enduml

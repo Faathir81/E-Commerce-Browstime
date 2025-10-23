@@ -1,0 +1,35 @@
+@startuml
+left to right direction
+skinparam actorStyle awesome
+
+actor Buyer
+actor Admin
+
+rectangle "BROWSTIME MVP" {
+  (Browse Products) as UC1
+  (Add to Cart) as UC2
+  (Checkout) as UC3
+  (Pay Order / Upload Proof) as UC4
+  (View My Orders) as UC5
+  (Confirm Received) as UC6
+  (Write Review) as UC7
+
+  (Manage Products/Categories/Images) as UC8
+  (Manage Materials & Recipes) as UC9
+  (Record/Verify Payment) as UC10
+  (View Reports) as UC11
+}
+
+Buyer --> UC1
+Buyer --> UC2
+Buyer --> UC3
+Buyer --> UC4
+Buyer --> UC5
+Buyer --> UC6
+Buyer --> UC7
+
+Admin --> UC8
+Admin --> UC9
+Admin --> UC10
+Admin --> UC11
+@enduml
