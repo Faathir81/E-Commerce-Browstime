@@ -13,6 +13,16 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
+    
+    'binderbyte' => [
+        'api_key' => env('BINDERBYTE_API_KEY'),
+    ],
+
+    'midtrans' => [
+        'server_key'    => env('MIDTRANS_SERVER_KEY'),
+        'client_key'    => env('MIDTRANS_CLIENT_KEY'),
+        'is_production' => env('MIDTRANS_IS_PRODUCTION', false),
+    ],
 
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
