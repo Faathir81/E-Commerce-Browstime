@@ -9,12 +9,8 @@ class Material extends Model
 {
     protected $fillable = [
         'name',
-        'unit',      // opsional: gram/ml/pcs, dll — aman kalau kolomnya ada
-        'is_active', // opsional
-    ];
-
-    protected $casts = [
-        'is_active' => 'boolean',
+        'unit',
+        // 'min_qty','
     ];
 
     public function recipes(): HasMany
