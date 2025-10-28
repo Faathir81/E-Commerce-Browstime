@@ -47,12 +47,12 @@ Setiap modul dibuat di branch turunan, diuji, lalu merge ke `dev`.
 
 ### 1A – Materials
 **Branch:** `feat/filament-materials`
-- [ ] Generate resource → `php artisan make:filament-resource Material --generate`
-- [ ] Form: `name`, `unit`, `min_qty`
-- [ ] Table: kolom + accessor `current_stock`
-- [ ] Header Action “Adjust Stock” → insert ke `material_stocks`
-- [ ] Filter “Below Minimum”
-- [ ] (Opsional) Widget LowStockTable  
+- [X] Generate resource → `php artisan make:filament-resource Material --generate`
+- [X] Form: `name`, `unit`, `min_qty`
+- [X] Table: kolom + accessor `current_stock`
+- [X] Header Action “Adjust Stock” → insert ke `material_stocks`
+- [X] Filter “Below Minimum”
+- [X] (Opsional) Widget LowStockTable  
 🧱 **DoD:** CRUD jalan & aksi stok bekerja.
 
 ### 1B – Products
