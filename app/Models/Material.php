@@ -18,4 +18,9 @@ class Material extends Model
     {
         return (float) ($this->stocks()->sum('qty') ?? 0);
     }
+
+    public function productRecipes()
+    {
+        return $this->hasMany(ProductRecipe::class);
+    }
 }

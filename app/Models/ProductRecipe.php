@@ -7,11 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductRecipe extends Model
 {
-    protected $fillable = [
-        'product_id',
-        'material_id',
-        'qty', // kebutuhan bahan per 1 unit produk
-    ];
+    protected $fillable = ['product_id', 'material_id', 'qty_per_unit'];
 
     protected $casts = [
         'qty' => 'float',
