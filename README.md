@@ -64,8 +64,8 @@ Setiap modul dibuat di branch turunan, diuji, lalu merge ke `dev`.
 
 ### 1C – Orders (Read-only)
 **Branch:** `feat/filament-orders`
-- [ ] Tabel & detail order
-- [ ] Action ubah status (confirm → ship → done)
+- [X] Tabel & detail order
+- [X] Action ubah status (confirm → ship → done)
 🧱 **DoD:** Admin bisa melihat & ubah status order.
 
 ### 1D – Payments

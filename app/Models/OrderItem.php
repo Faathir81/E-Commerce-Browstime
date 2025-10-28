@@ -7,17 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OrderItem extends Model
 {
-    protected $fillable = [
-        'order_id',
-        'product_id',
-        'price',
-        'qty',
-    ];
-
-    protected $casts = [
-        'price' => 'integer',
-        'qty'   => 'integer',
-    ];
+    protected $fillable = ['order_id','product_id','qty','price_frozen'];
 
     public $timestamps = false;
 
