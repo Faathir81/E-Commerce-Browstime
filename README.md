@@ -1,61 +1,156 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🧭 BROWSTIME Development Roadmap
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Project roadmap dan to-do list untuk pengembangan aplikasi e-commerce **BROWSTIME**  
+(Topik skripsi: digitalisasi UMKM make-to-order dengan manajemen stok bahan baku dan evaluasi usability + efisiensi).
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🏗️ Branch Structure
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+| Branch | Keterangan |
+|--------|-------------|
+| `dev` | Stable branch – hanya merge release final |
+| `<custom-branch>`  | Integration branch – PR aktif & testing |
+| feature branches | Dikerjakan per modul (misal `feat/filament-materials`) |
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## ⚙️ Phase 0 — Audit Database & Existing API
+**Branch:** `chore/audit-db-and-api`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 🎯 Tujuan
+Validasi struktur database & endpoint API yang sudah ada sebelum membangun ulang Filament dan frontend.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### ✅ To-Do
+- [X] Jalankan `php artisan about` → pastikan Laravel 12 + Filament 4.1 aktif.  
+- [X] Import `browstime.sql` → verifikasi semua tabel & relasi.  
+- [X] Audit tabel inti:
+  - `materials`, `material_stocks`, `products`, `product_recipes`,  
+    `orders`, `order_items`, `payments`, `reviews`, `categories`, `users`
+- [X] Tambahkan index (jika belum):
+  - `material_stocks(material_id, created_at)`
+  - `order_items(order_id)`
+  - `payments(order_id)`
+- [X] Audit endpoint dari `php artisan route:list` (API v1).  
+- [X] Tulis hasil audit di `docs/AUDIT_NOTES.md`.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 📘 Definition of Done
+- Database dan route bersih tanpa error.
+- Catatan audit tersedia dan disetujui.
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🧩 Phase 1 — Admin Dashboard (Filament CRUD)
+**Branch Payung:** `feat/admin-panel`
 
-### Premium Partners
+Setiap modul dibuat di branch turunan, diuji, lalu merge ke `dev`.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 1A – Materials
+**Branch:** `feat/filament-materials`
+- [ ] Generate resource → `php artisan make:filament-resource Material --generate`
+- [ ] Form: `name`, `unit`, `min_qty`
+- [ ] Table: kolom + accessor `current_stock`
+- [ ] Header Action “Adjust Stock” → insert ke `material_stocks`
+- [ ] Filter “Below Minimum”
+- [ ] (Opsional) Widget LowStockTable  
+🧱 **DoD:** CRUD jalan & aksi stok bekerja.
 
-## Contributing
+### 1B – Products
+**Branch:** `feat/filament-products`
+- [ ] Resource Product + FileUpload gambar (safe saat edit)
+- [ ] Relasi BOM (`product_recipes`)
+- [ ] Kolom stok makeable (optional)
+🧱 **DoD:** Produk bisa dibuat + gambar + resep bahan.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 1C – Orders (Read-only)
+**Branch:** `feat/filament-orders`
+- [ ] Tabel & detail order
+- [ ] Action ubah status (confirm → ship → done)
+🧱 **DoD:** Admin bisa melihat & ubah status order.
 
-## Code of Conduct
+### 1D – Payments
+**Branch:** `feat/filament-payments`
+- [ ] Resource Payment + mark as paid/manual proof
+🧱 **DoD:** Histori pembayaran tampil.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 1E – Categories
+**Branch:** `feat/filament-categories`
+- [ ] CRUD kategori (name, slug)
 
-## Security Vulnerabilities
+### 1F – Reports & Dashboard
+**Branch:** `feat/filament-reports-dashboard`
+- [ ] Widget: sales today, pending orders, low stock
+- [ ] Page laporan penjualan, persediaan, keuangan  
+🧱 **DoD:** Dashboard ringkas berfungsi.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## 🔁 Phase 2 — Re-Audit & Routing Final
+**Branch:** `chore/re-audit-and-routing`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### ✅ To-Do
+- [ ] Re-review hasil audit Phase 0.
+- [ ] Finalisasi migration/policy bila perlu.
+- [ ] Pastikan prefix route admin/api konsisten.
+
+🧱 **DoD:** Seluruh route aktif, tanpa duplikasi atau yatim.
+
+---
+
+## 🛍️ Phase 3 — Storefront (UI Pembeli)
+**Branch Payung:** `feat/storefront`
+
+### 3A – Layout & Catalog
+**Branch:** `feat/storefront-layout-and-catalog`
+- [ ] Blade + Tailwind layout sederhana (putih)
+- [ ] List & detail produk
+
+### 3B – Cart & Checkout
+**Branch:** `feat/storefront-cart-checkout`
+- [ ] Cart (session/local)
+- [ ] Checkout form (guest allowed)
+- [ ] Estimasi ongkir (RajaOngkir / placeholder)
+
+### 3C – Payment (Midtrans)
+**Branch:** `feat/storefront-payments-midtrans`
+- [ ] Integrasi Snap/API (QRIS & transfer)
+- [ ] Webhook → update `payments` & `orders.status`
+
+### 3D – Order Tracking & Review
+**Branch:** `feat/storefront-orders-review`
+- [ ] Riwayat order + konfirmasi penerimaan
+- [ ] Review produk
+
+🧱 **DoD:** Alur pembelian → pembayaran → review selesai.
+
+---
+
+## 🧹 Phase 4 — Finalization & Docs
+**Branch:** `chore/finalize-and-docs`
+- [ ] Seeder dummy (materials, products, recipes)
+- [ ] `.env.example` + instruksi install README
+- [ ] Fix edge case (FileUpload edit, validasi qty)
+- [ ] Bersihkan log & cache
+- [ ] Update README & LICENSE  
+
+🧱 **DoD:** Clone → `composer install` → `php artisan migrate --seed` → jalan tanpa error.
+
+---
+
+## 🚀 Phase 5 — Release & Hand-Off
+**Branch:** `release/v1.0`
+- [ ] Merge `dev` → `main`
+- [ ] Tag `v1.0.0`
+- [ ] Freeze kode → lanjut penulisan skripsi (Bab II–III, SUS evaluation)
+
+---
+
+## ✍️ Commit & PR Guidelines
+- Gunakan prefix `feat|fix|chore|docs|refactor`
+- PR Checklist:
+  - [ ] Uraian tes manual
+  - [ ] Screenshot UI (jika ada)
+  - [ ] Log bebas error
+- Gunakan **Squash & Merge** ke `dev`, lalu batch release ke `main`.
+
+---
