@@ -70,7 +70,7 @@ Setiap modul dibuat di branch turunan, diuji, lalu merge ke `dev`.
 
 ### 1D – Payments
 **Branch:** `feat/filament-payments`
-- [ ] Resource Payment + mark as paid/manual proof
+- [X] Resource Payment + mark as paid/manual proof
 🧱 **DoD:** Histori pembayaran tampil.
 
 ### 1E – Categories
