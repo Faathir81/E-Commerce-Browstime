@@ -9,19 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Order extends Model
 {
     protected $fillable = [
-        'code',
-        'user_id',      // nullable: guest checkout
-        'buyer_name',
-        'buyer_phone',
-        'address',
-        'status',       // pending|paid|shipped|completed|cancelled
-        'shipping_fee', // integer
-        'notes',        // nullable
-        // 'total' — kalau ada kolom ini di DB, boleh ditambahkan
-    ];
-
-    protected $casts = [
-        'shipping_fee' => 'integer',
+        'user_id','code','status','buyer_name','buyer_phone','ship_address',
+        'ship_city','ship_postal','shipping_cost','shipping_courier','shipping_service',
+        'shipping_etd','weight_gram','origin_city_id','destination_city_id',
+        'subtotal','grand_total','estimated_ready_at','estimated_delivery_at',
     ];
 
     public function items(): HasMany
@@ -36,13 +27,11 @@ class Order extends Model
 
     public function user(): BelongsTo
     {
-        // nullable — aman untuk guest
         return $this->belongsTo(User::class);
     }
 
     public function materialStocks(): HasMany
     {
-        // konsumsi stok yang terkait order ini (jika kita isi order_id di material_stocks)
         return $this->hasMany(MaterialStock::class);
     }
 }
