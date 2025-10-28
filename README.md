@@ -57,9 +57,9 @@ Setiap modul dibuat di branch turunan, diuji, lalu merge ke `dev`.
 
 ### 1B – Products
 **Branch:** `feat/filament-products`
-- [ ] Resource Product + FileUpload gambar (safe saat edit)
-- [ ] Relasi BOM (`product_recipes`)
-- [ ] Kolom stok makeable (optional)
+- [X] Resource Product + FileUpload gambar (safe saat edit)
+- [X] Relasi BOM (`product_recipes`)
+- [X] Kolom stok makeable (optional)
 🧱 **DoD:** Produk bisa dibuat + gambar + resep bahan.
 
 ### 1C – Orders (Read-only)

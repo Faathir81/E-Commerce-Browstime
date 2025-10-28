@@ -32,10 +32,9 @@ class Product extends Model
         return $this->hasMany(ProductImage::class);
     }
 
-    public function coverImage(): HasMany
+    public function coverImage()
     {
-        // gunakan firstWhere('is_cover', true) saat akses
-        return $this->images()->where('is_cover', true);
+        return $this->hasOne(ProductImage::class)->where('is_cover', 1);
     }
 
     public function orderItems(): HasMany
