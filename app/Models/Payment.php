@@ -9,19 +9,25 @@ class Payment extends Model
 {
     protected $fillable = [
         'order_id',
+        'gateway',           // manual | midtrans
+        'gateway_order_id',  // id order dari gateway (opsional)
+        'transaction_id',    // id transaksi dari gateway (opsional)
+        'method',            // transfer | qris | cash
         'amount',
-        'method',       // transfer|qris|bank_transfer|gopay|...
-        'provider',     // manual|midtrans
-        'status',       // pending|waiting_verification|paid|failed
-        'provider_ref', // transaction_id/order_id dari gateway
-        'proof_url',    // path bukti bayar (manual)
-        'raw_payload',  // json dari gateway
-        'notes',        // opsional alasan gagal/catatan
+        'currency',          // default 'IDR'
+        'status',            // pending | verified | failed
+        'channel',           // bebas (bank/ewallet)
+        'va_number',         // opsional
+        'qr_string',         // opsional
+        'payload',           // json dari gateway
+        'proof_url',         // bukti bayar manual
+        'paid_at',
     ];
 
     protected $casts = [
-        'amount'      => 'integer',
-        'raw_payload' => 'array',
+        'amount'  => 'integer',
+        'payload' => 'array',
+        'paid_at' => 'datetime',
     ];
 
     public function order(): BelongsTo
