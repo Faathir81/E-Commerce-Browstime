@@ -22,17 +22,17 @@ Project roadmap dan to-do list untuk pengembangan aplikasi e-commerce **BROWSTIM
 Validasi struktur database & endpoint API yang sudah ada sebelum membangun ulang Filament dan frontend.
 
 ### ✅ To-Do
-- [ ] Jalankan `php artisan about` → pastikan Laravel 12 + Filament 4.1 aktif.  
-- [ ] Import `browstime.sql` → verifikasi semua tabel & relasi.  
-- [ ] Audit tabel inti:
+- [X] Jalankan `php artisan about` → pastikan Laravel 12 + Filament 4.1 aktif.  
+- [X] Import `browstime.sql` → verifikasi semua tabel & relasi.  
+- [X] Audit tabel inti:
   - `materials`, `material_stocks`, `products`, `product_recipes`,  
     `orders`, `order_items`, `payments`, `reviews`, `categories`, `users`
-- [ ] Tambahkan index (jika belum):
+- [X] Tambahkan index (jika belum):
   - `material_stocks(material_id, created_at)`
   - `order_items(order_id)`
   - `payments(order_id)`
-- [ ] Audit endpoint dari `php artisan route:list` (API v1).  
-- [ ] Tulis hasil audit di `docs/AUDIT_NOTES.md`.
+- [X] Audit endpoint dari `php artisan route:list` (API v1).  
+- [X] Tulis hasil audit di `docs/AUDIT_NOTES.md`.
 
 ### 📘 Definition of Done
 - Database dan route bersih tanpa error.
