@@ -75,7 +75,7 @@ Setiap modul dibuat di branch turunan, diuji, lalu merge ke `dev`.
 
 ### 1E – Categories
 **Branch:** `feat/filament-categories`
-- [ ] CRUD kategori (name, slug)
+- [X] CRUD kategori (name, slug)
 
 ### 1F – Reports & Dashboard
 **Branch:** `feat/filament-reports-dashboard`

@@ -32,21 +32,36 @@ class MaterialsTable
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('unit')
-                    ->sortable(),
-
                 TextColumn::make('min_qty')
                     ->label('Min')
-                    ->numeric(3)
-                    ->sortable(),
+                    ->sortable()
+                    ->formatStateUsing(function ($state) {
+                        if ($state === null) return '-';
+                        $n = (float) $state;
+
+                        // bulat → "5"
+                        if (floor($n) == $n) return (string) (int) $n;
+
+                        // pecahan → "4.5" (tanpa ribuan & tanpa nol di belakang)
+                        return rtrim(rtrim(number_format($n, 3, '.', ''), '0'), '.');
+                    }),
 
                 TextColumn::make('current_stock')
                     ->label('Stock')
-                    ->numeric(3)
-                    ->sortable()
                     ->state(fn (Material $record) => $record->current_stock ?? 0)
+                    ->formatStateUsing(function ($state /*, Material $record */) {
+                        $n = (float) $state;
+
+                        if (floor($n) == $n) return (string) (int) $n;
+                        return rtrim(rtrim(number_format($n, 3, '.', ''), '0'), '.');
+
+                        // Kalo mau tempel satuan: return ($s.' '.$record->unit);
+                    })
                     ->badge()
                     ->color(fn (Material $r) => ($r->current_stock ?? 0) < $r->min_qty ? 'danger' : 'success'),
+
+                TextColumn::make('unit')
+                    ->sortable(),
             ])
             ->filters([
                 Filter::make('below_minimum')
