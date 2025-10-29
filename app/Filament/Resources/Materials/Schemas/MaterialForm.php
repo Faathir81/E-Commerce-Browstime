@@ -23,7 +23,10 @@ class MaterialForm
             TextInput::make('min_qty')
                 ->label('Minimum Stock')
                 ->numeric()
+                ->minValue(0)
                 ->default(0)
+                ->suffix(fn ($get) => $get('unit'))
+                ->helperText('Isi sesuai satuan di kolom Unit, tanpa konversi otomatis (contoh: 0.5 kg = 0.5).')
                 ->required(),
         ])->columns(3);
     }
