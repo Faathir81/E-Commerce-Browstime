@@ -9,6 +9,7 @@ use App\Filament\Admin\Resources\BahanBakus\Schemas\BahanBakuForm;
 use App\Filament\Admin\Resources\BahanBakus\Tables\BahanBakusTable;
 use App\Models\BahanBaku;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -21,6 +22,13 @@ class BahanBakuResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'nama';
+
+    protected static string | UnitEnum | null $navigationGroup = 'Master Data';
+
+    protected static ?string $navigationLabel = 'Bahan Baku';
+    protected static ?string $pluralLabel = 'Bahan Baku';
+    protected static ?string $modelLabel = 'Bahan Baku';
+    protected static ?string $pluralModelLabel = 'Bahan Baku';
 
     public static function form(Schema $schema): Schema
     {

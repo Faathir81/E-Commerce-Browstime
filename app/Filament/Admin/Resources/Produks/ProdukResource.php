@@ -9,6 +9,7 @@ use App\Filament\Admin\Resources\Produks\Schemas\ProdukForm;
 use App\Filament\Admin\Resources\Produks\Tables\ProduksTable;
 use App\Models\Produk;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -21,6 +22,13 @@ class ProdukResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'nama';
+
+    protected static string | UnitEnum | null $navigationGroup = 'Master Data';
+
+    protected static ?string $navigationLabel = 'Produk';
+    protected static ?string $pluralLabel = 'Produk';
+    protected static ?string $modelLabel = 'Produk';
+    protected static ?string $pluralModelLabel = 'Produk';
 
     public static function form(Schema $schema): Schema
     {
