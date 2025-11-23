@@ -28,13 +28,13 @@ Setiap task memiliki branch khusus agar proses merging & dokumentasi rapi.
 
 **Branch:** `feat/setup-project`
 
--   [ ] Install Laravel
--   [ ] Install Breeze (Auth customer)
--   [ ] Install Filament 4.1
--   [ ] Install Spatie Permission
--   [ ] Create roles: admin, produksi, keuangan, customer
--   [ ] Setup routing & layout dasar
--   [ ] Setup DB & `.env`
+-   [x] Install Laravel
+-   [x] Install Breeze (Auth customer)
+-   [x] Install Filament 4.1
+-   [x] Install Spatie Permission
+-   [x] Create roles: admin, produksi, keuangan, customer
+-   [x] Setup routing & layout dasar
+-   [x] Setup DB & `.env`
 
 ---
 
