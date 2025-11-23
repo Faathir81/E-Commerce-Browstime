@@ -76,9 +76,9 @@ Setiap task memiliki branch khusus agar proses merging & dokumentasi rapi.
 
 **Branch:** `feat/master-bom`
 
--   [ ] CRUD Resep
--   [ ] Nested form detail bahan
--   [ ] Kebutuhan bahan per produk
+-   [X] CRUD Resep
+-   [X] Nested form detail bahan
+-   [X] Kebutuhan bahan per produk
 
 ---
 
