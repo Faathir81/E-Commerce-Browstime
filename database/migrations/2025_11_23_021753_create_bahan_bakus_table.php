@@ -13,6 +13,18 @@ return new class extends Migration
     {
         Schema::create('bahan_bakus', function (Blueprint $table) {
             $table->id();
+            $table->string('nama');
+
+            // Relasi satuan
+            $table->foreignId('satuan_id')->constrained('satuans')->restrictOnDelete();
+
+            // Stok awal dan minimum
+            $table->decimal('stok_awal', 10, 2)->default(0);
+            $table->decimal('stok_minimum', 10, 2)->default(0);
+
+            // Optional deskripsi
+            $table->text('keterangan')->nullable();
+
             $table->timestamps();
         });
     }

@@ -44,31 +44,31 @@ Setiap task memiliki branch khusus agar proses merging & dokumentasi rapi.
 
 **Branch:** `feat/master-produk`
 
--   [ ] CRUD Produk
--   [ ] Upload gambar
--   [ ] Relasi ke kategori
--   [ ] Harga, deskripsi, estimasi waktu produksi
+-   [X] CRUD Produk
+-   [X] Upload gambar
+-   [X] Relasi ke kategori
+-   [X] Harga, deskripsi, estimasi waktu produksi
 
 ### **2.2 Kategori**
 
 **Branch:** `feat/master-kategori`
 
--   [ ] CRUD kategori
--   [ ] Relasi 1–many ke produk
+-   [X] CRUD kategori
+-   [X] Relasi 1–many ke produk
 
 ### **2.3 Bahan Baku**
 
 **Branch:** `feat/master-bahan-baku`
 
--   [ ] CRUD bahan baku
--   [ ] Satuan
--   [ ] Stok awal & minimum
+-   [X] CRUD bahan baku
+-   [X] Satuan
+-   [X] Stok awal & minimum
 
 ### **2.4 Satuan**
 
 **Branch:** `feat/master-satuan`
 
--   [ ] CRUD satuan material (gr, ml, pcs)
+-   [X] CRUD satuan material (gr, ml, pcs)
 
 ---
 
