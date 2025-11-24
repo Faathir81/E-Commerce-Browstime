@@ -31,7 +31,9 @@ class ProdukForm
 
                     TextInput::make('slug')
                         ->label('Slug')
-                        ->required(),
+                        ->required()
+                        ->disabled()
+                        ->dehydrated(true),
 
                     Select::make('kategori_id')
                         ->label('Kategori')

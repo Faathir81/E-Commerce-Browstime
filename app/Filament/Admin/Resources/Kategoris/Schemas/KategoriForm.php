@@ -31,7 +31,9 @@ class KategoriForm
                         TextInput::make('slug')
                             ->label('Slug')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->disabled()
+                            ->dehydrated(true),
                     ])
                     ->columns(2),
             ]);
