@@ -98,11 +98,21 @@ Setiap task memiliki branch khusus agar proses merging & dokumentasi rapi.
 
 **Branch:** `feat/wilayah-pengiriman`
 
--   [ ] CRUD wilayah pengiriman yang didukung (kecamatan/subdistrict)
--   [ ] Simpan subdistrict_id RajaOngkir
--   [ ] Tidak ada tarif manual (nominal dihitung dengan API)
--   [ ] Relasi pesanan → simpan ongkir final dari API
--   [ ] (Opsional) tabel cache ongkir untuk hemat limit
+-   [X] CRUD wilayah pengiriman yang didukung (kecamatan/subdistrict)
+-   [X] Simpan subdistrict_id RajaOngkir
+-   [X] Tidak ada tarif manual (nominal dihitung dengan API)
+-   [X] Relasi pesanan → simpan ongkir final dari API
+-   [X] (Opsional) tabel cache ongkir untuk hemat limit
+
+---
+
+## 11.5 — Data Wilayah (RajaOngkir Sync)
+
+Branch: feat/rajaongkir-wilayah
+
+- [ ] Endpoint sync provinsi, kota, kecamatan dari RajaOngkir
+- [ ] Cache ke database untuk dropdown
+- [ ] Validasi wilayah harus dalam daftar wilayah yang didukung
 
 ---
 
@@ -188,16 +198,6 @@ Setiap task memiliki branch khusus agar proses merging & dokumentasi rapi.
 -   [ ] Update qty
 -   [ ] Hapus item
 -   [ ] Hitung subtotal
-
----
-
-## 11.5 — Data Wilayah (RajaOngkir Sync)
-
-Branch: feat/rajaongkir-wilayah
-
-- [ ] Endpoint sync provinsi, kota, kecamatan dari RajaOngkir
-- [ ] Cache ke database untuk dropdown
-- [ ] Validasi wilayah harus dalam daftar wilayah yang didukung
 
 ---
 
