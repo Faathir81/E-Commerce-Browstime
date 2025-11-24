@@ -110,9 +110,9 @@ Setiap task memiliki branch khusus agar proses merging & dokumentasi rapi.
 
 Branch: feat/rajaongkir-wilayah
 
-- [ ] Endpoint sync provinsi, kota, kecamatan dari RajaOngkir
-- [ ] Cache ke database untuk dropdown
-- [ ] Validasi wilayah harus dalam daftar wilayah yang didukung
+- [X] Endpoint sync provinsi, kota, kecamatan dari RajaOngkir
+- [X] Cache ke database untuk dropdown
+- [X] Validasi wilayah harus dalam daftar wilayah yang didukung
 
 ---
 
