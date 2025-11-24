@@ -86,11 +86,11 @@ Setiap task memiliki branch khusus agar proses merging & dokumentasi rapi.
 
 **Branch:** `feat/mutasi-stok`
 
--   [ ] Pemakaian produksi
--   [ ] Stok masuk
--   [ ] Stok rusak / expired
--   [ ] Penyesuaian stok
--   [ ] Log mutasi
+-   [X] Pemakaian produksi
+-   [X] Stok masuk
+-   [X] Stok rusak / expired
+-   [X] Penyesuaian stok
+-   [X] Log mutasi
 
 ---
 
