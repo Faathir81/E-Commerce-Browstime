@@ -96,11 +96,13 @@ Setiap task memiliki branch khusus agar proses merging & dokumentasi rapi.
 
 ## ## 5.0 — Tarif Ongkir (Database)
 
-**Branch:** `feat/tarif-ongkir`
+**Branch:** `feat/wilayah-pengiriman`
 
--   [ ] CRUD wilayah
--   [ ] Nominal ongkir flat-rate
--   [ ] Relasi pesanan ke tarif ongkir
+-   [ ] CRUD wilayah pengiriman yang didukung (kecamatan/subdistrict)
+-   [ ] Simpan subdistrict_id RajaOngkir
+-   [ ] Tidak ada tarif manual (nominal dihitung dengan API)
+-   [ ] Relasi pesanan → simpan ongkir final dari API
+-   [ ] (Opsional) tabel cache ongkir untuk hemat limit
 
 ---
 
@@ -189,16 +191,26 @@ Setiap task memiliki branch khusus agar proses merging & dokumentasi rapi.
 
 ---
 
+## 11.5 — Data Wilayah (RajaOngkir Sync)
+
+Branch: feat/rajaongkir-wilayah
+
+- [ ] Endpoint sync provinsi, kota, kecamatan dari RajaOngkir
+- [ ] Cache ke database untuk dropdown
+- [ ] Validasi wilayah harus dalam daftar wilayah yang didukung
+
+---
+
 ## ## 12.0 — Checkout Customer
 
 **Branch:** `feat/frontend-checkout`
 
--   [ ] Form alamat
--   [ ] Pilih ongkir (DB)
+-   [ ] Form alamat (provinsi → kota → kecamatan)
+-   [ ] Hitung ongkir → API RajaOngkir /cost
+-   [ ] Tampilkan ETA pengiriman
 -   [ ] Pilih metode pembayaran
 -   [ ] Hitung total
--   [ ] Buat pesanan
-
+-   [ ] Buat pesanan + simpan ongkir final
 ---
 
 ## ## 13.0 — Checkout Guest
