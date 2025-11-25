@@ -9,11 +9,11 @@ use App\Filament\Admin\Resources\Satuans\Schemas\SatuanForm;
 use App\Filament\Admin\Resources\Satuans\Tables\SatuansTable;
 use App\Models\Satuan;
 use BackedEnum;
-use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Filament\Clusters\PersediaanBarang\PersediaanBarangCluster;
 
 class SatuanResource extends Resource
 {
@@ -23,12 +23,12 @@ class SatuanResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'nama';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Master Data';
-
     protected static ?string $navigationLabel = 'Satuan';
     protected static ?string $pluralLabel = 'Satuan';
     protected static ?string $modelLabel = 'Satuan';
     protected static ?string $pluralModelLabel = 'Satuan';
+
+    protected static ?string $cluster = PersediaanBarangCluster::class;
 
     public static function form(Schema $schema): Schema
     {

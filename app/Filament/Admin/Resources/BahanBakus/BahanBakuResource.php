@@ -9,11 +9,11 @@ use App\Filament\Admin\Resources\BahanBakus\Schemas\BahanBakuForm;
 use App\Filament\Admin\Resources\BahanBakus\Tables\BahanBakusTable;
 use App\Models\BahanBaku;
 use BackedEnum;
-use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Filament\Clusters\PersediaanBarang\PersediaanBarangCluster;
 
 class BahanBakuResource extends Resource
 {
@@ -23,12 +23,12 @@ class BahanBakuResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'nama';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Master Data';
-
     protected static ?string $navigationLabel = 'Bahan Baku';
     protected static ?string $pluralLabel = 'Bahan Baku';
     protected static ?string $modelLabel = 'Bahan Baku';
     protected static ?string $pluralModelLabel = 'Bahan Baku';
+
+    protected static ?string $cluster = PersediaanBarangCluster::class;
 
     public static function form(Schema $schema): Schema
     {

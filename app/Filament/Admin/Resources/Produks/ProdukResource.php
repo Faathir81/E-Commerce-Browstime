@@ -9,11 +9,11 @@ use App\Filament\Admin\Resources\Produks\Schemas\ProdukForm;
 use App\Filament\Admin\Resources\Produks\Tables\ProduksTable;
 use App\Models\Produk;
 use BackedEnum;
-use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Filament\Clusters\ProdukKatalog\ProdukKatalogCluster;
 
 class ProdukResource extends Resource
 {
@@ -23,12 +23,12 @@ class ProdukResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'nama';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Master Data';
-
     protected static ?string $navigationLabel = 'Produk';
     protected static ?string $pluralLabel = 'Produk';
     protected static ?string $modelLabel = 'Produk';
     protected static ?string $pluralModelLabel = 'Produk';
+
+    protected static ?string $cluster = ProdukKatalogCluster::class;
 
     public static function form(Schema $schema): Schema
     {
