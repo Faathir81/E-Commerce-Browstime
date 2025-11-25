@@ -12,6 +12,7 @@ use Filament\Pages\Page;
 use Filament\Notifications\Notification;
 use UnitEnum;
 use BackedEnum;
+use Filament\Schemas\Components\Section;
 
 class PengaturanMidtrans extends Page implements HasForms
 {
@@ -41,21 +42,26 @@ class PengaturanMidtrans extends Page implements HasForms
     {
         return $schema
             ->schema([
-                TextInput::make('server_key')
-                    ->label('Server Key')
-                    ->password()
-                    ->revealable()
-                    ->required(),
+                Section::make()
+                    ->schema([
+                        TextInput::make('server_key')
+                            ->label('Server Key')
+                            ->password()
+                            ->revealable()
+                            ->required(),
 
-                TextInput::make('client_key')
-                    ->label('Client Key')
-                    ->password()
-                    ->revealable()
-                    ->required(),
+                        TextInput::make('client_key')
+                            ->label('Client Key')
+                            ->password()
+                            ->revealable()
+                            ->required(),
 
-                Toggle::make('is_production')
-                    ->label('Gunakan Mode Production?')
-                    ->helperText('Jika dimatikan, sistem akan menggunakan Sandbox'),
+                        Toggle::make('is_production')
+                            ->label('Gunakan Mode Production?')
+                            ->helperText('Jika dimatikan, sistem akan menggunakan Sandbox'),
+                    ])
+                    ->columnSpanFull()
+                    ->extraAttributes(['style' => 'margin-bottom: 2rem;']),
             ])
             ->statePath('data');
     }
