@@ -120,9 +120,9 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/metode-pembayaran`
 
--   [ ] CRUD rekening
--   [ ] QRIS static (jika manual)
--   [ ] Konfigurasi Midtrans key (opsional)
+-   [X] CRUD rekening
+-   [X] QRIS static (jika manual)
+-   [X] Konfigurasi Midtrans key (opsional)
 
 ---
 
