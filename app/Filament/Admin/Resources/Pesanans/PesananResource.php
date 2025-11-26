@@ -11,6 +11,7 @@ use App\Filament\Admin\Resources\Pesanans\Schemas\PesananInfolist;
 use App\Filament\Admin\Resources\Pesanans\Tables\PesanansTable;
 use App\Models\Pesanan;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -20,9 +21,16 @@ class PesananResource extends Resource
 {
     protected static ?string $model = Pesanan::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-shopping-cart';
 
     protected static ?string $recordTitleAttribute = 'kode';
+
+    protected static string | UnitEnum | null $navigationGroup = 'Transaksi';
+
+    protected static ?string $navigationLabel = 'Pesanan';
+    protected static ?string $pluralLabel = 'Pesanan';
+    protected static ?string $modelLabel = 'Pesanan';
+    protected static ?string $pluralModelLabel = 'Pesanan';
 
     public static function form(Schema $schema): Schema
     {
