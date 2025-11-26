@@ -11,5 +11,5 @@ class ProdukKatalogCluster extends Cluster
 {
     protected static string | UnitEnum | null $navigationGroup = 'Master Data';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedSquares2x2;
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-tag';
 }

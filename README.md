@@ -130,10 +130,10 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/admin-pesanan`
 
--   [ ] Lihat daftar pesanan
--   [ ] Ubah status: pending → paid → produksi → dikirim → selesai
--   [ ] Upload/review bukti pembayaran
--   [ ] Input nomor resi (manual)
+-   [X] Lihat daftar pesanan
+-   [X] Ubah status: pending → paid → produksi → dikirim → selesai
+-   [X] Upload/review bukti pembayaran
+-   [X] Input nomor resi (manual)
 
 ---
 
