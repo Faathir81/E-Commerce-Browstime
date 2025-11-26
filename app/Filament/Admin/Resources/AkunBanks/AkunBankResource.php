@@ -19,7 +19,7 @@ class AkunBankResource extends Resource
 {
     protected static ?string $model = AkunBank::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-banknotes';
 
     protected static ?string $recordTitleAttribute = 'nama_bank';
 

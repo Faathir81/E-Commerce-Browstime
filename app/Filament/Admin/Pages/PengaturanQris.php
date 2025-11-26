@@ -20,7 +20,7 @@ class PengaturanQris extends Page implements HasForms
     protected static string | UnitEnum | null $navigationGroup = 'Pengaturan Sistem';
     protected static ?string $navigationLabel = 'QRIS Static';
     protected static ?string $title = 'Pengaturan QRIS Static';
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-user-group';
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-qr-code';
 
     protected string $view = 'filament.admin.pages.pengaturan-qris';
 
