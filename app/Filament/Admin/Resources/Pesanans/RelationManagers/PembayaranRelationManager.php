@@ -41,7 +41,7 @@ class PembayaranRelationManager extends RelationManager
             ->headerActions([])
             ->recordActions([
                 EditAction::make()
-                    ->form([
+                    ->schema([
                         Forms\Components\Select::make('metode')
                             ->label('Metode')
                             ->options([

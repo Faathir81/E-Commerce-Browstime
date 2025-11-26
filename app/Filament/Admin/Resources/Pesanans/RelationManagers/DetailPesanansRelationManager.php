@@ -29,7 +29,7 @@ class DetailPesanansRelationManager extends RelationManager
                     ->label('Subtotal')
                     ->money('IDR'),
             ])
-            ->headerActions([]) // read only
-            ->actions([]);      // read only
+            ->headerActions([])      // tetap sama
+            ->recordActions([]);     // ganti dari ->actions([])
     }
 }
