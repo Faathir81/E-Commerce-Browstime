@@ -16,7 +16,6 @@ class ProduksTable
     {
         return $table
             ->columns([
-
                 ImageColumn::make('gambar')
                     ->label('Gambar')
                     ->square()
@@ -42,7 +41,6 @@ class ProduksTable
                 IconColumn::make('is_active')
                     ->label('Aktif')
                     ->boolean(),
-
             ])
             ->filters([])
             ->recordActions([

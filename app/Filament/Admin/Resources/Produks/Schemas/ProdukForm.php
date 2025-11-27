@@ -28,7 +28,7 @@ class ProdukForm
                             if (blank($state)) return;
                             $set('slug', Str::slug($state));
                         }),
-
+                        
                     TextInput::make('slug')
                         ->label('Slug')
                         ->required()
@@ -69,7 +69,6 @@ class ProdukForm
                     Toggle::make('is_active')
                         ->label('Aktif di Katalog')
                         ->default(true),
-
                 ])
                 ->columns(3),
 
