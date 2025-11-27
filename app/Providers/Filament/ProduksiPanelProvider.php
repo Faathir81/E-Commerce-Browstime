@@ -19,26 +19,25 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class AdminPanelProvider extends PanelProvider
+class ProduksiPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->id('admin')
-            ->path('admin')
+            ->id('produksi')
+            ->path('produksi')
             ->login()
             ->authGuard('web')
-            ->homeUrl('/produksi')
+            ->homeUrl('/admin')
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
-            ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\Filament\Admin\Resources')
-            ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\Filament\Admin\Pages')
+            ->discoverResources(in: app_path('Filament/Produksi/Resources'), for: 'App\Filament\Produksi\Resources')
+            ->discoverPages(in: app_path('Filament/Produksi/Pages'), for: 'App\Filament\Produksi\Pages')
             ->pages([
                 Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\Filament\Admin\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Produksi/Widgets'), for: 'App\Filament\Produksi\Widgets')
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,

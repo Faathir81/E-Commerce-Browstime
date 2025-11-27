@@ -28,4 +28,21 @@ class BahanBaku extends Model
     {
         return $this->hasMany(MutasiStok::class, 'bahan_id');
     }
+
+    public function getStokAttribute(): float
+    {
+        // stok awal dari database
+        $awal = (float) $this->stok_awal;
+
+        // hitung semua mutasi (stok_masuk +, pemakaian produksi -, penyesuaian dsb.)
+        $mutasiMasuk = $this->mutasi()
+            ->whereIn('jenis_mutasi', ['stok_masuk'])
+            ->sum('qty');
+
+        $mutasiKeluar = $this->mutasi()
+            ->whereIn('jenis_mutasi', ['pemakaian_produksi', 'stok_keluar', 'penyesuaian_minus'])
+            ->sum('qty');
+
+        return $awal + $mutasiMasuk - $mutasiKeluar;
+    }
 }
