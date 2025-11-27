@@ -5,6 +5,7 @@ namespace App\Filament\Produksi\Resources\Produksis;
 use App\Filament\Produksi\Resources\Produksis\Pages\ListProduksi;
 use App\Filament\Produksi\Resources\Produksis\Pages\ViewProduksi;
 use App\Filament\Produksi\Resources\Produksis\Tables\ProduksisTable;
+use App\Filament\Produksi\Resources\Produksis\Schemas\ProduksiInfolist;
 use App\Models\Pesanan;
 use BackedEnum;
 use UnitEnum;
@@ -32,7 +33,7 @@ class ProduksiResource extends Resource
 
     public static function infolist(Schema $schema): Schema
     {
-        return $schema;
+        return ProduksiInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table

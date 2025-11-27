@@ -33,4 +33,9 @@ class Pesanan extends Model
     {
         return $this->hasOne(Pembayaran::class);
     }
+
+    public function alamatPengiriman()
+    {
+        return $this->hasOne(AlamatPengiriman::class, 'pelanggan_id', 'pelanggan_id');
+    }
 }
