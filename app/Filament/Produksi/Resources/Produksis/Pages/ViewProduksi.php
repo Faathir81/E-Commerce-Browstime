@@ -37,10 +37,10 @@ class ViewProduksi extends ViewRecord
                         $bahan = $item['bahan'];
                         $kebutuhanQty = $item['kebutuhan'];
 
-                        if ($bahan->stok < $kebutuhanQty) {
+                        if ($bahan->stok_virtual < $kebutuhanQty) {
                             Notification::make()
                                 ->title('Stok tidak cukup')
-                                ->body("Bahan {$bahan->nama} kurang. Dibutuhkan {$kebutuhanQty} {$bahan->satuan?->nama}, stok sekarang {$bahan->stok}.")
+                                ->body("Bahan {$bahan->nama} kurang. Dibutuhkan {$kebutuhanQty} {$bahan->satuan?->nama}, stok sekarang {$bahan->stok_virtual}.")
                                 ->danger()
                                 ->send();
 
@@ -54,7 +54,7 @@ class ViewProduksi extends ViewRecord
                         $bahan = $item['bahan'];
                         $kebutuhanQty = $item['kebutuhan'];
 
-                        $stokAwal = $bahan->stok;
+                        $stokAwal = $bahan->stok_virtual;
                         $stokAkhir = $stokAwal - $kebutuhanQty;
 
                         MutasiStok::create([
@@ -65,6 +65,10 @@ class ViewProduksi extends ViewRecord
                             'stok_akhir' => $stokAkhir,
                             'catatan' => 'Produksi pesanan ' . $pesanan->kode,
                             'user_id' => Auth::id(),
+                        ]);
+
+                        $bahan->update([
+                            'stok_awal' => $stokAkhir
                         ]);
                     }
 
