@@ -14,14 +14,14 @@ class CreateMutasiStok extends CreateRecord
     {
         $bahan = \App\Models\BahanBaku::find($data['bahan_id']);
 
+        // stok real = stok_awal
         $data['stok_awal'] = $bahan->stok_awal;
 
-        // rumus mutasi
         if ($data['jenis_mutasi'] === 'penyesuaian') {
             $data['stok_akhir'] = $data['qty'];
         } elseif ($data['jenis_mutasi'] === 'stok_masuk') {
             $data['stok_akhir'] = $bahan->stok_awal + $data['qty'];
-        } else {
+        } else { // pemakaian produksi
             $data['stok_akhir'] = $bahan->stok_awal - $data['qty'];
         }
 
@@ -31,8 +31,9 @@ class CreateMutasiStok extends CreateRecord
     protected function afterCreate(): void
     {
         $bahan = $this->record->bahan;
+
         $bahan->update([
-            'stok_awal' => $this->record->stok_akhir
+            'stok_awal' => $this->record->stok_akhir,
         ]);
     }
 }
