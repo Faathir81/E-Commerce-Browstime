@@ -44,31 +44,31 @@ Setiap task memiliki branch khusus agar proses merging & dokumentasi rapi.
 
 **Branch:** `feat/master-produk`
 
--   [X] CRUD Produk
--   [X] Upload gambar
--   [X] Relasi ke kategori
--   [X] Harga, deskripsi, estimasi waktu produksi
+-   [x] CRUD Produk
+-   [x] Upload gambar
+-   [x] Relasi ke kategori
+-   [x] Harga, deskripsi, estimasi waktu produksi
 
 ### **2.2 Kategori**
 
 **Branch:** `feat/master-kategori`
 
--   [X] CRUD kategori
--   [X] Relasi 1–many ke produk
+-   [x] CRUD kategori
+-   [x] Relasi 1–many ke produk
 
 ### **2.3 Bahan Baku**
 
 **Branch:** `feat/master-bahan-baku`
 
--   [X] CRUD bahan baku
--   [X] Satuan
--   [X] Stok awal & minimum
+-   [x] CRUD bahan baku
+-   [x] Satuan
+-   [x] Stok awal & minimum
 
 ### **2.4 Satuan**
 
 **Branch:** `feat/master-satuan`
 
--   [X] CRUD satuan material (gr, ml, pcs)
+-   [x] CRUD satuan material (gr, ml, pcs)
 
 ---
 
@@ -76,9 +76,9 @@ Setiap task memiliki branch khusus agar proses merging & dokumentasi rapi.
 
 **Branch:** `feat/master-bom`
 
--   [X] CRUD Resep
--   [X] Nested form detail bahan
--   [X] Kebutuhan bahan per produk
+-   [x] CRUD Resep
+-   [x] Nested form detail bahan
+-   [x] Kebutuhan bahan per produk
 
 ---
 
@@ -86,11 +86,11 @@ Setiap task memiliki branch khusus agar proses merging & dokumentasi rapi.
 
 **Branch:** `feat/mutasi-stok`
 
--   [X] Pemakaian produksi
--   [X] Stok masuk
--   [X] Stok rusak / expired
--   [X] Penyesuaian stok
--   [X] Log mutasi
+-   [x] Pemakaian produksi
+-   [x] Stok masuk
+-   [x] Stok rusak / expired
+-   [x] Penyesuaian stok
+-   [x] Log mutasi
 
 ---
 
@@ -98,11 +98,11 @@ Setiap task memiliki branch khusus agar proses merging & dokumentasi rapi.
 
 **Branch:** `feat/wilayah-pengiriman`
 
--   [X] CRUD wilayah pengiriman yang didukung (kecamatan/subdistrict)
--   [X] Simpan subdistrict_id RajaOngkir
--   [X] Tidak ada tarif manual (nominal dihitung dengan API)
--   [X] Relasi pesanan → simpan ongkir final dari API
--   [X] (Opsional) tabel cache ongkir untuk hemat limit
+-   [x] CRUD wilayah pengiriman yang didukung (kecamatan/subdistrict)
+-   [x] Simpan subdistrict_id RajaOngkir
+-   [x] Tidak ada tarif manual (nominal dihitung dengan API)
+-   [x] Relasi pesanan → simpan ongkir final dari API
+-   [x] (Opsional) tabel cache ongkir untuk hemat limit
 
 ---
 
@@ -110,9 +110,9 @@ Setiap task memiliki branch khusus agar proses merging & dokumentasi rapi.
 
 Branch: feat/rajaongkir-wilayah
 
-- [X] Endpoint sync provinsi, kota, kecamatan dari RajaOngkir
-- [X] Cache ke database untuk dropdown
-- [X] Validasi wilayah harus dalam daftar wilayah yang didukung
+-   [x] Endpoint sync provinsi, kota, kecamatan dari RajaOngkir
+-   [x] Cache ke database untuk dropdown
+-   [x] Validasi wilayah harus dalam daftar wilayah yang didukung
 
 ---
 
@@ -120,9 +120,9 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/metode-pembayaran`
 
--   [X] CRUD rekening
--   [X] QRIS static (jika manual)
--   [X] Konfigurasi Midtrans key (opsional)
+-   [x] CRUD rekening
+-   [x] QRIS static (jika manual)
+-   [x] Konfigurasi Midtrans key (opsional)
 
 ---
 
@@ -130,10 +130,10 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/admin-pesanan`
 
--   [X] Lihat daftar pesanan
--   [X] Ubah status: pending → paid → produksi → dikirim → selesai
--   [X] Upload/review bukti pembayaran
--   [X] Input nomor resi (manual)
+-   [x] Lihat daftar pesanan
+-   [x] Ubah status: pending → paid → produksi → dikirim → selesai
+-   [x] Upload/review bukti pembayaran
+-   [x] Input nomor resi (manual)
 
 ---
 
@@ -141,11 +141,11 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/produksi`
 
--   [ ] Lihat pesanan siap produksi
--   [ ] Hitung kebutuhan bahan (BOM × qty)
--   [ ] Validasi stok cukup / kurang
--   [ ] Proses produksi
--   [ ] Mark “Siap Dikirim”
+-   [x] Lihat pesanan siap produksi
+-   [x] Hitung kebutuhan bahan (BOM × qty)
+-   [x] Validasi stok cukup / kurang
+-   [x] Proses produksi
+-   [x] Mark “Siap Dikirim”
 
 ---
 
@@ -211,6 +211,7 @@ Branch: feat/rajaongkir-wilayah
 -   [ ] Pilih metode pembayaran
 -   [ ] Hitung total
 -   [ ] Buat pesanan + simpan ongkir final
+
 ---
 
 ## ## 13.0 — Checkout Guest
