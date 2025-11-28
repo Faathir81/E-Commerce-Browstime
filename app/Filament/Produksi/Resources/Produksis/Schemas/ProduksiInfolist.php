@@ -26,7 +26,7 @@ class ProduksiInfolist
                             ->label('Kode Pesanan')
                             ->copyable(),
 
-                        TextEntry::make('pelanggan.nama')
+                        TextEntry::make('nama_pelanggan')
                             ->label('Customer'),
 
                         TextEntry::make('created_at')
@@ -61,19 +61,19 @@ class ProduksiInfolist
                         TextEntry::make('alamat_nama_penerima')
                             ->label('Nama Penerima')
                             ->state(function ($record) {
-                                return $record->pelanggan?->alamatPengirimans->first()?->nama_penerima ?? '-';
+                                return $record->resolvedPelanggan()?->alamatPengiriman->first()?->nama_penerima ?? '-';
                             }),
 
                         TextEntry::make('alamat_no_hp')
                             ->label('No HP')
                             ->state(function ($record) {
-                                return $record->pelanggan?->alamatPengirimans->first()?->no_hp ?? '-';
+                                return $record->resolvedPelanggan()?->alamatPengiriman->first()?->no_hp ?? '-';
                             }),
 
                         TextEntry::make('alamat_lengkap')
                             ->label('Alamat Lengkap')
                             ->state(function ($record) {
-                                return $record->pelanggan?->alamatPengirimans->first()?->alamat_lengkap ?? '-';
+                                return $record->resolvedPelanggan()?->alamatPengiriman->first()?->alamat_lengkap ?? '-';
                             })
                             ->columnSpanFull(),
 

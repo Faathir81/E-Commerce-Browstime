@@ -16,7 +16,7 @@ class ProduksisTable
                     ->label('Kode Pesanan')
                     ->searchable(),
 
-                TextColumn::make('pelanggan.nama')
+                TextColumn::make('nama_pelanggan')
                     ->label('Pelanggan')
                     ->placeholder('-'),
 
