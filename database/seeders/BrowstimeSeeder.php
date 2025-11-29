@@ -5,9 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-// Spatie Permission
+// Spatie
 use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 
 // Models
 use App\Models\User;
@@ -29,21 +28,20 @@ class BrowstimeSeeder extends Seeder
     public function run(): void
     {
         /* ============================
-         * 1. ROLE (SPATIE)
+         * 1. ROLE
          * ============================*/
         $roles = ['admin', 'produksi', 'keuangan', 'pelanggan'];
 
         foreach ($roles as $r) {
-            Role::create([
+            Role::firstOrCreate([
                 'name' => $r,
                 'guard_name' => 'web',
             ]);
         }
 
         /* ============================
-         * 2. USER + ROLE
+         * 2. USERS
          * ============================*/
-
         $admin = User::create([
             'name' => 'Admin Utama',
             'email' => 'admin@demo.com',
@@ -62,9 +60,16 @@ class BrowstimeSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
 
+        $pelangganUser = User::create([
+            'name' => 'Pelanggan Login',
+            'email' => 'pelanggan1@demo.com',
+            'password' => Hash::make('password'),
+        ]);
+
         $admin->assignRole('admin');
         $stafProduksi->assignRole('produksi');
         $keuangan->assignRole('keuangan');
+        $pelangganUser->assignRole('pelanggan');
 
         /* ============================
          * 3. METODE PEMBAYARAN
@@ -94,7 +99,7 @@ class BrowstimeSeeder extends Seeder
         ]);
 
         /* ============================
-         * 6. KATEGORI PRODUK
+         * 6. KATEGORI
          * ============================*/
         $katCookies = Kategori::create(['nama' => 'Cookies', 'slug' => 'cookies']);
         $katBrownies = Kategori::create(['nama' => 'Brownies', 'slug' => 'brownies']);
@@ -104,7 +109,6 @@ class BrowstimeSeeder extends Seeder
          * ============================*/
         $gr = Satuan::create(['nama' => 'Gram', 'symbol' => 'gr']);
         $pcs = Satuan::create(['nama' => 'Pcs', 'symbol' => 'pcs']);
-        $ml = Satuan::create(['nama' => 'Mililiter', 'symbol' => 'ml']);
 
         /* ============================
          * 8. BAHAN BAKU
@@ -140,7 +144,6 @@ class BrowstimeSeeder extends Seeder
             'harga' => 35000,
             'deskripsi' => 'Cookies coklat premium',
             'waktu_produksi' => 1,
-            'gambar' => null,
         ]);
 
         $produk2 = Produk::create([
@@ -150,11 +153,10 @@ class BrowstimeSeeder extends Seeder
             'harga' => 45000,
             'deskripsi' => 'Brownies klasik lembut',
             'waktu_produksi' => 1,
-            'gambar' => null,
         ]);
 
         /* ============================
-         * 10. RESEP / BOM
+         * 10. BOM
          * ============================*/
         $bom1 = ResepBom::create([
             'produk_id' => $produk1->id,
@@ -162,18 +164,8 @@ class BrowstimeSeeder extends Seeder
         ]);
 
         DetailResep::insert([
-            [
-                'resep_id' => $bom1->id,
-                'bahan_id' => $tepung->id,
-                'satuan_id' => $gr->id,
-                'jumlah' => 100,
-            ],
-            [
-                'resep_id' => $bom1->id,
-                'bahan_id' => $gula->id,
-                'satuan_id' => $gr->id,
-                'jumlah' => 50,
-            ],
+            ['resep_id' => $bom1->id, 'bahan_id' => $tepung->id, 'satuan_id' => $gr->id, 'jumlah' => 100],
+            ['resep_id' => $bom1->id, 'bahan_id' => $gula->id,   'satuan_id' => $gr->id, 'jumlah' => 50],
         ]);
 
         $bom2 = ResepBom::create([
@@ -182,31 +174,28 @@ class BrowstimeSeeder extends Seeder
         ]);
 
         DetailResep::insert([
-            [
-                'resep_id' => $bom2->id,
-                'bahan_id' => $tepung->id,
-                'satuan_id' => $gr->id,
-                'jumlah' => 150,
-            ],
-            [
-                'resep_id' => $bom2->id,
-                'bahan_id' => $butter->id,
-                'satuan_id' => $gr->id,
-                'jumlah' => 100,
-            ],
+            ['resep_id' => $bom2->id, 'bahan_id' => $tepung->id, 'satuan_id' => $gr->id, 'jumlah' => 150],
+            ['resep_id' => $bom2->id, 'bahan_id' => $butter->id, 'satuan_id' => $gr->id, 'jumlah' => 100],
         ]);
 
         /* ============================
-         * 11. PELANGGAN
+         * 11. PELANGGAN (GUEST + LOGIN)
          * ============================*/
-        $pelanggan = Pelanggan::create([
-            'nama' => 'Pelanggan Demo',
-            'email' => 'pelanggan@demo.com',
+        $guest = Pelanggan::create([
+            'nama' => 'Pelanggan Guest',
+            'email' => 'guest@demo.com',
             'no_hp' => '08123456789',
         ]);
 
+        $pelanggan1 = Pelanggan::create([
+            'user_id' => $pelangganUser->id,
+            'nama' => 'Pelanggan Login',
+            'email' => 'pelanggan1@demo.com',
+            'no_hp' => '08123456788',
+        ]);
+
         /* ============================
-         * 12. WILAYAH PENGIRIMAN (MINIMAL)
+         * 12. WILAYAH PENGIRIMAN
          * ============================*/
         $wilayah = WilayahPengiriman::create([
             'nama' => 'Depok - Beji',
@@ -220,10 +209,19 @@ class BrowstimeSeeder extends Seeder
          * 13. ALAMAT PENGIRIMAN
          * ============================*/
         AlamatPengiriman::create([
-            'pelanggan_id' => $pelanggan->id,
-            'nama_penerima' => 'Pelanggan Demo',
-            'no_hp' => '08123456789',
+            'pelanggan_id' => $guest->id,
+            'nama_penerima' => $guest->nama,
+            'no_hp' => $guest->no_hp,
             'alamat_lengkap' => 'Jl. Mawar No. 12',
+            'kode_pos' => '16425',
+            'wilayah_pengiriman_id' => $wilayah->id,
+        ]);
+
+        AlamatPengiriman::create([
+            'pelanggan_id' => $pelanggan1->id,
+            'nama_penerima' => 'Pelanggan Login',
+            'no_hp' => '08123456788',
+            'alamat_lengkap' => 'Jl. Punklorde No. 1',
             'kode_pos' => '16425',
             'wilayah_pengiriman_id' => $wilayah->id,
         ]);

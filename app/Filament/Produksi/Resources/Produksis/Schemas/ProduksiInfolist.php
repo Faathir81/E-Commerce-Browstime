@@ -219,48 +219,6 @@ class ProduksiInfolist
 
                     ])
                     ->columns(3),
-
-
-                /*
-                |----------------------------------------------------------------------
-                | TIMELINE STATUS PESANAN
-                |----------------------------------------------------------------------
-                */
-                Section::make('Timeline Pesanan')
-                    ->schema([
-                        RepeatableEntry::make('timeline')
-                            ->schema([
-                                TextEntry::make('label')->label('Status'),
-                                TextEntry::make('time')->label('Waktu'),
-                            ])
-                            ->state(function ($record) {
-
-                                return [
-                                    [
-                                        'label' => 'Dibuat',
-                                        'time'  => $record->created_at?->format('d M Y H:i'),
-                                    ],
-                                    [
-                                        'label' => 'Dibayar',
-                                        'time'  => $record->pembayaran?->created_at
-                                                    ? $record->pembayaran->created_at->format('d M Y H:i')
-                                                    : '-',
-                                    ],
-                                    [
-                                        'label' => 'Produksi',
-                                        'time'  => $record->status === 'produksi'
-                                                    ? $record->updated_at?->format('d M Y H:i')
-                                                    : '-',
-                                    ],
-                                    [
-                                        'label' => 'Dikirim',
-                                        'time'  => $record->status === 'dikirim'
-                                                    ? $record->updated_at?->format('d M Y H:i')
-                                                    : '-',
-                                    ],
-                                ];
-                            })
-                    ]),
             ]);
     }
 }
