@@ -336,12 +336,12 @@ Branch: feat/rajaongkir-wilayah
 
 Gunakan checklist ini untuk track progress harian.
 
--   [ ] Master Data Selesai
--   [ ] BOM Selesai
--   [ ] Mutasi Stok Selesai
--   [ ] Pesanan Admin Selesai
--   [ ] Produksi Selesai
--   [ ] Dashboard Selesai
+-   [X] Master Data Selesai
+-   [X] BOM Selesai
+-   [X] Mutasi Stok Selesai
+-   [X] Pesanan Admin Selesai
+-   [X] Produksi Selesai
+-   [X] Dashboard Selesai
 -   [ ] Laporan Selesai
 -   [ ] Katalog Customer Selesai
 -   [ ] Keranjang Selesai
@@ -357,17 +357,3 @@ Gunakan checklist ini untuk track progress harian.
 -   [ ] Final Deploy
 -   [ ] Bab 6
 -   [ ] Bab 7
-
----
-
-# 👍 CATATAN PENTING
-
--   Semua branch dimulai dari `dev`, merge ke `main` hanya ketika modul selesai.
--   Penamaan branch fleksibel tapi **harus konsisten**.
--   Ambil modul per 1–2 hari agar progress stabil.
-
----
-
-# ✨ Selesai.
-
-README ini siap dipakai untuk GitHub dan dokumentasi development.
