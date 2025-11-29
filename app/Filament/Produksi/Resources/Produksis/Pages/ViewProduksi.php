@@ -3,6 +3,7 @@
 namespace App\Filament\Produksi\Resources\Produksis\Pages;
 
 use App\Filament\Produksi\Resources\Produksis\ProduksiResource;
+use App\Filament\Produksi\Resources\Produksis\Schemas\ProduksiHelper;
 use App\Models\BahanBaku;
 use App\Models\DetailPesanan;
 use App\Models\MutasiStok;
@@ -104,6 +105,6 @@ class ViewProduksi extends ViewRecord
 
     protected function hitungKebutuhanBahan(Pesanan $pesanan): array
     {
-        return \App\Filament\Produksi\Resources\Produksis\Schemas\ProduksiHelper::hitungKebutuhanBahan($pesanan);
+        return ProduksiHelper::hitungKebutuhanBahan($pesanan);
     }
 }
