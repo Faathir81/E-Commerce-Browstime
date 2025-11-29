@@ -4,6 +4,7 @@ namespace App\Filament\Admin\Widgets;
 
 use App\Models\Pesanan;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Facades\DB;
 
 class GrafikPenjualan extends ChartWidget
 {
@@ -15,10 +16,14 @@ class GrafikPenjualan extends ChartWidget
 
     protected function getData(): array
     {
-        // Ambil data 7 hari terakhir
-        $data = Pesanan::where('status', 'paid')
-            ->whereDate('created_at', '>=', now()->subDays(6))
-            ->selectRaw('DATE(created_at) as tanggal, SUM(total) as omzet')
+        $data = Pesanan::query()
+            ->leftJoin('pembayarans as pay', function ($join) {
+                $join->on('pay.pesanan_id', '=', 'pesanans.id')
+                    ->where('pay.status', 'valid');
+            })
+            ->whereIn('pesanans.status', ['paid', 'dikirim'])
+            ->whereDate(DB::raw('COALESCE(pay.created_at, pesanans.updated_at)'), '>=', now()->subDays(6))
+            ->selectRaw('DATE(COALESCE(pay.created_at, pesanans.updated_at)) as tanggal, SUM(pesanans.total) as omzet')
             ->groupBy('tanggal')
             ->orderBy('tanggal')
             ->pluck('omzet', 'tanggal');

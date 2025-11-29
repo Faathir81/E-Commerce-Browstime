@@ -6,6 +6,7 @@ use App\Models\BahanBaku;
 use App\Models\Pesanan;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\Facades\DB;
 
 class RingkasanStatistik extends StatsOverviewWidget
 {
@@ -22,11 +23,17 @@ class RingkasanStatistik extends StatsOverviewWidget
 
     protected function getStats(): array
     {
-        $totalHariIni = Pesanan::where('status', 'paid')
-            ->whereDate('created_at', today())
-            ->sum('total');
+        $omzetQuery = Pesanan::query()
+            ->leftJoin('pembayarans as pay', function ($join) {
+                $join->on('pay.pesanan_id', '=', 'pesanans.id')
+                    ->where('pay.status', 'valid');
+            })
+            ->whereIn('pesanans.status', ['paid', 'dikirim'])
+            ->whereDate(DB::raw('COALESCE(pay.created_at, pesanans.updated_at)'), today());
 
-        $jumlahPesanan = Pesanan::whereDate('created_at', today())->count();
+        $totalHariIni = (clone $omzetQuery)->sum('pesanans.total');
+
+        $jumlahPesanan = (clone $omzetQuery)->count();
 
         $jumlahStokRendah = BahanBaku::whereColumn('stok_awal', '<', 'stok_minimum')->count();
 

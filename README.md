@@ -155,10 +155,10 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/dashboard-admin`
 
--   [ ] Penjualan harian
--   [ ] Stok rendah
--   [ ] Total pesanan
--   [ ] Grafik performa
+-   [X] Penjualan harian
+-   [X] Stok rendah
+-   [X] Total pesanan
+-   [X] Grafik performa
 
 ### **9.2 Laporan**
 
