@@ -12,6 +12,7 @@ use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ViewProduksi extends ViewRecord
 {
@@ -49,34 +50,45 @@ class ViewProduksi extends ViewRecord
                         }
                     }
 
-                    // 2) Catat mutasi pemakaian produksi
-                    foreach ($kebutuhan as $item) {
-                        /** @var BahanBaku $bahan */
-                        $bahan = $item['bahan'];
-                        $kebutuhanQty = $item['kebutuhan'];
+                    DB::transaction(function () use ($kebutuhan, $pesanan) {
+                        // 2) Catat mutasi pemakaian produksi
+                        foreach ($kebutuhan as $item) {
+                            $kebutuhanQty = $item['kebutuhan'];
+                            $bahan = BahanBaku::lockForUpdate()->find($item['bahan']->id);
 
-                        $stokAwal = $bahan->stok_virtual;
-                        $stokAkhir = $stokAwal - $kebutuhanQty;
+                            if (!$bahan) {
+                                continue;
+                            }
 
-                        MutasiStok::create([
-                            'bahan_id' => $bahan->id,
-                            'jenis_mutasi' => 'pemakaian_produksi',
-                            'qty' => $kebutuhanQty,
-                            'stok_awal' => $stokAwal,
-                            'stok_akhir' => $stokAkhir,
-                            'catatan' => 'Produksi pesanan ' . $pesanan->kode,
-                            'user_id' => Auth::id(),
-                        ]);
+                            $stokAwal = $bahan->current_stok;
 
-                        $bahan->update([
-                            'stok_awal' => $stokAkhir
-                        ]);
-                    }
+                            if ($stokAwal < $kebutuhanQty) {
+                                throw new \RuntimeException("Stok {$bahan->nama} tidak cukup saat transaksi dijalankan.");
+                            }
 
-                    // 3) Update status pesanan jika masih paid
-                    if ($pesanan->status === 'paid') {
-                        $pesanan->update(['status' => 'produksi']);
-                    }
+                            $stokAkhir = $stokAwal - $kebutuhanQty;
+
+                            MutasiStok::create([
+                                'bahan_id' => $bahan->id,
+                                'jenis_mutasi' => 'pemakaian_produksi',
+                                'qty' => $kebutuhanQty,
+                                'stok_awal' => $stokAwal,
+                                'stok_akhir' => $stokAkhir,
+                                'catatan' => 'Produksi pesanan ' . $pesanan->kode,
+                                'user_id' => Auth::id(),
+                            ]);
+
+                            // stok_awal disimpan sebagai stok berjalan (current_stok)
+                            $bahan->update([
+                                'stok_awal' => $stokAkhir,
+                            ]);
+                        }
+
+                        // 3) Update status pesanan jika masih paid
+                        if ($pesanan->status === 'paid') {
+                            $pesanan->update(['status' => 'produksi']);
+                        }
+                    });
 
                     Notification::make()
                         ->title('Produksi berhasil diproses')

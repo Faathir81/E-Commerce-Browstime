@@ -17,7 +17,7 @@ class PesanansTable
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('user.name')
+                Tables\Columns\TextColumn::make('nama_pelanggan')
                     ->label('Pelanggan')
                     ->searchable()
                     ->toggleable(),
