@@ -164,11 +164,11 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/laporan`
 
--   [ ] Laporan penjualan
--   [ ] Laporan stok
--   [ ] Laporan keuangan
--   [ ] Filter tanggal
--   [ ] Export Excel
+-   [X] Laporan penjualan
+-   [X] Laporan stok
+-   [X] Laporan keuangan
+-   [X] Filter tanggal
+-   [X] Export Excel
 
 ---
 

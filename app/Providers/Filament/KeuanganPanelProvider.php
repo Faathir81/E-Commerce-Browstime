@@ -19,25 +19,25 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class ProduksiPanelProvider extends PanelProvider
+class KeuanganPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->id('produksi')
-            ->path('produksi')
+            ->id('keuangan')
+            ->path('keuangan')
             ->login()
             ->authGuard('web')
-            ->homeUrl('/produksi')
+            ->homeUrl('/keuangan')
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->discoverResources(in: app_path('Filament/Produksi/Resources'), for: 'App\Filament\Produksi\Resources')
-            ->discoverPages(in: app_path('Filament/Produksi/Pages'), for: 'App\Filament\Produksi\Pages')
+            ->discoverResources(in: app_path('Filament/Keuangan/Resources'), for: 'App\Filament\Keuangan\Resources')
+            ->discoverPages(in: app_path('Filament/Keuangan/Pages'), for: 'App\Filament\Keuangan\Pages')
             ->pages([
                 Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Produksi/Widgets'), for: 'App\Filament\Produksi\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Keuangan/Widgets'), for: 'App\Filament\Keuangan\Widgets')
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,

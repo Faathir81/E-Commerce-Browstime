@@ -3,16 +3,18 @@
 namespace App\Filament\Admin\Pages;
 
 use App\Models\MidtransSetting;
+use Filament\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Schemas\Schema;
 use Filament\Pages\Page;
 use Filament\Notifications\Notification;
+use Filament\Schemas\Components\Form;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use UnitEnum;
 use BackedEnum;
-use Filament\Schemas\Components\Section;
 
 class PengaturanMidtrans extends Page implements HasForms
 {
@@ -22,8 +24,6 @@ class PengaturanMidtrans extends Page implements HasForms
     protected static ?string $navigationLabel = 'Midtrans Key';
     protected static ?string $title = 'Pengaturan Midtrans';
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-key';
-
-    protected string $view = 'filament.admin.pages.pengaturan-midtrans';
 
     public ?array $data = [];
 
@@ -64,6 +64,42 @@ class PengaturanMidtrans extends Page implements HasForms
                     ->extraAttributes(['style' => 'margin-bottom: 2rem;']),
             ])
             ->statePath('data');
+    }
+
+    public function content(Schema $schema): Schema
+    {
+        return $schema->components([
+            Section::make('Pengaturan Midtrans')
+                ->schema([
+                    Form::make()
+                        ->schema([
+                            TextInput::make('server_key')
+                                ->label('Server Key')
+                                ->password()
+                                ->revealable()
+                                ->required(),
+
+                            TextInput::make('client_key')
+                                ->label('Client Key')
+                                ->password()
+                                ->revealable()
+                                ->required(),
+
+                            Toggle::make('is_production')
+                                ->label('Gunakan Mode Production?')
+                                ->helperText('Jika dimatikan, sistem akan menggunakan Sandbox'),
+                        ])
+                        ->statePath('data')
+                        ->livewireSubmitHandler('simpan')
+                        ->footer([
+                            Action::make('simpan')
+                                ->label('Simpan')
+                                ->color('primary')
+                                ->action('simpan'),
+                        ]),
+                ])
+                ->columnSpanFull(),
+        ]);
     }
 
     public function simpan(): void

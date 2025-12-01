@@ -3,15 +3,17 @@
 namespace App\Filament\Admin\Pages;
 
 use App\Models\QrisSetting;
+use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Form;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use BackedEnum;
 use UnitEnum;
-use Filament\Schemas\Components\Section;
 
 class PengaturanQris extends Page implements HasForms
 {
@@ -21,8 +23,6 @@ class PengaturanQris extends Page implements HasForms
     protected static ?string $navigationLabel = 'QRIS Static';
     protected static ?string $title = 'Pengaturan QRIS Static';
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-qr-code';
-
-    protected string $view = 'filament.admin.pages.pengaturan-qris';
 
     public ?array $data = [];
 
@@ -52,6 +52,33 @@ class PengaturanQris extends Page implements HasForms
                 ->extraAttributes(['style' => 'margin-bottom: 2rem;']),
         ])
         ->statePath('data');
+    }
+
+    public function content(Schema $schema): Schema
+    {
+        return $schema->components([
+            Section::make('Pengaturan QRIS')
+                ->schema([
+                    Form::make()
+                        ->schema([
+                            FileUpload::make('gambar_qris')
+                                ->image()
+                                ->disk('public')
+                                ->directory('qris')
+                                ->visibility('public')
+                                ->required(),
+                        ])
+                        ->statePath('data')
+                        ->livewireSubmitHandler('simpan')
+                        ->footer([
+                            Action::make('simpan')
+                                ->label('Simpan')
+                                ->color('warning')
+                                ->action('simpan'),
+                        ]),
+                ])
+                ->columnSpanFull(),
+        ]);
     }
 
     public function simpan(): void
