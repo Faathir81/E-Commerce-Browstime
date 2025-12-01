@@ -28,7 +28,7 @@ class ProduksiPanelProvider extends PanelProvider
             ->path('produksi')
             ->login()
             ->authGuard('web')
-            ->homeUrl('/admin')
+            ->homeUrl('/produksi')
             ->colors([
                 'primary' => Color::Amber,
             ])
