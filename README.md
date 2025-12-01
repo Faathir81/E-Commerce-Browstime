@@ -342,7 +342,7 @@ Gunakan checklist ini untuk track progress harian.
 -   [X] Pesanan Admin Selesai
 -   [X] Produksi Selesai
 -   [X] Dashboard Selesai
--   [ ] Laporan Selesai
+-   [X] Laporan Selesai
 -   [ ] Katalog Customer Selesai
 -   [ ] Keranjang Selesai
 -   [ ] Checkout Customer Selesai
