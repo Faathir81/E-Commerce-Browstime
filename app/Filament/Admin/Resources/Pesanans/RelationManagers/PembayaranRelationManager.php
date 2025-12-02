@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Pesanans\RelationManagers;
 
+use App\Support\StatusStyle;
 use Filament\Forms;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
@@ -26,17 +27,16 @@ class PembayaranRelationManager extends RelationManager
                     ->money('IDR'),
 
                 Tables\Columns\ImageColumn::make('bukti_bayar')
-                    ->label('Bukti'),
+                    ->label('Bukti')
+                    ->disk('public')
+                    ->size(80),
 
                 Tables\Columns\TextColumn::make('status')
                     ->label('Status')
                     ->badge()
-                    ->colors([
-                        'warning' => 'menunggu_verifikasi',
-                        'success' => 'valid',
-                        'danger'  => 'invalid',
-                        'gray'    => 'pending',
-                    ]),
+                    ->formatStateUsing(fn (?string $state) => StatusStyle::pembayaran($state)['label'])
+                    ->color(fn (?string $state) => StatusStyle::pembayaran($state)['color'])
+                    ->icon(fn (?string $state) => StatusStyle::pembayaran($state)['icon']),
             ])
             ->headerActions([])
             ->recordActions([
@@ -66,12 +66,7 @@ class PembayaranRelationManager extends RelationManager
 
                         Forms\Components\Select::make('status')
                             ->label('Status')
-                            ->options([
-                                'pending'             => 'Belum Bayar',
-                                'menunggu_verifikasi' => 'Menunggu Verifikasi',
-                                'valid'               => 'Valid',
-                                'invalid'             => 'Invalid',
-                            ])
+                            ->options(StatusStyle::pembayaranOptions())
                             ->native(false)
                             ->required(),
                     ]),

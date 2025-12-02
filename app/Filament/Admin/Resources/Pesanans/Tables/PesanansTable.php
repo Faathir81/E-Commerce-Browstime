@@ -2,9 +2,11 @@
 
 namespace App\Filament\Admin\Resources\Pesanans\Tables;
 
+use App\Models\Pesanan;
+use App\Support\StatusStyle;
 use Filament\Tables\Table;
 use Filament\Tables;
-use Filament\Actions\{ViewAction, EditAction, DeleteBulkAction, BulkActionGroup};
+use Filament\Actions\{Action, EditAction, DeleteBulkAction, BulkActionGroup};
 
 class PesanansTable
 {
@@ -30,13 +32,9 @@ class PesanansTable
                 Tables\Columns\TextColumn::make('status')
                     ->label('Status')
                     ->badge()
-                    ->colors([
-                        'warning' => 'pending',
-                        'success' => ['paid', 'selesai'],
-                        'info'    => 'produksi',
-                        'primary' => 'dikirim',
-                        'danger'  => 'batal',
-                    ]),
+                    ->formatStateUsing(fn (?string $state) => StatusStyle::pesanan($state)['label'])
+                    ->color(fn (?string $state) => StatusStyle::pesanan($state)['color'])
+                    ->icon(fn (?string $state) => StatusStyle::pesanan($state)['icon']),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Tanggal')
@@ -44,8 +42,8 @@ class PesanansTable
                     ->sortable(),
             ])
             ->filters([])
+            ->recordUrl(fn (Pesanan $record) => \App\Filament\Admin\Resources\Pesanans\PesananResource::getUrl('edit', ['record' => $record]))
             ->recordActions([
-                ViewAction::make(),
                 EditAction::make(),
             ])
             ->bulkActions([

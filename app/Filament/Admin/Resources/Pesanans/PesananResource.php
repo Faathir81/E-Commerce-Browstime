@@ -12,6 +12,7 @@ use App\Filament\Admin\Resources\Pesanans\Tables\PesanansTable;
 use App\Models\Pesanan;
 use BackedEnum;
 use UnitEnum;
+use Filament\Resources\RelationManagers\RelationGroup;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -50,8 +51,10 @@ class PesananResource extends Resource
     public static function getRelations(): array
     {
         return [
-            \App\Filament\Admin\Resources\Pesanans\RelationManagers\DetailPesanansRelationManager::class,
-            \App\Filament\Admin\Resources\Pesanans\RelationManagers\PembayaranRelationManager::class,
+            RelationGroup::make('Relasi', [
+                \App\Filament\Admin\Resources\Pesanans\RelationManagers\PembayaranRelationManager::class,
+                \App\Filament\Admin\Resources\Pesanans\RelationManagers\DetailPesanansRelationManager::class,
+            ]),
         ];
     }
 

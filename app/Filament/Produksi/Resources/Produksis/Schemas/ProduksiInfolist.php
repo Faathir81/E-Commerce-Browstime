@@ -2,6 +2,7 @@
 
 namespace App\Filament\Produksi\Resources\Produksis\Schemas;
 
+use App\Support\StatusStyle;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
@@ -36,14 +37,9 @@ class ProduksiInfolist
                         TextEntry::make('status')
                             ->label('Status')
                             ->badge()
-                            ->color(fn ($state) => match ($state) {
-                                'pending'   => 'gray',
-                                'paid'      => 'info',
-                                'produksi'  => 'warning',
-                                'dikirim'   => 'success',
-                                'selesai'   => 'success',
-                                default     => 'gray',
-                            }),
+                            ->formatStateUsing(fn (?string $state) => StatusStyle::pesanan($state)['label'])
+                            ->color(fn (?string $state) => StatusStyle::pesanan($state)['color'])
+                            ->icon(fn (?string $state) => StatusStyle::pesanan($state)['icon']),
                     ])
                     ->columns(2),
 
@@ -201,13 +197,10 @@ class ProduksiInfolist
                         TextEntry::make('pembayaran_status')
                             ->label('Status Pembayaran')
                             ->badge()
-                            ->state(fn ($record) => $record->pembayaran?->status ?? '-')
-                            ->color(fn ($state) => match ($state) {
-                                'valid' => 'success',
-                                'pending' => 'warning',
-                                'invalid' => 'danger',
-                                default => 'gray',
-                            }),
+                            ->state(fn ($record) => $record->pembayaran?->status)
+                            ->formatStateUsing(fn (?string $state) => StatusStyle::pembayaran($state)['label'])
+                            ->color(fn (?string $state) => StatusStyle::pembayaran($state)['color'])
+                            ->icon(fn (?string $state) => StatusStyle::pembayaran($state)['icon']),
 
                         TextEntry::make('pembayaran_dibayar_pada')
                             ->label('Dibayar Pada')

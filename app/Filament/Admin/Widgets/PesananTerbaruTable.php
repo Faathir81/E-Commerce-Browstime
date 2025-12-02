@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Widgets;
 
 use App\Models\Pesanan;
+use App\Support\StatusStyle;
 use Filament\Actions\Action;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
@@ -26,7 +27,12 @@ class PesananTerbaruTable extends TableWidget
                 TextColumn::make('kode')->label('Kode')->searchable(),
                 TextColumn::make('nama_pelanggan')->label('Pelanggan'),
                 TextColumn::make('total')->label('Total')->money('idr', true),
-                TextColumn::make('status')->label('Status')->badge(),
+                TextColumn::make('status')
+                    ->label('Status')
+                    ->badge()
+                    ->formatStateUsing(fn (?string $state) => StatusStyle::pesanan($state)['label'])
+                    ->color(fn (?string $state) => StatusStyle::pesanan($state)['color'])
+                    ->icon(fn (?string $state) => StatusStyle::pesanan($state)['icon']),
                 TextColumn::make('created_at')->label('Tanggal')->dateTime('d M Y H:i'),
             ])
             ->recordActions([

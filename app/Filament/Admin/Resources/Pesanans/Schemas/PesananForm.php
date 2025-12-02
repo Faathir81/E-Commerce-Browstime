@@ -2,6 +2,8 @@
 
 namespace App\Filament\Admin\Resources\Pesanans\Schemas;
 
+use App\Models\Pesanan;
+use App\Support\StatusStyle;
 use Filament\Schemas\Schema;
 use Filament\Forms;
 use Filament\Schemas\Components\Section;
@@ -12,39 +14,45 @@ class PesananForm
     {
         return $schema
             ->components([
-                Section::make('Informasi Pesanan')
+                Section::make()
+                    ->columnSpanFull()
                     ->schema([
+                        Forms\Components\TextInput::make('nama_pelanggan')
+                            ->label('Nama Pelanggan')
+                            ->disabled()
+                            ->dehydrated(false)
+                            ->afterStateHydrated(function (Forms\Components\TextInput $component, $state, ?Pesanan $record): void {
+                                $component->state($record?->nama_pelanggan);
+                            })
+                            ->columnSpan(1),
+
                         Forms\Components\TextInput::make('kode')
                             ->label('Kode Pesanan')
-                            ->disabled(),
+                            ->disabled()
+                            ->columnSpan(1),
 
                         Forms\Components\TextInput::make('total')
                             ->label('Total')
-                            ->disabled(),
-                    ])
-                    ->columns(2),
+                            ->disabled()
+                            ->columnSpan(1),
 
-                Section::make('Status & Pengiriman')
-                    ->schema([
-                        Forms\Components\Select::make('status')
+                        Forms\Components\ToggleButtons::make('status')
                             ->label('Status')
-                            ->options([
-                                'pending'   => 'Menunggu Pembayaran',
-                                'paid'      => 'Terbayar',
-                                'produksi'  => 'Diproduksi',
-                                'dikirim'   => 'Dikirim',
-                                'selesai'   => 'Selesai',
-                                'batal'     => 'Batal',
-                            ])
-                            ->native(false)
+                            ->options(StatusStyle::pesananOptions())
+                            ->icons(StatusStyle::pesananIcons())
+                            ->colors(StatusStyle::pesananColors())
+                            ->columnSpanFull()
+                            ->inline()
                             ->required(),
 
                         Forms\Components\TextInput::make('no_resi')
-                            ->label('Nomor Resi'),
+                            ->label('Nomor Resi')
+                            ->columnSpan(1),
 
                         Forms\Components\DateTimePicker::make('eta')
                             ->label('Estimasi Sampai')
-                            ->seconds(false),
+                            ->seconds(false)
+                            ->columnSpan(1),
                     ])
                     ->columns(3),
             ]);

@@ -10,6 +10,24 @@ class Pesanan extends Model
 {
     protected $guarded = [];
 
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_PAID = 'paid';
+    public const STATUS_PRODUKSI = 'produksi';
+    public const STATUS_DIKIRIM = 'dikirim';
+    public const STATUS_SELESAI = 'selesai';
+    public const STATUS_BATAL = 'batal';
+    public const STATUS_PERLU_PERBAIKAN = 'perlu_perbaikan';
+
+    public const STATUSES = [
+        self::STATUS_PENDING,
+        self::STATUS_PAID,
+        self::STATUS_PRODUKSI,
+        self::STATUS_DIKIRIM,
+        self::STATUS_SELESAI,
+        self::STATUS_BATAL,
+        self::STATUS_PERLU_PERBAIKAN,
+    ];
+
     // customer (kalau pakai user langsung)
     public function user(): BelongsTo
     {

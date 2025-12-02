@@ -2,6 +2,7 @@
 
 namespace App\Filament\Produksi\Resources\Produksis\Tables;
 
+use App\Support\StatusStyle;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Actions\ViewAction;
@@ -26,12 +27,9 @@ class ProduksisTable
 
                 TextColumn::make('status')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'paid' => 'warning',
-                        'produksi' => 'info',
-                        'dikirim' => 'success',
-                        default => 'gray',
-                    })
+                    ->formatStateUsing(fn (?string $state) => StatusStyle::pesanan($state)['label'])
+                    ->color(fn (?string $state) => StatusStyle::pesanan($state)['color'])
+                    ->icon(fn (?string $state) => StatusStyle::pesanan($state)['icon'])
                     ->label('Status'),
             ])
 
