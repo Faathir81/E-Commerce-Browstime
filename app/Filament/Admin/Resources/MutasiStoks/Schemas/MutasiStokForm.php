@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\MutasiStoks\Schemas;
 
+use App\Support\StatusStyle;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -54,12 +55,7 @@ class MutasiStokForm
                 // ===========================
                 Select::make('jenis_mutasi')
                     ->label('Jenis Mutasi')
-                    ->options([
-                        'stok_masuk'   => 'Stok Masuk',
-                        'stok_rusak'   => 'Stok Rusak',
-                        'stok_expired' => 'Stok Expired',
-                        'penyesuaian'  => 'Penyesuaian Stok',
-                    ])
+                    ->options(StatusStyle::mutasiStokOptions())
                     ->required()
                     ->live()
                     ->afterStateUpdated(function ($state, $get, $set) {

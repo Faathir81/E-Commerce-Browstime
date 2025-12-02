@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\MutasiStok;
+use App\Support\StatusStyle;
 use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -46,7 +47,7 @@ class LaporanStokExport implements FromQuery, WithHeadings, WithMapping
         return [
             Carbon::parse($row->created_at)->format('d/m/Y H:i'),
             $row->nama_bahan,
-            str_replace('_', ' ', ucfirst($row->jenis_mutasi)),
+            StatusStyle::mutasiStokLabel($row->jenis_mutasi),
             (float) $row->qty,
             (float) $row->stok_awal,
             (float) $row->stok_akhir,

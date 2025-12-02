@@ -12,6 +12,9 @@ class PesananForm
 {
     public static function configure(Schema $schema): Schema
     {
+        $hiddenStatuses = ['produksi', 'dikirim'];
+        $hiddenStatusMap = array_flip($hiddenStatuses);
+
         return $schema
             ->components([
                 Section::make()
@@ -38,9 +41,9 @@ class PesananForm
 
                         Forms\Components\ToggleButtons::make('status')
                             ->label('Status')
-                            ->options(StatusStyle::pesananOptions())
-                            ->icons(StatusStyle::pesananIcons())
-                            ->colors(StatusStyle::pesananColors())
+                            ->options(array_diff_key(StatusStyle::pesananOptions(), $hiddenStatusMap))
+                            ->icons(array_diff_key(StatusStyle::pesananIcons(), $hiddenStatusMap))
+                            ->colors(array_diff_key(StatusStyle::pesananColors(), $hiddenStatusMap))
                             ->columnSpanFull()
                             ->inline()
                             ->required(),
