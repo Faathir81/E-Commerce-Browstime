@@ -6,7 +6,9 @@ use App\Models\Pesanan;
 use App\Support\StatusStyle;
 use Filament\Schemas\Schema;
 use Filament\Forms;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TextInput;
 
 class PesananForm
 {
@@ -55,6 +57,18 @@ class PesananForm
                         Forms\Components\DateTimePicker::make('eta')
                             ->label('Estimasi Sampai')
                             ->seconds(false)
+                            ->columnSpan(1),
+
+                        TextInput::make('status_saat_ini')
+                            ->label('Status Saat Ini')
+                            ->disabled()
+                            ->dehydrated(false)
+                            ->reactive()
+                            ->afterStateHydrated(function ($component, Get $get) {
+                                $component->state(
+                                    StatusStyle::pesanan($get('status'))['label'] ?? '-',
+                                );
+                            })
                             ->columnSpan(1),
                     ])
                     ->columns(3),
