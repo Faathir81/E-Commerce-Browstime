@@ -12,12 +12,8 @@ use Filament\Tables\Columns\TextColumn;
 
 class PesananTerbaruTable extends TableWidget
 {
+    protected static ?string $heading = 'Pesanan Terbaru';
     protected int|string|array $columnSpan = 'full';
-
-    protected function getHeading(): string
-    {
-        return 'Pesanan Terbaru';
-    }
 
     public function table(Table $table): Table
     {
