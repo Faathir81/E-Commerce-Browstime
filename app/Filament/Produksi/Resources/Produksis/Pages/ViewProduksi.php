@@ -5,7 +5,6 @@ namespace App\Filament\Produksi\Resources\Produksis\Pages;
 use App\Filament\Produksi\Resources\Produksis\ProduksiResource;
 use App\Filament\Produksi\Resources\Produksis\Schemas\ProduksiHelper;
 use App\Models\BahanBaku;
-use App\Models\DetailPesanan;
 use App\Models\MutasiStok;
 use App\Models\Pesanan;
 use Filament\Actions\Action;
@@ -13,6 +12,8 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use RuntimeException;
+use Throwable;
 
 class ViewProduksi extends ViewRecord
 {
@@ -26,10 +27,16 @@ class ViewProduksi extends ViewRecord
                 ->color('warning')
                 ->icon('heroicon-o-fire')
                 ->requiresConfirmation()
-                ->visible(fn () => in_array($this->record->status, ['paid', 'produksi']))
+                ->modalHeading('Mulai produksi?')
+                ->modalDescription('Stok bahan baku akan berkurang dan aksi tidak dapat dibatalkan.')
+                ->visible(fn () => $this->record->status === 'paid')
                 ->action(function () {
                     /** @var Pesanan $pesanan */
-                    $pesanan = $this->record;
+                    $pesanan = $this->record->fresh();
+
+                    if ($pesanan?->status !== 'paid') {
+                        return $this->notifyStatusInvalid('Aksi Mulai Produksi hanya dapat dijalankan saat status pesanan Terbayar.');
+                    }
 
                     $kebutuhan = $this->hitungKebutuhanBahan($pesanan);
 
@@ -40,62 +47,66 @@ class ViewProduksi extends ViewRecord
                         $kebutuhanQty = $item['kebutuhan'];
 
                         if ($bahan->stok_virtual < $kebutuhanQty) {
-                            Notification::make()
-                                ->title('Stok tidak cukup')
-                                ->body("Bahan {$bahan->nama} kurang. Dibutuhkan {$kebutuhanQty} {$bahan->satuan?->nama}, stok sekarang {$bahan->stok_virtual}.")
-                                ->danger()
-                                ->send();
-
-                            return;
+                            return $this->notifyStockNotEnough($bahan->nama, $kebutuhanQty, $bahan->satuan?->nama, $bahan->stok_virtual);
                         }
                     }
 
-                    DB::transaction(function () use ($kebutuhan, $pesanan) {
-                        // 2) Catat mutasi pemakaian produksi
-                        foreach ($kebutuhan as $item) {
-                            $kebutuhanQty = $item['kebutuhan'];
-                            $bahan = BahanBaku::lockForUpdate()->find($item['bahan']->id);
+                    try {
+                        DB::transaction(function () use ($kebutuhan, $pesanan) {
+                            $lockedPesanan = Pesanan::lockForUpdate()->find($pesanan->id);
 
-                            if (!$bahan) {
-                                continue;
+                            if (!$lockedPesanan || $lockedPesanan->status !== 'paid') {
+                                throw new RuntimeException('Aksi tidak valid: status pesanan sudah berubah.');
                             }
 
-                            $stokAwal = $bahan->current_stok;
+                            // 2) Catat mutasi pemakaian produksi
+                            foreach ($kebutuhan as $item) {
+                                $kebutuhanQty = $item['kebutuhan'];
+                                $bahan = BahanBaku::lockForUpdate()->find($item['bahan']->id);
 
-                            if ($stokAwal < $kebutuhanQty) {
-                                throw new \RuntimeException("Stok {$bahan->nama} tidak cukup saat transaksi dijalankan.");
+                                if (!$bahan) {
+                                    continue;
+                                }
+
+                                $stokAwal = $bahan->current_stok;
+
+                                if ($stokAwal < $kebutuhanQty) {
+                                    throw new RuntimeException("Stok {$bahan->nama} tidak cukup saat transaksi dijalankan.");
+                                }
+
+                                $stokAkhir = $stokAwal - $kebutuhanQty;
+
+                                MutasiStok::create([
+                                    'bahan_id' => $bahan->id,
+                                    'jenis_mutasi' => 'pemakaian_produksi',
+                                    'qty' => $kebutuhanQty,
+                                    'stok_awal' => $stokAwal,
+                                    'stok_akhir' => $stokAkhir,
+                                    'catatan' => 'Produksi pesanan ' . $pesanan->kode,
+                                    'user_id' => Auth::id(),
+                                ]);
+
+                                // stok_awal disimpan sebagai stok berjalan (current_stok)
+                                $bahan->update([
+                                    'stok_awal' => $stokAkhir,
+                                ]);
                             }
 
-                            $stokAkhir = $stokAwal - $kebutuhanQty;
+                            // 3) Update status pesanan jika masih paid
+                            $lockedPesanan->update(['status' => 'produksi']);
+                        });
+                    } catch (RuntimeException $e) {
+                        $this->notifyStatusInvalid($e->getMessage());
+                        return;
+                    } catch (Throwable $e) {
+                        $this->notifyTransactionError($e->getMessage());
+                        return;
+                    }
 
-                            MutasiStok::create([
-                                'bahan_id' => $bahan->id,
-                                'jenis_mutasi' => 'pemakaian_produksi',
-                                'qty' => $kebutuhanQty,
-                                'stok_awal' => $stokAwal,
-                                'stok_akhir' => $stokAkhir,
-                                'catatan' => 'Produksi pesanan ' . $pesanan->kode,
-                                'user_id' => Auth::id(),
-                            ]);
+                    $this->notifySuccess('Produksi berhasil diproses');
 
-                            // stok_awal disimpan sebagai stok berjalan (current_stok)
-                            $bahan->update([
-                                'stok_awal' => $stokAkhir,
-                            ]);
-                        }
-
-                        // 3) Update status pesanan jika masih paid
-                        if ($pesanan->status === 'paid') {
-                            $pesanan->update(['status' => 'produksi']);
-                        }
-                    });
-
-                    Notification::make()
-                        ->title('Produksi berhasil diproses')
-                        ->success()
-                        ->send();
-                })
-                ->after(fn () => $this->fillForm()), // ✅ Perbaikan: tambahkan after hook
+                    $this->refreshRecordState(forceRedirect: true);
+                }),
 
             Action::make('siap_dikirim')
                 ->label('Tandai Siap Dikirim')
@@ -104,19 +115,93 @@ class ViewProduksi extends ViewRecord
                 ->requiresConfirmation()
                 ->visible(fn () => $this->record->status === 'produksi')
                 ->action(function () {
-                    $this->record->update(['status' => 'dikirim']);
+                    $pesanan = $this->record->fresh();
 
-                    Notification::make()
-                        ->title('Pesanan ditandai siap dikirim')
-                        ->success()
-                        ->send();
-                })
-                ->after(fn () => $this->fillForm()), // ✅ Perbaikan: tambahkan after hook
+                    if ($pesanan?->status !== 'produksi') {
+                        return $this->notifyStatusInvalid('Aksi ini hanya dapat dijalankan saat pesanan berstatus Produksi.');
+                    }
+
+                    try {
+                        DB::transaction(function () use ($pesanan) {
+                            $lockedPesanan = Pesanan::lockForUpdate()->find($pesanan->id);
+
+                            if (!$lockedPesanan || $lockedPesanan->status !== 'produksi') {
+                                throw new RuntimeException('Aksi tidak valid: status pesanan sudah berubah.');
+                            }
+
+                            $lockedPesanan->update(['status' => 'dikirim']);
+                        });
+                    } catch (RuntimeException $e) {
+                        $this->notifyStatusInvalid($e->getMessage());
+                        return;
+                    } catch (Throwable $e) {
+                        $this->notifyTransactionError($e->getMessage());
+                        return;
+                    }
+
+                    $this->notifySuccess('Pesanan ditandai siap dikirim');
+
+                    $this->refreshRecordState(forceRedirect: true);
+                }),
         ];
     }
 
     protected function hitungKebutuhanBahan(Pesanan $pesanan): array
     {
         return ProduksiHelper::hitungKebutuhanBahan($pesanan);
+    }
+
+    protected function refreshRecordState(bool $forceRedirect = false): void
+    {
+        if (! $this->record?->getKey()) {
+            return;
+        }
+
+        $this->record = $this->resolveRecord($this->record->getKey());
+
+        if ($forceRedirect) {
+            $this->redirect(static::getResource()::getUrl('view', ['record' => $this->record]));
+
+            return;
+        }
+
+        $this->dispatch('$refresh');
+    }
+
+    protected function notifyStatusInvalid(string $message): void
+    {
+        Notification::make()
+            ->title('Aksi tidak valid')
+            ->body($message)
+            ->danger()
+            ->send();
+    }
+
+    protected function notifyTransactionError(string $message): void
+    {
+        Notification::make()
+            ->title('Terjadi kesalahan')
+            ->body($message)
+            ->danger()
+            ->send();
+    }
+
+    protected function notifyStockNotEnough(string $bahan, float $kebutuhan, ?string $satuan, float $stok): void
+    {
+        $unit = $satuan ? " {$satuan}" : '';
+
+        Notification::make()
+            ->title('Stok tidak cukup')
+            ->body("Bahan {$bahan} kurang. Dibutuhkan {$kebutuhan}{$unit}, stok sekarang {$stok}.")
+            ->danger()
+            ->send();
+    }
+
+    protected function notifySuccess(string $message): void
+    {
+        Notification::make()
+            ->title($message)
+            ->success()
+            ->send();
     }
 }
