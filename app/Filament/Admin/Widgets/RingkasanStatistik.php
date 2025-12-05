@@ -6,7 +6,7 @@ use App\Models\BahanBaku;
 use App\Models\Pesanan;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class RingkasanStatistik extends StatsOverviewWidget
 {
@@ -23,13 +23,12 @@ class RingkasanStatistik extends StatsOverviewWidget
 
     protected function getStats(): array
     {
+        $todayStart = Carbon::now()->startOfDay();
+        $todayEnd = Carbon::now()->endOfDay();
+
         $omzetQuery = Pesanan::query()
-            ->leftJoin('pembayarans as pay', function ($join) {
-                $join->on('pay.pesanan_id', '=', 'pesanans.id')
-                    ->where('pay.status', 'valid');
-            })
-            ->whereIn('pesanans.status', ['paid', 'dikirim'])
-            ->whereDate(DB::raw('COALESCE(pay.created_at, pesanans.updated_at)'), today());
+            ->whereIn('pesanans.status', ['paid', 'produksi', 'dikirim', 'selesai'])
+            ->whereBetween('pesanans.created_at', [$todayStart, $todayEnd]);
 
         $totalHariIni = (clone $omzetQuery)->sum('pesanans.total');
 
