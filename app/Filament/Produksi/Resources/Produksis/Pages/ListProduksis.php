@@ -53,20 +53,6 @@ class ListProduksi extends ListRecords
     public function getTabs(): array
     {
         return [
-            'all' => Tab::make('Semua')
-                ->badge($this->countForStatuses())
-                ->badgeColor('gray'),
-
-            'pending' => Tab::make('Menunggu Pembayaran')
-                ->modifyQueryUsing(fn ($query) => $query->where('status', 'pending'))
-                ->badge($this->countForStatuses(['pending']))
-                ->badgeColor('gray'),
-
-            'perlu_perbaikan' => Tab::make('Perlu Perbaikan')
-                ->modifyQueryUsing(fn ($query) => $query->where('status', 'perlu_perbaikan'))
-                ->badge($this->countForStatuses(['perlu_perbaikan']))
-                ->badgeColor('warning'),
-
             'paid' => Tab::make('Terbayar')
                 ->modifyQueryUsing(fn ($query) => $query->where('status', 'paid'))
                 ->badge($this->countForStatuses(['paid']))
@@ -86,22 +72,13 @@ class ListProduksi extends ListRecords
                 ->modifyQueryUsing(fn ($query) => $query->where('status', 'selesai'))
                 ->badge($this->countForStatuses(['selesai']))
                 ->badgeColor('success'),
-
-            'cancelled' => Tab::make('Batal')
-                ->modifyQueryUsing(fn ($query) => $query->where('status', 'batal'))
-                ->badge($this->countForStatuses(['batal']))
-                ->badgeColor('danger'),
         ];
     }
 
     private function countForStatuses(array $statuses = null): int
     {
-        $query = Pesanan::query();
+        $allowedStatuses = $statuses ?? ProduksiResource::ALLOWED_STATUSES;
 
-        if ($statuses) {
-            $query->whereIn('status', $statuses);
-        }
-
-        return $query->count();
+        return Pesanan::whereIn('status', $allowedStatuses)->count();
     }
 }

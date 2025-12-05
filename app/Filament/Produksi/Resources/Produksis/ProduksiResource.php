@@ -8,6 +8,7 @@ use App\Filament\Produksi\Resources\Produksis\Tables\ProduksisTable;
 use App\Filament\Produksi\Resources\Produksis\Schemas\ProduksiInfolist;
 use App\Models\Pesanan;
 use BackedEnum;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -17,6 +18,8 @@ use Filament\Tables\Table;
 class ProduksiResource extends Resource
 {
     protected static ?string $model = Pesanan::class;
+
+    public const ALLOWED_STATUSES = ['paid', 'produksi', 'dikirim', 'selesai'];
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
@@ -46,6 +49,11 @@ class ProduksiResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->whereIn('status', self::ALLOWED_STATUSES);
     }
 
     public static function getPages(): array
