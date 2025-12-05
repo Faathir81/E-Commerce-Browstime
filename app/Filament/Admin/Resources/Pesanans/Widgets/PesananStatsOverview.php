@@ -10,14 +10,26 @@ class PesananStatsOverview extends StatsOverviewWidget
 {
     protected function getStats(): array
     {
+        $openStatuses = array_diff(
+            Pesanan::STATUSES,
+            [Pesanan::STATUS_SELESAI, Pesanan::STATUS_BATAL]
+        );
+
+        $revenueStatuses = [
+            Pesanan::STATUS_PAID,
+            Pesanan::STATUS_PRODUKSI,
+            Pesanan::STATUS_DIKIRIM,
+            Pesanan::STATUS_SELESAI,
+        ];
+
         $total = Pesanan::count();
-        $open = Pesanan::whereIn('status', ['pending', 'paid', 'perlu_perbaikan', 'produksi', 'dikirim'])->count();
-        $avgTotal = Pesanan::avg('total') ?? 0;
+        $open = Pesanan::whereIn('status', $openStatuses)->count();
+        $avgTotal = Pesanan::whereIn('status', $revenueStatuses)->avg('total') ?? 0;
 
         return [
             Stat::make('Pesanan', number_format($total))
                 ->icon('heroicon-m-rectangle-stack')
-                ->color('primary')
+                ->color('warning')
                 ->chart($this->emptySparkline()),
 
             Stat::make('Pesanan terbuka', number_format($open))
