@@ -30,7 +30,8 @@ class AdminPanelProvider extends PanelProvider
             ->authGuard('web')
             ->homeUrl('/admin')
             ->colors([
-                'primary' => Color::Amber,
+                // Set default theme color to blue instead of amber
+                'primary' => Color::Blue,
             ])
             ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\Filament\Admin\Resources')

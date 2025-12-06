@@ -5,6 +5,7 @@ namespace App\Filament\Keuangan\Pages;
 use App\Exports\LaporanStokExport;
 use App\Models\User;
 use App\Models\MutasiStok;
+use App\Support\StatusStyle;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -150,7 +151,7 @@ class LaporanStok extends Page implements HasForms
                             TextEntry::make('jenis_mutasi')
                                 ->badge()
                                 ->color('gray')
-                                ->formatStateUsing(fn ($state) => str_replace('_', ' ', ucfirst($state))),
+                                ->formatStateUsing(fn ($state) => StatusStyle::mutasiStokLabel($state)),
                             TextEntry::make('qty')
                                 ->state(fn ($record) => $record->qty ?? 0)
                                 ->formatStateUsing(fn ($state) => number_format($state, 2, ',', '.')),

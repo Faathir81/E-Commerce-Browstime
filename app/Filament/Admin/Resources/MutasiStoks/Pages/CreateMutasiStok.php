@@ -4,7 +4,6 @@ namespace App\Filament\Admin\Resources\MutasiStoks\Pages;
 
 use App\Filament\Admin\Resources\MutasiStoks\MutasiStokResource;
 use Filament\Resources\Pages\CreateRecord;
-use Illuminate\Support\Facades\Auth;
 
 class CreateMutasiStok extends CreateRecord
 {
@@ -35,5 +34,10 @@ class CreateMutasiStok extends CreateRecord
         $bahan->update([
             'stok_awal' => $this->record->stok_akhir,
         ]);
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return static::getResource()::getUrl('view', ['record' => $this->getRecord()]);
     }
 }

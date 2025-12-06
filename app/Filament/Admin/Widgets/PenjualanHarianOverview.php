@@ -5,19 +5,18 @@ namespace App\Filament\Admin\Widgets;
 use App\Models\Pesanan;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class PenjualanHarianOverview extends StatsOverviewWidget
 {
     protected function getStats(): array
     {
+        $todayStart = Carbon::now()->startOfDay();
+        $todayEnd = Carbon::now()->endOfDay();
+
         $totalHariIni = Pesanan::query()
-            ->leftJoin('pembayarans as pay', function ($join) {
-                $join->on('pay.pesanan_id', '=', 'pesanans.id')
-                    ->where('pay.status', 'valid');
-            })
-            ->whereIn('pesanans.status', ['paid', 'dikirim'])
-            ->whereDate(DB::raw('COALESCE(pay.created_at, pesanans.updated_at)'), today())
+            ->whereIn('pesanans.status', ['paid', 'produksi', 'dikirim', 'selesai'])
+            ->whereBetween('pesanans.created_at', [$todayStart, $todayEnd])
             ->sum('pesanans.total');
 
         return [

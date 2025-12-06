@@ -5,6 +5,7 @@ namespace App\Filament\Keuangan\Pages;
 use App\Exports\LaporanPenjualanExport;
 use App\Models\User;
 use App\Models\Pembayaran;
+use App\Support\StatusStyle;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -159,7 +160,11 @@ class LaporanPenjualan extends Page implements HasForms
                             TextEntry::make('customer')
                                 ->state(fn ($record) => $record->nama_customer ?? $record->guest_email ?? 'Guest'),
                             TextEntry::make('metode')
-                                ->formatStateUsing(fn ($state) => ucfirst($state)),
+                                ->badge()
+                                ->state(fn ($record) => $record->metode)
+                                ->formatStateUsing(fn (?string $state) => StatusStyle::metodePembayaran($state)['label'])
+                                ->color(fn (?string $state) => StatusStyle::metodePembayaran($state)['color'])
+                                ->icon(fn (?string $state) => StatusStyle::metodePembayaran($state)['icon']),
                             TextEntry::make('total_pesanan')
                                 ->state(fn ($record) => $record->total_pesanan ?? 0)
                                 ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state, 0, ',', '.')),
@@ -168,16 +173,14 @@ class LaporanPenjualan extends Page implements HasForms
                                 ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state, 0, ',', '.')),
                             TextEntry::make('status_pembayaran')
                                 ->badge()
-                                ->color(fn ($state) => match ($state) {
-                                    'valid' => 'success',
-                                    'pending' => 'warning',
-                                    default => 'danger',
-                                })
-                                ->formatStateUsing(fn ($state) => ucfirst($state)),
+                                ->color(fn (?string $state) => StatusStyle::pembayaran($state)['color'])
+                                ->icon(fn (?string $state) => StatusStyle::pembayaran($state)['icon'])
+                                ->formatStateUsing(fn (?string $state) => StatusStyle::pembayaran($state)['label']),
                             TextEntry::make('status_pesanan')
                                 ->badge()
-                                ->color('gray')
-                                ->formatStateUsing(fn ($state) => ucfirst($state)),
+                                ->color(fn (?string $state) => StatusStyle::pesanan($state)['color'])
+                                ->icon(fn (?string $state) => StatusStyle::pesanan($state)['icon'])
+                                ->formatStateUsing(fn (?string $state) => StatusStyle::pesanan($state)['label']),
                         ])
                         ->placeholder('Tidak ada data pada rentang tanggal yang dipilih.'),
                 ])

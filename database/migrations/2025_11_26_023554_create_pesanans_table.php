@@ -27,6 +27,7 @@ return new class extends Migration
                 'dikirim',       // dikirim
                 'selesai',       // selesai
                 'batal',         // optional
+                'perlu_perbaikan', // butuh revisi / tidak valid
             ]);
             $table->string('no_resi')->nullable();
             $table->dateTime('eta')->nullable();             // estimasi sampai

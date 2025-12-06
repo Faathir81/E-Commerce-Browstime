@@ -4,7 +4,6 @@ namespace App\Filament\Admin\Resources\Pesanans\Pages;
 
 use App\Filament\Admin\Resources\Pesanans\PesananResource;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditPesanan extends EditRecord
@@ -14,7 +13,6 @@ class EditPesanan extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            ViewAction::make(),
             DeleteAction::make(),
         ];
     }
