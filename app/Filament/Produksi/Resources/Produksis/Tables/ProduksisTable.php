@@ -15,22 +15,26 @@ class ProduksisTable
             ->columns([
                 TextColumn::make('kode')
                     ->label('Kode Pesanan')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(),
 
                 TextColumn::make('nama_pelanggan')
                     ->label('Pelanggan')
-                    ->placeholder('-'),
+                    ->placeholder('-')
+                    ->toggleable(),
 
                 TextColumn::make('total')
                     ->label('Total')
-                    ->money('IDR'),
+                    ->money('IDR')
+                    ->toggleable(),
 
                 TextColumn::make('status')
                     ->badge()
                     ->formatStateUsing(fn (?string $state) => StatusStyle::pesanan($state)['label'])
                     ->color(fn (?string $state) => StatusStyle::pesanan($state)['color'])
                     ->icon(fn (?string $state) => StatusStyle::pesanan($state)['icon'])
-                    ->label('Status'),
+                    ->label('Status')
+                    ->toggleable(),
             ])
 
             ->recordActions([

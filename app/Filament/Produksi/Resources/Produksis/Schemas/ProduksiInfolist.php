@@ -152,7 +152,11 @@ class ProduksiInfolist
                             ->schema([
                                 TextEntry::make('pembayaran_metode')
                                     ->label('Metode Pembayaran')
-                                    ->state(fn ($record) => $record->pembayaran?->metode ?? '-'),
+                                    ->badge()
+                                    ->state(fn ($record) => $record->pembayaran?->metode)
+                                    ->formatStateUsing(fn (?string $state) => StatusStyle::metodePembayaran($state)['label'])
+                                    ->color(fn (?string $state) => StatusStyle::metodePembayaran($state)['color'])
+                                    ->icon(fn (?string $state) => StatusStyle::metodePembayaran($state)['icon']),
 
                                 TextEntry::make('pembayaran_status')
                                     ->label('Status Pembayaran')

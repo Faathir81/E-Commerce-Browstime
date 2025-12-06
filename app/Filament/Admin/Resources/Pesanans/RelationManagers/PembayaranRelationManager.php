@@ -20,7 +20,10 @@ class PembayaranRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('metode')
                     ->label('Metode')
-                    ->badge(),
+                    ->badge()
+                    ->formatStateUsing(fn (?string $state) => StatusStyle::metodePembayaran($state)['label'])
+                    ->color(fn (?string $state) => StatusStyle::metodePembayaran($state)['color'])
+                    ->icon(fn (?string $state) => StatusStyle::metodePembayaran($state)['icon']),
 
                 Tables\Columns\TextColumn::make('jumlah')
                     ->label('Jumlah')
@@ -44,11 +47,7 @@ class PembayaranRelationManager extends RelationManager
                     ->schema([
                         Forms\Components\Select::make('metode')
                             ->label('Metode')
-                            ->options([
-                                'transfer' => 'Transfer Bank',
-                                'qris'     => 'QRIS',
-                                'midtrans' => 'Midtrans',
-                            ])
+                            ->options(StatusStyle::metodePembayaranOptions())
                             ->native(false)
                             ->required(),
 

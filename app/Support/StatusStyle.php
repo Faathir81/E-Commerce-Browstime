@@ -64,6 +64,21 @@ class StatusStyle
         return self::toOptions(self::pembayaranMap());
     }
 
+    /**
+     * Mapping untuk metode pembayaran.
+     */
+    public static function metodePembayaran(?string $state): array
+    {
+        $map = self::metodePembayaranMap();
+
+        return $map[$state] ?? self::fallback($state);
+    }
+
+    public static function metodePembayaranOptions(): array
+    {
+        return self::toOptions(self::metodePembayaranMap());
+    }
+
     private static function pesananMap(): array
     {
         return [
@@ -153,6 +168,27 @@ class StatusStyle
                 'label' => 'Invalid',
                 'color' => 'danger',
                 'icon'  => 'heroicon-m-x-circle',
+            ],
+        ];
+    }
+
+    private static function metodePembayaranMap(): array
+    {
+        return [
+            'transfer' => [
+                'label' => 'Transfer Bank',
+                'color' => 'gray',
+                'icon'  => 'heroicon-m-building-library',
+            ],
+            'qris' => [
+                'label' => 'QRIS',
+                'color' => 'info',
+                'icon'  => 'heroicon-m-qr-code',
+            ],
+            'midtrans' => [
+                'label' => 'Midtrans',
+                'color' => 'primary',
+                'icon'  => 'heroicon-m-credit-card',
             ],
         ];
     }
