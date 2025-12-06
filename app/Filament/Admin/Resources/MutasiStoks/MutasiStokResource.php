@@ -3,8 +3,8 @@
 namespace App\Filament\Admin\Resources\MutasiStoks;
 
 use App\Filament\Admin\Resources\MutasiStoks\Pages\CreateMutasiStok;
-use App\Filament\Admin\Resources\MutasiStoks\Pages\EditMutasiStok;
 use App\Filament\Admin\Resources\MutasiStoks\Pages\ListMutasiStoks;
+use App\Filament\Admin\Resources\MutasiStoks\Pages\ViewMutasiStok;
 use App\Filament\Admin\Resources\MutasiStoks\Schemas\MutasiStokForm;
 use App\Filament\Admin\Resources\MutasiStoks\Tables\MutasiStoksTable;
 use App\Models\MutasiStok;
@@ -52,7 +52,7 @@ class MutasiStokResource extends Resource
         return [
             'index' => ListMutasiStoks::route('/'),
             'create' => CreateMutasiStok::route('/create'),
-            'edit' => EditMutasiStok::route('/{record}/edit'),
+            'view' => ViewMutasiStok::route('/{record}'),
         ];
     }
 }

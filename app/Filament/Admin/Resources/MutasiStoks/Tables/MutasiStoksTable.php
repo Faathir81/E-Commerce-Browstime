@@ -2,8 +2,12 @@
 
 namespace App\Filament\Admin\Resources\MutasiStoks\Tables;
 
+use App\Filament\Admin\Resources\MutasiStoks\MutasiStokResource;
+use App\Support\StatusStyle;
+use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Actions\ViewAction;
 
 class MutasiStoksTable
 {
@@ -16,7 +20,9 @@ class MutasiStoksTable
 
                 TextColumn::make('jenis_mutasi')
                     ->label('Mutasi')
-                    ->badge(),
+                    ->badge()
+                    ->formatStateUsing(fn ($state) => StatusStyle::mutasiStokLabel($state))
+                    ->color(fn ($state) => StatusStyle::mutasiStok($state)['color'] ?? 'gray'),
 
                 TextColumn::make('qty')
                     ->numeric()
@@ -36,6 +42,10 @@ class MutasiStoksTable
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->label('Tanggal'),
+            ])
+            ->recordUrl(fn ($record) => MutasiStokResource::getUrl('view', ['record' => $record]))
+            ->recordActions([
+                ViewAction::make(),
             ])
             ->defaultSort('created_at', 'desc');
     }

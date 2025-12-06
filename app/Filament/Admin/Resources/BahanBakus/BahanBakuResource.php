@@ -19,7 +19,7 @@ class BahanBakuResource extends Resource
 {
     protected static ?string $model = BahanBaku::class;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-building-storefront'; 
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-archive-box'; 
 
     protected static ?string $recordTitleAttribute = 'nama';
 

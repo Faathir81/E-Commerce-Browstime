@@ -32,16 +32,21 @@ class StatusStyle
     /**
      * Mapping label untuk jenis mutasi stok.
      */
-    public static function mutasiStokLabel(?string $state): string
+    public static function mutasiStok(?string $state): array
     {
         $map = self::mutasiStokMap();
 
-        return $map[$state] ?? self::fallback($state)['label'];
+        return $map[$state] ?? self::fallback($state);
+    }
+
+    public static function mutasiStokLabel(?string $state): string
+    {
+        return self::mutasiStok($state)['label'];
     }
 
     public static function mutasiStokOptions(): array
     {
-        return self::mutasiStokMap();
+        return self::toOptions(self::mutasiStokMap());
     }
 
     /**
@@ -103,11 +108,26 @@ class StatusStyle
     private static function mutasiStokMap(): array
     {
         return [
-            'pemakaian_produksi' => 'Pemakaian Produksi',
-            'stok_masuk'         => 'Stok Masuk',
-            'stok_rusak'         => 'Stok Rusak',
-            'stok_expired'       => 'Stok Expired',
-            'penyesuaian'        => 'Penyesuaian Stok',
+            'pemakaian_produksi' => [
+                'label' => 'Pemakaian Produksi',
+                'color' => 'warning',
+            ],
+            'stok_masuk' => [
+                'label' => 'Stok Masuk',
+                'color' => 'success',
+            ],
+            'stok_rusak' => [
+                'label' => 'Stok Rusak',
+                'color' => 'danger',
+            ],
+            'stok_expired' => [
+                'label' => 'Stok Expired',
+                'color' => 'danger',
+            ],
+            'penyesuaian' => [
+                'label' => 'Penyesuaian Stok',
+                'color' => 'info',
+            ],
         ];
     }
 

@@ -19,7 +19,7 @@ class SatuanResource extends Resource
 {
     protected static ?string $model = Satuan::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-adjustments-vertical';
 
     protected static ?string $recordTitleAttribute = 'nama';
 

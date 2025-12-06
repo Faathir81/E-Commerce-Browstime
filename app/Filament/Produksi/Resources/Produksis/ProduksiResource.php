@@ -21,7 +21,7 @@ class ProduksiResource extends Resource
 
     public const ALLOWED_STATUSES = ['paid', 'produksi', 'dikirim', 'selesai'];
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-check-badge';
 
     protected static ?string $recordTitleAttribute = 'kode';
 
