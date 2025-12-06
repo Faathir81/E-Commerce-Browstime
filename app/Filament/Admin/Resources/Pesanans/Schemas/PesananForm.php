@@ -7,6 +7,7 @@ use App\Support\StatusStyle;
 use Filament\Schemas\Schema;
 use Filament\Forms;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 
@@ -48,6 +49,10 @@ class PesananForm
                             ->colors(array_diff_key(StatusStyle::pesananColors(), $hiddenStatusMap))
                             ->columnSpanFull()
                             ->inline()
+                            ->live()
+                            ->afterStateUpdated(function (Set $set, ?string $state): void {
+                                $set('status_saat_ini', StatusStyle::pesanan($state)['label'] ?? '-');
+                            })
                             ->required(),
 
                         Forms\Components\TextInput::make('no_resi')
@@ -64,10 +69,8 @@ class PesananForm
                             ->disabled()
                             ->dehydrated(false)
                             ->reactive()
-                            ->afterStateHydrated(function ($component, Get $get) {
-                                $component->state(
-                                    StatusStyle::pesanan($get('status'))['label'] ?? '-',
-                                );
+                            ->afterStateHydrated(function ($component, $state, ?Pesanan $record): void {
+                                $component->state(StatusStyle::pesanan($record?->status ?? $state)['label'] ?? '-');
                             })
                             ->columnSpan(1),
                     ])

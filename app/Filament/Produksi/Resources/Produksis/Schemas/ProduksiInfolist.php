@@ -2,6 +2,7 @@
 
 namespace App\Filament\Produksi\Resources\Produksis\Schemas;
 
+use App\Models\MutasiStok;
 use App\Support\StatusStyle;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
@@ -116,16 +117,26 @@ class ProduksiInfolist
                                     ->columns(4)
                                     ->state(function ($record) {
                                         $kebutuhan = ProduksiHelper::hitungKebutuhanBahan($record);
+                                        $bahanIds = collect($kebutuhan)->keys();
 
-                                        return collect($kebutuhan)->map(function ($item) {
+                                        // Ambil stok awal yang dicatat saat mutasi produksi (jika sudah diproses)
+                                        $stokAwalProduksi = MutasiStok::query()
+                                            ->whereIn('bahan_id', $bahanIds)
+                                            ->where('jenis_mutasi', 'pemakaian_produksi')
+                                            ->where('catatan', 'Produksi pesanan ' . $record->kode)
+                                            ->get()
+                                            ->keyBy('bahan_id');
+
+                                        return collect($kebutuhan)->map(function ($item) use ($stokAwalProduksi) {
                                             $bahan = $item['bahan'];
+                                            $stokAwal = $stokAwalProduksi[$bahan->id]->stok_awal ?? $bahan->stok_virtual;
 
                                             return [
                                                 'nama'      => $bahan->nama,
                                                 'kebutuhan' => $item['kebutuhan'],
                                                 'satuan'    => $bahan->satuan?->nama,
-                                                'stok'      => $bahan->stok_virtual,
-                                                'status'    => $bahan->stok_virtual >= $item['kebutuhan']
+                                                'stok'      => $stokAwal,
+                                                'status'    => $stokAwal >= $item['kebutuhan']
                                                                 ? 'cukup'
                                                                 : 'kurang',
                                             ];
