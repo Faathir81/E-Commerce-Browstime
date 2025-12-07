@@ -33,7 +33,9 @@
                 </p>
 
                 <div class="flex flex-wrap items-center gap-4 pt-2">
-                    <a href="#" class="rounded-full bg-[#7b4a2f] px-6 py-3 text-base font-semibold text-white shadow-[0_14px_32px_rgba(123,74,47,0.35)] transition hover:bg-[#6b3f26]">
+                    <a href="#category-section"
+                       data-scroll-to="#category-section"
+                       class="rounded-full bg-[#7b4a2f] px-6 py-3 text-base font-semibold text-white shadow-[0_14px_32px_rgba(123,74,47,0.35)] transition hover:bg-[#6b3f26]">
                         Shop Now
                     </a>
                     <a href="#" class="rounded-full bg-white px-6 py-3 text-base font-semibold text-[#3b241a] shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(0,0,0,0.12)]">
@@ -98,3 +100,17 @@
         </div>
     </div>
 </section>
+
+@push('scripts')
+<script>
+document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('[data-scroll-to]');
+    if (!trigger) return;
+    const targetSel = trigger.getAttribute('data-scroll-to');
+    const target = document.querySelector(targetSel);
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+</script>
+@endpush
