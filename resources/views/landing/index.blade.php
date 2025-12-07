@@ -2,16 +2,16 @@
 
 @section('content')
 
-    {{-- HERO SECTION FULL WIDTH --}}
+    {{-- HERO SECTION --}}
     @include('landing.partials.hero')
 
-    {{-- CONTENT --}}
+    {{-- CATEGORY SECTION --}}
     <x-category-section />
 
-    @livewire('product-list')
-
+    {{-- BEST SELLER SECTION --}}
     @include('landing.partials.best-seller', ['bestSellers' => $bestSellers])
 
+    {{-- FOOTER --}}
     @include('layouts.partials.footer')
 
 @endsection

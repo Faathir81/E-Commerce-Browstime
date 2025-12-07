@@ -10,7 +10,7 @@
             </div>
 
             <a 
-                href="{{ route('product.all') ?? '#' }}" 
+                href="{{ route('search') }}" 
                 class="inline-flex items-center rounded-full border border-[#d3b58f] px-5 py-2 text-sm font-medium text-[#3b241a] transition-colors hover:bg-[#c79c68] hover:text-[#2b1a14]"
             >
                 View All Products
@@ -22,12 +22,14 @@
             @foreach ($bestSellers as $product)
                 @php
                     $inStock = $product->hasSufficientStock();
+                    $productUrl = route('product.show', $product->slug);
                 @endphp
 
-                <div class="group relative w-full max-w-[360px] bg-white shadow-md rounded-2xl overflow-hidden border border-[#f1e8df] transition-shadow duration-200 hover:shadow-lg">
+                <div class="group relative w-full max-w-[360px] bg-white shadow-md rounded-2xl overflow-hidden border border-[#f1e8df] transition-shadow duration-200 hover:shadow-lg cursor-pointer"
+                     data-product-url="{{ $productUrl }}">
 
                     {{-- GAMBAR PRODUK --}}
-                    <div class="h-56 overflow-hidden">
+                    <div class="h-56 overflow-hidden pointer-events-none">
                         <img 
                             src="{{ asset('storage/' . ($product->gambar ?? 'placeholder.jpg')) }}" 
                             alt="{{ $product->nama }}"
@@ -36,7 +38,7 @@
                     </div>
 
                     {{-- BODY CARD --}}
-                    <div class="p-4">
+                    <div class="p-4 pointer-events-none">
                         
                         {{-- Status --}}
                         <p class="text-xs flex items-center gap-1 {{ $inStock ? 'text-[#7d6b5c]' : 'text-[#8b5a2b]' }}">
@@ -57,6 +59,7 @@
                         {{-- BUTTON --}}
                         <button 
                             wire:click="addToCart({{ $product->id }})"
+                            data-add-btn
                             class="mt-4 w-full flex items-center justify-center gap-2 text-white text-sm py-2 rounded-xl transition {{ $inStock ? 'bg-[#3b241a] hover:bg-[#2c1c14]' : 'bg-gray-400 cursor-not-allowed' }}"
                             {{ $inStock ? '' : 'disabled' }}
                         >
@@ -71,3 +74,19 @@
 
     </div>
 </section>
+
+@push('scripts')
+<script>
+document.addEventListener('click', (e) => {
+    const addBtn = e.target.closest('[data-add-btn]');
+    if (addBtn) {
+        e.stopPropagation();
+        return;
+    }
+    const card = e.target.closest('[data-product-url]');
+    if (!card) return;
+    const url = card.getAttribute('data-product-url');
+    if (url) window.location = url;
+});
+</script>
+@endpush

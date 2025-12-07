@@ -3,12 +3,19 @@
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\ProductController;
 
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 
 Route::get('/products', function () {
     return 'all products here'; // nanti diganti view asli
 })->name('product.all');
+
+Route::redirect('/products', '/search')->name('product.redirect');
+
+Route::get('/search', [SearchController::class, 'index'])->name('search');
+Route::get('/products/{slug}', [ProductController::class, 'show'])->name('product.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -90,7 +90,7 @@
 
                     <div class="absolute bottom-6 right-6 rounded-2xl bg-white px-5 py-4 text-right text-sm text-[#6d5749] shadow-[0_18px_38px_rgba(0,0,0,0.15)]">
                         <p class="leading-tight">Starting from</p>
-                        <p class="text-2xl font-semibold text-[#8b5a2b]">Rp 40.000</p>
+                        <p class="text-2xl font-semibold text-[#8b5a2b]">Rp 15.000</p>
                     </div>
                 </div>
             </div>
