@@ -63,7 +63,9 @@ class ProdukForm
                     FileUpload::make('gambar')
                         ->label('Gambar Produk')
                         ->image()
+                        ->disk('public')
                         ->directory('produk')
+                        ->visibility('public')
                         ->required(),
 
                     Toggle::make('is_active')

@@ -27,6 +27,34 @@ class Produk extends Model
         return $this->belongsTo(Kategori::class, 'kategori_id');
     }
 
+    public function hasSufficientStock(): bool
+    {
+        $recipe = $this->resep;
+        if (! $recipe) {
+            return true;
+        }
+
+        foreach ($recipe->detail as $detail) {
+            $bahan = $detail->bahan;
+            // Jika data bahan tidak ada, anggap tidak cukup stok untuk menghindari oversell.
+            if (! $bahan) {
+                return false;
+            }
+
+            $current = $bahan->current_stok ?? 0;
+            if ($current < ($detail->jumlah ?? 0)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
     // nanti dipakai di BOM
     public function resep()
     {
