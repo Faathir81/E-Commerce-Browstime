@@ -8,6 +8,8 @@
     {{-- CONTENT --}}
     <x-category-section />
 
+    @livewire('product-list')
+
     @include('landing.partials.best-seller', ['bestSellers' => $bestSellers])
 
     @include('layouts.partials.footer')

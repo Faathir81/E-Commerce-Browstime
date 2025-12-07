@@ -24,14 +24,16 @@
                     $inStock = $product->hasSufficientStock();
                 @endphp
 
-                <div class="relative w-full max-w-[360px] bg-white shadow-md rounded-2xl overflow-hidden border border-[#f1e8df]">
+                <div class="group relative w-full max-w-[360px] bg-white shadow-md rounded-2xl overflow-hidden border border-[#f1e8df] transition-shadow duration-200 hover:shadow-lg">
 
                     {{-- GAMBAR PRODUK --}}
-                    <img 
-                        src="{{ asset('storage/' . ($product->gambar ?? 'placeholder.jpg')) }}" 
-                        alt="{{ $product->nama }}"
-                        class="w-full h-56 object-cover"
-                    >
+                    <div class="h-56 overflow-hidden">
+                        <img 
+                            src="{{ asset('storage/' . ($product->gambar ?? 'placeholder.jpg')) }}" 
+                            alt="{{ $product->nama }}"
+                            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        >
+                    </div>
 
                     {{-- BODY CARD --}}
                     <div class="p-4">

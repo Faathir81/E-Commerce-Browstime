@@ -7,6 +7,7 @@
         </span>
         <input
             type="text"
+            wire:model.live.debounce.300ms="search"
             placeholder="Search cookies & brownies..."
             class="w-full rounded-full border border-[#e6d8cf] bg-white px-4 py-2 pl-10 text-sm text-[#5a3d2a] placeholder:text-[#8a5c3a] shadow-[0_0_0_1px_rgba(214,189,170,0.15)] focus:outline-none"
         >

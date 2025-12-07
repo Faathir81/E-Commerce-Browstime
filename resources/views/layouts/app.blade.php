@@ -6,7 +6,6 @@
     <title>{{ config('app.name', 'Browstime') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-
 <body class="bg-[#FFF9F4] text-[#2b1a14] antialiased">
 
     {{-- NAVBAR --}}

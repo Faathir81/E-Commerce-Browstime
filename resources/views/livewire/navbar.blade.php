@@ -1,4 +1,4 @@
-<nav class="w-full border-b border-[#f1e6dc] bg-white">
+<nav class="w-full border-b border-[#f1e6dc] bg-white sticky top-0 z-50">
     <div class="mx-auto flex w-full max-w-screen-2xl items-center justify-between gap-6 px-6 py-3 sm:px-8 lg:px-14">
         <div class="flex items-center gap-3">
             <x-logo />

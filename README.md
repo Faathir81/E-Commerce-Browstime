@@ -183,7 +183,7 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/frontend-katalog`
 
--   [ ] Tampilkan produk
+-   [X] Tampilkan produk
 -   [ ] Search
 -   [ ] Filter kategori
 -   [ ] Detail produk
