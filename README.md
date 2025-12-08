@@ -184,9 +184,9 @@ Branch: feat/rajaongkir-wilayah
 **Branch:** `feat/frontend-katalog`
 
 -   [X] Tampilkan produk
--   [ ] Search
--   [ ] Filter kategori
--   [ ] Detail produk
+-   [X] Search
+-   [X] Filter kategori
+-   [X] Detail produk
 
 ---
 
