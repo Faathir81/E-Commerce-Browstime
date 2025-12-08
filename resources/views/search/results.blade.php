@@ -3,6 +3,10 @@
 @section('content')
 <div class="max-w-screen-2xl mx-auto px-6 sm:px-8 lg:px-14 py-8">
 
+    <div class="sm:hidden mb-4">
+        @livewire('search-bar', [], key('search-bar-mobile'))
+    </div>
+
     <div class="flex items-start gap-2 text-[#3b241a] mb-6">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round"

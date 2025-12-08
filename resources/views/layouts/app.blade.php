@@ -12,8 +12,10 @@
 </head>
 <body class="bg-[#FFF9F4] text-[#2b1a14] antialiased">
 
-    {{-- NAVBAR --}}
-    <livewire:navbar />
+    {{-- NAVBAR (hidden on cart page) --}}
+    @unless (request()->routeIs('cart.index'))
+        <livewire:navbar />
+    @endunless
 
     {{-- PAGE CONTENT --}}
     <main>

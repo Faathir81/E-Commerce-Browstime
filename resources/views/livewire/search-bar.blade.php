@@ -1,7 +1,7 @@
 <form wire:submit.prevent="goToResults"
       wire:mouseenter="openDropdown"
       wire:mouseleave="closeDropdown"
-      class="relative w-full max-w-xl mx-auto">
+      class="relative w-full max-w-[220px] sm:max-w-md lg:max-w-xl mx-auto">
 
     <label class="relative flex items-center">
         <span class="absolute left-4 text-[#8a5c3a] pointer-events-none">

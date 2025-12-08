@@ -7,6 +7,37 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
+    public function index()
+    {
+        $sessionCart = session('cart', []); // [product_id => qty]
+        $productIds = array_keys($sessionCart);
+        $products = $productIds
+            ? Produk::whereIn('id', $productIds)->get()
+            : collect();
+
+        $cartItems = $products->map(function (Produk $product) use ($sessionCart) {
+            $qty = $sessionCart[$product->id] ?? 0;
+            return (object) [
+                'id'        => $product->id,
+                'name'      => $product->nama,
+                'price'     => $product->harga,
+                'quantity'  => $qty,
+                'image_url' => $product->gambar ? asset('storage/' . $product->gambar) : 'https://via.placeholder.com/120x120',
+            ];
+        })->values();
+
+        $subtotal = $cartItems->sum(fn ($item) => $item->price * $item->quantity);
+        $deliveryFee = $subtotal > 0 ? 15000 : 0;
+        $total = $subtotal + $deliveryFee;
+
+        return view('cart.index', [
+            'cartItems'   => $cartItems,
+            'subtotal'    => $subtotal,
+            'deliveryFee' => $deliveryFee,
+            'total'       => $total,
+        ]);
+    }
+
     public function add(Request $request)
     {
         $validated = $request->validate([
@@ -68,5 +99,87 @@ class CartController extends Controller
         }
 
         return empty($limits) ? 0 : min($limits);
+    }
+
+    public function update(Request $request, int $id)
+    {
+        $validated = $request->validate([
+            'action' => ['required', 'in:increase,decrease'],
+        ]);
+
+        $cart = session('cart', []);
+        if (! array_key_exists($id, $cart)) {
+            return response()->json(['message' => 'Item not in cart'], 404);
+        }
+
+        $product = Produk::active()->with(['resep.detail.bahan'])->find($id);
+        if (! $product) {
+            unset($cart[$id]);
+            session(['cart' => $cart]);
+            return response()->json(['message' => 'Item unavailable'], 404);
+        }
+
+        $availableUnits = $this->calculateAvailableUnits($product);
+        $currentQty = $cart[$id];
+        $nextQty = $validated['action'] === 'increase' ? $currentQty + 1 : $currentQty - 1;
+        if ($availableUnits !== null && $availableUnits >= 0 && $nextQty > $availableUnits) {
+            $nextQty = $availableUnits;
+        }
+
+        if ($nextQty <= 0) {
+            unset($cart[$id]);
+        } else {
+            $cart[$id] = $nextQty;
+        }
+
+        session(['cart' => $cart]);
+
+        $totalQuantity = array_sum($cart);
+        $subtotal = $this->calculateSubtotal($cart);
+        $deliveryFee = $subtotal > 0 ? 15000 : 0;
+        $total = $subtotal + $deliveryFee;
+
+        return response()->json([
+            'itemQuantity'  => $cart[$id] ?? 0,
+            'totalQuantity' => $totalQuantity,
+            'subtotal'      => $subtotal,
+            'deliveryFee'   => $deliveryFee,
+            'total'         => $total,
+        ]);
+    }
+
+    public function remove(int $id)
+    {
+        $cart = session('cart', []);
+        unset($cart[$id]);
+        session(['cart' => $cart]);
+
+        $totalQuantity = array_sum($cart);
+        $subtotal = $this->calculateSubtotal($cart);
+        $deliveryFee = $subtotal > 0 ? 15000 : 0;
+        $total = $subtotal + $deliveryFee;
+
+        return response()->json([
+            'totalQuantity' => $totalQuantity,
+            'subtotal'      => $subtotal,
+            'deliveryFee'   => $deliveryFee,
+            'total'         => $total,
+        ]);
+    }
+
+    protected function calculateSubtotal(array $cart): int
+    {
+        if (empty($cart)) {
+            return 0;
+        }
+
+        $products = Produk::whereIn('id', array_keys($cart))->get()->keyBy('id');
+        $sum = 0;
+        foreach ($cart as $productId => $qty) {
+            if (isset($products[$productId])) {
+                $sum += ((int) $products[$productId]->harga) * ((int) $qty);
+            }
+        }
+        return $sum;
     }
 }

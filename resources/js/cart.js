@@ -94,3 +94,86 @@ document.addEventListener('DOMContentLoaded', () => {
     initProductQuantity();
     initLandingCards();
 });
+
+// CART PAGE QTY & REMOVE
+const updateCartSummary = (subtotal, delivery, total) => {
+    const format = (num) =>
+        'Rp ' +
+        Number(num || 0)
+            .toLocaleString('id-ID');
+    const subEl = document.querySelector('[data-cart-subtotal]');
+    const delEl = document.querySelector('[data-cart-delivery]');
+    const totEl = document.querySelector('[data-cart-total]');
+    if (subEl) subEl.textContent = format(subtotal);
+    if (delEl) delEl.textContent = format(delivery);
+    if (totEl) totEl.textContent = format(total);
+};
+
+const initCartPage = () => {
+    const qtyButtons = document.querySelectorAll('[data-qty-btn]');
+    const removeButtons = document.querySelectorAll('[data-remove-btn]');
+
+    qtyButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const action = btn.dataset.action;
+            const updateUrl = btn.dataset.updateUrl;
+            const id = btn.dataset.id;
+            if (!action || !updateUrl || !id) return;
+
+            fetch(updateUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ action }),
+            })
+                .then((res) => (res.ok ? res.json() : res.json().then((err) => Promise.reject(err))))
+                .then((data) => {
+                    const display = document.querySelector(`[data-qty-display][data-id="${id}"]`);
+                    const row = btn.closest('[data-cart-item]');
+                    if (data.itemQuantity > 0) {
+                        if (display) display.textContent = data.itemQuantity;
+                    } else if (row) {
+                        row.remove();
+                    }
+                    const total = data?.totalQuantity ?? 0;
+                    notifyLivewire(total);
+                    updateCartBadge(total);
+                    updateCartSummary(data?.subtotal, data?.deliveryFee, data?.total);
+                })
+                .catch((err) => console.error('Update cart failed', err));
+        });
+    });
+
+    removeButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const removeUrl = btn.dataset.removeUrl;
+            const id = btn.dataset.id;
+            if (!removeUrl || !id) return;
+            fetch(removeUrl, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+            })
+                .then((res) => (res.ok ? res.json() : res.json().then((err) => Promise.reject(err))))
+                .then((data) => {
+                    const row = btn.closest('[data-cart-item]');
+                    if (row) row.remove();
+                    const total = data?.totalQuantity ?? 0;
+                    notifyLivewire(total);
+                    updateCartBadge(total);
+                    updateCartSummary(data?.subtotal, data?.deliveryFee, data?.total);
+                })
+                .catch((err) => console.error('Remove cart item failed', err));
+        });
+    });
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    initCartPage();
+});
