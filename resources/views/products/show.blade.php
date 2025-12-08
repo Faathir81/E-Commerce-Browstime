@@ -107,6 +107,8 @@
             </div>
 
             <button type="button"
+                    data-add-cart
+                    data-product-id="{{ $product->id }}"
                     class="w-full mt-2 inline-flex items-center justify-center gap-3 rounded-full text-white py-3 text-sm font-semibold transition {{ $isInStock ? 'bg-[#7a4b24] hover:bg-[#693f1d]' : 'bg-gray-400 cursor-not-allowed' }}"
                     {{ $isInStock ? '' : 'disabled' }}>
                 <x-heroicon-o-shopping-cart class="w-5 h-5" />
@@ -157,29 +159,6 @@
 @endpush
 
 @push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const input = document.querySelector('[data-qty-input]');
-    const minus = document.querySelector('[data-qty-minus]');
-    const plus = document.querySelector('[data-qty-plus]');
-    if (!input || !minus || !plus) return;
-
-    const min = 1;
-    const maxRaw = parseInt(input.dataset.max, 10);
-    const max = Number.isNaN(maxRaw) ? Infinity : maxRaw;
-    const clamp = (val) => {
-        const n = Number.isNaN(val) ? min : val;
-        return Math.min(max, Math.max(min, n));
-    };
-
-    const setValue = (val) => {
-        const next = clamp(parseInt(val, 10));
-        input.value = next;
-    };
-
-    minus.addEventListener('click', () => setValue(parseInt(input.value, 10) - 1));
-    plus.addEventListener('click', () => setValue(parseInt(input.value, 10) + 1));
-});
-</script>
+    @vite('resources/js/cart.js')
 @endpush
 @endsection

@@ -5,8 +5,10 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
 
 Route::get('/', [LandingController::class, 'index'])->name('landing');
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 
 Route::get('/products', function () {
     return 'all products here'; // nanti diganti view asli
@@ -16,6 +18,9 @@ Route::redirect('/products', '/search')->name('product.redirect');
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/products/{slug}', [ProductController::class, 'show'])->name('product.show');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

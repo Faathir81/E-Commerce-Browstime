@@ -1,7 +1,7 @@
 <form wire:submit.prevent="goToResults"
       wire:mouseenter="openDropdown"
       wire:mouseleave="closeDropdown"
-      class="relative w-full max-w-xl mx-auto">
+      class="relative w-full max-w-[calc(100vw-2.5rem)] sm:max-w-md lg:max-w-xl mx-auto">
 
     <label class="relative flex items-center">
         <span class="absolute left-4 text-[#8a5c3a] pointer-events-none">
@@ -34,7 +34,7 @@
 
     @if (strlen(trim($search)) >= 1 && $dropdownOpen)
         <div
-            class="absolute left-0 right-0 mt-2 bg-white rounded-2xl shadow-lg border border-[#e0c8b0] max-h-80 overflow-y-auto z-[60] p-2"
+            class="absolute left-0 right-0 mt-2 bg-white rounded-2xl shadow-lg border border-[#e0c8b0] max-h-80 overflow-y-auto overflow-x-hidden z-[60] p-2 max-w-[calc(100vw-2.5rem)] mx-auto"
         >
             <div wire:loading.class="opacity-50">
                 @if ($this->results->isEmpty())
@@ -51,7 +51,7 @@
                                  class="w-12 h-12 rounded-lg object-cover"
                                  alt="{{ $item->nama }}">
 
-                            <div class="flex-1">
+                            <div class="flex-1 min-w-0">
                                 <p class="font-medium text-[#3b241a] truncate">
                                     {{ $item->nama }}
                                 </p>

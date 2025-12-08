@@ -38,7 +38,7 @@
                     </div>
 
                     {{-- BODY CARD --}}
-                    <div class="p-4 pointer-events-none flex flex-col flex-1">
+                    <div class="p-4 flex flex-col flex-1">
                         
                         <div class="flex flex-col gap-2">
 
@@ -62,8 +62,9 @@
 
                             {{-- BUTTON --}}
                             <button 
-                                wire:click="addToCart({{ $product->id }})"
+                                type="button"
                                 data-add-btn
+                                data-product-id="{{ $product->id }}"
                                 class="w-full flex items-center justify-center gap-2 text-white text-sm py-2 rounded-xl transition {{ $inStock ? 'bg-[#3b241a] hover:bg-[#2c1c14]' : 'bg-gray-400 cursor-not-allowed' }}"
                                 {{ $inStock ? '' : 'disabled' }}
                             >
@@ -81,18 +82,5 @@
 </section>
 
 @push('scripts')
-<script>
-document.addEventListener('click', (e) => {
-    const addBtn = e.target.closest('[data-add-btn]');
-    if (addBtn) {
-        e.stopPropagation();
-        return;
-    }
-    const card = e.target.closest('[data-product-url]');
-    if (!card) return;
-    const url = card.getAttribute('data-product-url');
-    if (url) window.location = url;
-});
-</script>
 @endpush
 
