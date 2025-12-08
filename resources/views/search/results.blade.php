@@ -80,6 +80,7 @@
 
                         <button type="button"
                                 data-add-btn
+                                data-product-id="{{ $product->id }}"
                                 class="w-full flex items-center justify-center gap-2 text-white text-sm py-2 rounded-xl transition {{ $inStock ? 'bg-[#3b241a] hover:bg-[#2c1c14]' : 'bg-gray-400 cursor-not-allowed' }}"
                                 {{ $inStock ? '' : 'disabled' }}>
                             <x-heroicon-o-shopping-cart class="w-4 h-4" />
@@ -102,10 +103,7 @@
 <script>
 document.addEventListener('click', (e) => {
     const addBtn = e.target.closest('[data-add-btn]');
-    if (addBtn) {
-        e.stopPropagation();
-        return;
-    }
+    if (addBtn) return;
     const card = e.target.closest('[data-product-url]');
     if (!card) return;
     const url = card.getAttribute('data-product-url');

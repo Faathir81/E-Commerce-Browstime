@@ -194,10 +194,10 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/frontend-cart`
 
--   [ ] Tambah ke keranjang
--   [ ] Update qty
--   [ ] Hapus item
--   [ ] Hitung subtotal
+-   [X] Tambah ke keranjang
+-   [X] Update qty
+-   [X] Hapus item
+-   [X] Hitung subtotal
 
 ---
 

@@ -10,11 +10,9 @@ const updateCartBadge = (total) => {
 };
 
 const notifyLivewire = (total) => {
+    // Use emit for compatibility; dispatch caused payload shape issues on some setups.
     if (window.Livewire?.emit) {
         window.Livewire.emit('cartUpdated', total);
-    }
-    if (window.Livewire?.dispatch) {
-        window.Livewire.dispatch('cartUpdated', total);
     }
 };
 
