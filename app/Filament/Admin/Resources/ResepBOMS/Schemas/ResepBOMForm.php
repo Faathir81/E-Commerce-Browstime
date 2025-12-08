@@ -19,7 +19,7 @@ class ResepBOMForm
                 Select::make('produk_id')
                     ->relationship('produk', 'nama')
                     ->label('Produk')
-                    ->searchable()
+                    ->preload()   // show all product names immediately
                     ->required(),
 
                 // NESTED DETAIL RESEP
