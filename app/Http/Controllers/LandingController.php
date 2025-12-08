@@ -11,7 +11,7 @@ class LandingController extends Controller
         $bestSellers = Produk::active()
             ->with(['resep.detail.bahan'])
             ->orderBy('created_at', 'desc')
-            ->take(4)
+            ->take(5)
             ->get();
 
         return view('landing.index', compact('bestSellers'));

@@ -18,14 +18,14 @@
         </div>
 
         {{-- GRID PRODUK --}}
-        <div class="grid gap-4 justify-center grid-cols-[repeat(auto-fit,minmax(220px,260px))]">
+        <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             @foreach ($bestSellers as $product)
                 @php
                     $inStock = $product->hasSufficientStock();
                     $productUrl = route('product.show', $product->slug);
                 @endphp
 
-                <div class="group relative w-full max-w-[360px] bg-white shadow-md rounded-2xl overflow-hidden border border-[#f1e8df] transition-shadow duration-200 hover:shadow-lg cursor-pointer"
+                <div class="group relative w-full bg-white shadow-md rounded-2xl overflow-hidden border border-[#f1e8df] transition-shadow duration-200 hover:shadow-lg cursor-pointer flex flex-col h-full"
                      data-product-url="{{ $productUrl }}">
 
                     {{-- GAMBAR PRODUK --}}
@@ -38,11 +38,13 @@
                     </div>
 
                     {{-- BODY CARD --}}
-                    <div class="p-4 pointer-events-none">
+                    <div class="p-4 pointer-events-none flex flex-col flex-1">
                         
+                        <div class="flex flex-col gap-2">
+
                         {{-- Status --}}
-                        <p class="text-xs flex items-center gap-1 {{ $inStock ? 'text-[#7d6b5c]' : 'text-[#8b5a2b]' }}">
-                            <span class="{{ $inStock ? 'text-green-600' : 'text-red-500' }}">●</span>
+                        <p class="text-xs flex items-center gap-1.5 {{ $inStock ? 'text-[#7d6b5c]' : 'text-[#8b5a2b]' }}">
+                            <span class="inline-block w-2.5 h-2.5 rounded-full {{ $inStock ? 'bg-green-600' : 'bg-red-500' }}"></span>
                             {{ $inStock ? 'In Stock' : 'Out Stock' }}
                         </p>
 
@@ -50,22 +52,25 @@
                         <h3 class="font-semibold text-[#3b241a] mt-1">
                             {{ $product->nama }}
                         </h3>
+                        </div>
 
-                        {{-- Harga --}}
-                        <p class="text-sm text-[#3b241a] mt-1">
-                            Rp {{ number_format($product->harga, 0, ',', '.') }}
-                        </p>
+                        <div class="mt-auto flex flex-col gap-3">
+                            {{-- Harga --}}
+                            <p class="text-sm text-[#3b241a]">
+                                Rp {{ number_format($product->harga, 0, ',', '.') }}
+                            </p>
 
-                        {{-- BUTTON --}}
-                        <button 
-                            wire:click="addToCart({{ $product->id }})"
-                            data-add-btn
-                            class="mt-4 w-full flex items-center justify-center gap-2 text-white text-sm py-2 rounded-xl transition {{ $inStock ? 'bg-[#3b241a] hover:bg-[#2c1c14]' : 'bg-gray-400 cursor-not-allowed' }}"
-                            {{ $inStock ? '' : 'disabled' }}
-                        >
-                            <x-heroicon-o-shopping-cart class="w-4 h-4" />
-                            Add
-                        </button>
+                            {{-- BUTTON --}}
+                            <button 
+                                wire:click="addToCart({{ $product->id }})"
+                                data-add-btn
+                                class="w-full flex items-center justify-center gap-2 text-white text-sm py-2 rounded-xl transition {{ $inStock ? 'bg-[#3b241a] hover:bg-[#2c1c14]' : 'bg-gray-400 cursor-not-allowed' }}"
+                                {{ $inStock ? '' : 'disabled' }}
+                            >
+                                <x-heroicon-o-shopping-cart class="w-4 h-4" />
+                                Add
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -90,3 +95,4 @@ document.addEventListener('click', (e) => {
 });
 </script>
 @endpush
+

@@ -18,6 +18,7 @@ class ProduksTable
             ->columns([
                 ImageColumn::make('gambar')
                     ->label('Gambar')
+                    ->disk('public')
                     ->square()
                     ->width(60),
 

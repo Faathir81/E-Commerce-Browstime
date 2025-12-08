@@ -36,13 +36,13 @@
             No products found. Try another keyword.
         </div>
     @else
-        <div class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(220px,260px))]">
+        <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             @foreach ($results as $product)
                 @php
                     $productUrl = route('product.show', $product->slug);
                     $inStock = $product->hasSufficientStock();
                 @endphp
-                <div class="group relative w-full max-w-[360px] bg-white shadow-md rounded-2xl overflow-hidden border border-[#f1e8df] transition-shadow duration-200 hover:shadow-lg flex flex-col cursor-pointer"
+                <div class="group relative w-full bg-white shadow-md rounded-2xl overflow-hidden border border-[#f1e8df] transition-shadow duration-200 hover:shadow-lg flex flex-col cursor-pointer h-full"
                      data-product-url="{{ $productUrl }}">
                     <a href="{{ $productUrl }}" class="block pointer-events-none">
                         <div class="h-56 overflow-hidden">
@@ -52,9 +52,9 @@
                         </div>
                     </a>
 
-                    <div class="p-4 flex-1">
+                    <div class="p-4 flex-1 flex flex-col gap-2">
                         <p class="text-xs flex items-center gap-1 {{ $inStock ? 'text-[#7d6b5c]' : 'text-[#8b5a2b]' }}">
-                            <span class="{{ $inStock ? 'text-green-600' : 'text-red-500' }}">●</span>
+                            <span class="{{ $inStock ? 'text-green-600' : 'text-red-500' }}">&bull;</span>
                             {{ $inStock ? 'In Stock' : 'Out Stock' }}
                         </p>
 
@@ -64,19 +64,19 @@
                             </h3>
                         </a>
 
-                        <p class="text-sm text-[#3b241a] mt-1">
-                            Rp {{ number_format($product->harga, 0, ',', '.') }}
-                        </p>
-
                         <p class="text-xs text-[#6f4c3b] mt-1">
                             {{ optional($product->kategori)->nama ?? 'Produk' }}
                         </p>
                     </div>
 
-                    <div class="px-4 pb-4">
+                    <div class="px-4 pb-4 pt-3 mt-auto flex flex-col gap-3">
+                        <p class="text-sm text-[#3b241a]">
+                            Rp {{ number_format($product->harga, 0, ',', '.') }}
+                        </p>
+
                         <button type="button"
                                 data-add-btn
-                                class="mt-1 w-full flex items-center justify-center gap-2 text-white text-sm py-2 rounded-xl transition {{ $inStock ? 'bg-[#3b241a] hover:bg-[#2c1c14]' : 'bg-gray-400 cursor-not-allowed' }}"
+                                class="w-full flex items-center justify-center gap-2 text-white text-sm py-2 rounded-xl transition {{ $inStock ? 'bg-[#3b241a] hover:bg-[#2c1c14]' : 'bg-gray-400 cursor-not-allowed' }}"
                                 {{ $inStock ? '' : 'disabled' }}>
                             <x-heroicon-o-shopping-cart class="w-4 h-4" />
                             Add
@@ -109,3 +109,4 @@ document.addEventListener('click', (e) => {
 });
 </script>
 @endpush
+
