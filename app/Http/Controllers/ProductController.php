@@ -29,7 +29,7 @@ class ProductController extends Controller
     {
         $recipe = $product->resep;
         if (! $recipe || $recipe->detail->isEmpty()) {
-            return null; // treat as unlimited/unknown
+            return 0; // no recipe = tidak bisa diproduksi
         }
 
         $limits = [];
@@ -37,12 +37,12 @@ class ProductController extends Controller
             $bahan = $detail->bahan;
             $needed = $detail->jumlah ?? 0;
             if (! $bahan || $needed <= 0) {
-                continue;
+                return 0; // bahan tidak ada / jumlah tidak valid -> out of stock
             }
             $available = floor(($bahan->current_stok ?? 0) / $needed);
             $limits[] = (int) max($available, 0);
         }
 
-        return empty($limits) ? null : min($limits);
+        return empty($limits) ? 0 : min($limits);
     }
 }

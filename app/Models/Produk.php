@@ -30,14 +30,14 @@ class Produk extends Model
     public function hasSufficientStock(): bool
     {
         $recipe = $this->resep;
-        if (! $recipe) {
-            return true;
+        if (! $recipe || $recipe->detail->isEmpty()) {
+            return false;
         }
 
         foreach ($recipe->detail as $detail) {
             $bahan = $detail->bahan;
-            // Jika data bahan tidak ada, anggap tidak cukup stok untuk menghindari oversell.
-            if (! $bahan) {
+            // Jika data bahan tidak ada atau jumlah kebutuhannya tidak valid, anggap stok tidak cukup.
+            if (! $bahan || ($detail->jumlah ?? 0) <= 0) {
                 return false;
             }
 

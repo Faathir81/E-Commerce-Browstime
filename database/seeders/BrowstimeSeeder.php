@@ -296,23 +296,23 @@ class BrowstimeSeeder extends Seeder
             'waktu_produksi'=> 120,
         ]);
 
-        // 9. Brownies Crispy Chocolate – Pouch
+        // 9. Brownies Crispy Chocolate – Ziplock
         $browniesChocoPouch = Produk::create([
-            'nama'          => 'Brownies Crispy Chocolate – Pouch',
-            'slug'          => 'brownies-crispy-chocolate-pouch',
+            'nama'          => 'Brownies Crispy Chocolate – Ziplock',
+            'slug'          => 'brownies-crispy-chocolate-ziplock',
             'kategori_id'   => $katBrownies->id,
             'harga'         => 15000,
-            'deskripsi'     => 'Enjoy the irresistible crunch of our Brownies Crispy Chocolate — thin, crackly, and bursting with rich chocolate flavor! Packed in a convenient pouch, this treat is perfect for satisfying your sweet cravings anytime. (90 grams)',
-            'waktu_produksi'=> 120,
+            'deskripsi'     => 'Enjoy the irresistible crunch of our Brownies Crispy Chocolate — thin, crackly, and bursting with rich chocolate flavor! Packed in a practical ziplock pouch, perfect for snacking anytime. (50 grams)',
+            'waktu_produksi'=> 120, // sesuai input owner
         ]);
 
-        // 10. Brownies Crispy Matcha – Pouch
+        // 10. Brownies Crispy Matcha – Ziplock
         $browniesMatchaPouch = Produk::create([
-            'nama'          => 'Brownies Crispy Matcha – Pouch',
-            'slug'          => 'brownies-crispy-matcha-pouch',
+            'nama'          => 'Brownies Crispy Matcha – Ziplock',
+            'slug'          => 'brownies-crispy-matcha-ziplock',
             'kategori_id'   => $katBrownies->id,
             'harga'         => 15000,
-            'deskripsi'     => 'Delight in the fragrant, earthy taste of our Brownies Crispy Matcha — crisp, thin brownies infused with premium matcha for a refreshing twist. Conveniently packed in a handy pouch for your daily matcha moments! (90 grams)',
+            'deskripsi'     => 'Delight in the fragrant, earthy taste of our Brownies Crispy Matcha — thin, crispy brownies infused with premium matcha. Packed in a handy ziplock pouch for your daily matcha moments. (50 grams)',
             'waktu_produksi'=> 120,
         ]);
 
@@ -887,7 +887,7 @@ class BrowstimeSeeder extends Seeder
         // Brownies Crispy Chocolate – Pouch
         $bomBrowniesChoco = ResepBom::create([
             'produk_id'  => $browniesChocoPouch->id,
-            'deskripsi'  => 'Resep Brownies Crispy Chocolate – Pouch (90g)',
+            'deskripsi'  => 'Resep Brownies Crispy Chocolate – Ziplock (50g)',
         ]);
 
         DetailResep::insert([
@@ -895,43 +895,43 @@ class BrowstimeSeeder extends Seeder
                 'resep_id'  => $bomBrowniesChoco->id,
                 'bahan_id'  => $darkChocolate->id,
                 'satuan_id' => $gr->id,
-                'jumlah'    => 35,
+                'jumlah'    => 18,
             ],
             [
                 'resep_id'  => $bomBrowniesChoco->id,
                 'bahan_id'  => $cokelatChip->id,
                 'satuan_id' => $gr->id,
-                'jumlah'    => 10,
+                'jumlah'    => 5,
             ],
             [
                 'resep_id'  => $bomBrowniesChoco->id,
                 'bahan_id'  => $butterMix->id,
                 'satuan_id' => $gr->id,
-                'jumlah'    => 18,
+                'jumlah'    => 9,
             ],
             [
                 'resep_id'  => $bomBrowniesChoco->id,
                 'bahan_id'  => $patiSagu->id,
                 'satuan_id' => $gr->id,
-                'jumlah'    => 15,
+                'jumlah'    => 8,
             ],
             [
                 'resep_id'  => $bomBrowniesChoco->id,
                 'bahan_id'  => $gulaAren->id,
                 'satuan_id' => $gr->id,
-                'jumlah'    => 7,
+                'jumlah'    => 4,
             ],
             [
                 'resep_id'  => $bomBrowniesChoco->id,
                 'bahan_id'  => $gulaKelapa->id,
                 'satuan_id' => $gr->id,
-                'jumlah'    => 5,
+                'jumlah'    => 3,
             ],
             [
                 'resep_id'  => $bomBrowniesChoco->id,
                 'bahan_id'  => $kacangAlmond->id,
                 'satuan_id' => $gr->id,
-                'jumlah'    => 4,
+                'jumlah'    => 2,
             ],
             [
                 'resep_id'  => $bomBrowniesChoco->id,
@@ -962,7 +962,7 @@ class BrowstimeSeeder extends Seeder
         // Brownies Crispy Matcha – Pouch
         $bomBrowniesMatcha = ResepBom::create([
             'produk_id'  => $browniesMatchaPouch->id,
-            'deskripsi'  => 'Resep Brownies Crispy Matcha – Pouch (90g)',
+            'deskripsi'  => 'Resep Brownies Crispy Matcha – Ziplock (50g)',
         ]);
 
         DetailResep::insert([
@@ -970,31 +970,31 @@ class BrowstimeSeeder extends Seeder
                 'resep_id'  => $bomBrowniesMatcha->id,
                 'bahan_id'  => $matchaBubuk->id,
                 'satuan_id' => $gr->id,
-                'jumlah'    => 4,
+                'jumlah'    => 2,
             ],
             [
                 'resep_id'  => $bomBrowniesMatcha->id,
                 'bahan_id'  => $darkChocolate->id,
                 'satuan_id' => $gr->id,
-                'jumlah'    => 20,
+                'jumlah'    => 10,
             ],
             [
                 'resep_id'  => $bomBrowniesMatcha->id,
                 'bahan_id'  => $butterMix->id,
                 'satuan_id' => $gr->id,
-                'jumlah'    => 18,
+                'jumlah'    => 9,
             ],
             [
                 'resep_id'  => $bomBrowniesMatcha->id,
                 'bahan_id'  => $patiSagu->id,
                 'satuan_id' => $gr->id,
-                'jumlah'    => 15,
+                'jumlah'    => 8,
             ],
             [
                 'resep_id'  => $bomBrowniesMatcha->id,
                 'bahan_id'  => $gulaKelapa->id,
                 'satuan_id' => $gr->id,
-                'jumlah'    => 10,
+                'jumlah'    => 6,
             ],
             [
                 'resep_id'  => $bomBrowniesMatcha->id,

@@ -3,6 +3,8 @@
 @section('content')
 <div class="max-w-screen-2xl mx-auto px-6 sm:px-8 lg:px-14 py-8 lg:py-10 text-[#3b241a]">
 
+    @php $isInStock = $product->hasSufficientStock(); @endphp
+
     <div class="grid grid-cols-1 lg:grid-cols-[0.9fr,1.1fr] gap-8 lg:gap-12 items-start">
         {{-- IMAGE PANEL --}}
         <div class="relative bg-white rounded-3xl overflow-hidden shadow-lg max-w-[520px] lg:sticky lg:top-24 self-start">
@@ -17,7 +19,7 @@
                 @if(optional($product->kategori)->nama)
                     <span class="rounded-full bg-[#f1e8df] text-[#3b241a] px-3 py-1">{{ $product->kategori->nama }}</span>
                 @endif
-                @if($product->hasSufficientStock())
+                @if($isInStock)
                     <span class="rounded-full bg-[#e8f7e5] text-[#2f7a3d] px-3 py-1">In Stock</span>
                 @else
                     <span class="rounded-full bg-[#fdecea] text-[#b3261e] px-3 py-1">Out Stock</span>
@@ -45,7 +47,12 @@
                         </span>
                         <div>
                             <p class="text-xs text-[#6f4c3b]">Delivery Time</p>
-                            <p class="font-semibold">{{ $product->waktu_produksi ?? '1-2 Days' }}</p>
+                            <p class="font-semibold">
+                                {{ $product->waktu_produksi ?? '1-2 Days' }}
+                                @if(is_numeric($product->waktu_produksi))
+                                    Minutes
+                                @endif
+                            </p>
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
@@ -72,7 +79,8 @@
                 <div class="flex items-center gap-3">
                     <button type="button"
                             data-qty-minus
-                            class="w-10 h-10 flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] hover:bg-[#f5ece3] transition">
+                            class="w-10 h-10 flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] transition {{ $isInStock ? 'hover:bg-[#f5ece3]' : 'opacity-50 cursor-not-allowed' }}"
+                            {{ $isInStock ? '' : 'disabled' }}>
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M3.33118 7.99463H12.6584" stroke="#3E2723" stroke-width="1.33247" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
@@ -87,7 +95,8 @@
                            class="no-spinner w-16 h-10 text-center border border-[#e4d6c6] rounded-lg focus:ring-[#bb936c] focus:border-[#bb936c]" />
                     <button type="button"
                             data-qty-plus
-                            class="w-10 h-10 flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] hover:bg-[#f5ece3] transition">
+                            class="w-10 h-10 flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] transition {{ $isInStock ? 'hover:bg-[#f5ece3]' : 'opacity-50 cursor-not-allowed' }}"
+                            {{ $isInStock ? '' : 'disabled' }}>
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M3.33118 7.99463H12.6584" stroke="#3E2723" stroke-width="1.33247" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M7.99481 3.33105V12.6583" stroke="#3E2723" stroke-width="1.33247" stroke-linecap="round" stroke-linejoin="round"/>
@@ -98,7 +107,8 @@
             </div>
 
             <button type="button"
-                    class="w-full mt-2 inline-flex items-center justify-center gap-3 rounded-full bg-[#7a4b24] text-white py-3 text-sm font-semibold hover:bg-[#693f1d] transition">
+                    class="w-full mt-2 inline-flex items-center justify-center gap-3 rounded-full text-white py-3 text-sm font-semibold transition {{ $isInStock ? 'bg-[#7a4b24] hover:bg-[#693f1d]' : 'bg-gray-400 cursor-not-allowed' }}"
+                    {{ $isInStock ? '' : 'disabled' }}>
                 <x-heroicon-o-shopping-cart class="w-5 h-5" />
                 Add to Cart
             </button>
@@ -110,13 +120,19 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         @foreach ($product->resep->detail as $detail)
+                            @php
+                                $rawAmount = $detail->jumlah;
+                                $formattedAmount = $rawAmount === null
+                                    ? '-'
+                                    : rtrim(rtrim((string) $rawAmount, '0'), '.');
+                            @endphp
                             <div class="flex flex-col gap-1 rounded-xl bg-[#f9f2eb] px-4 py-3 border border-[#f1e8df]">
                                 <div class="flex items-start gap-2 text-sm font-semibold text-[#3b241a]">
                                     <span class="mt-1 h-2 w-2 rounded-full bg-[#7a4b24]"></span>
                                     <p class="truncate">{{ optional($detail->bahan)->nama ?? 'Bahan' }}</p>
                                 </div>
                                 <p class="text-sm text-[#6f4c3b] ml-4">
-                                    {{ $detail->jumlah ?? '-' }} {{ optional($detail->satuan)->symbol ?? optional($detail->satuan)->nama }}
+                                    {{ $formattedAmount }} {{ optional($detail->satuan)->symbol ?? optional($detail->satuan)->nama }}
                                 </p>
                             </div>
                         @endforeach
