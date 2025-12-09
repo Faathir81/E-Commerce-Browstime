@@ -2,91 +2,110 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 class RajaOngkirService
 {
-    protected function client()
+    private const CACHE_TTL_SECONDS = 30;
+    private const MIN_WEIGHT_KG = 0.01;
+
+    public function calculateDomesticCost(int $destinationSubdistrictId, int $weightGram, string $courier = 'jne'): array
     {
-        return Http::withHeaders([
-            'Accept' => 'application/json',
-            'key'    => config('services.rajaongkir.key'),
-        ]);
+        $originId = (int) config('services.rajaongkir.origin_subdistrict_id', 763);
+        $baseUrl = rtrim(config('services.rajaongkir.base_url', 'https://rajaongkir.komerce.id/api/v1'), '/');
+        $apiKey = (string) config('services.rajaongkir.key');
+        $weightKg = $this->convertGramToKilogram($weightGram);
+        $cacheKey = sprintf(
+            'rajaongkir.domestic.%d.%d.%s.%s',
+            $originId,
+            $destinationSubdistrictId,
+            $courier,
+            number_format($weightKg, 2, '.', '')
+        );
+
+        return Cache::remember(
+            $cacheKey,
+            now()->addSeconds(self::CACHE_TTL_SECONDS),
+            function () use ($originId, $destinationSubdistrictId, $courier, $weightKg, $apiKey, $baseUrl) {
+                try {
+                    $response = Http::withHeaders([
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/x-www-form-urlencoded',
+                        'key' => $apiKey,
+                    ])
+                        ->timeout(15)
+                        ->asForm()
+                        ->post($baseUrl . '/calculate/domestic-cost', [
+                            'origin' => $originId,
+                            'originType' => 'subdistrict',
+                            'destination' => $destinationSubdistrictId,
+                            'destinationType' => 'subdistrict',
+                            'weight' => $weightKg,
+                            'courier' => $courier,
+                        ]);
+                } catch (\Throwable $exception) {
+                    throw new \RuntimeException('Failed to connect to RajaOngkir: ' . $exception->getMessage(), 0, $exception);
+                }
+
+                if ($response->failed()) {
+                    try {
+                        $response->throw();
+                    } catch (RequestException $exception) {
+                        $message = $exception->response?->json('message') ?? $exception->getMessage();
+                        throw new \RuntimeException('RajaOngkir error: ' . $message, $exception->getCode(), $exception);
+                    }
+                }
+
+                $option = $this->extractFirstOption($response->json());
+                if (! $option) {
+                    throw new \RuntimeException('RajaOngkir response malformed: cost option not found.');
+                }
+
+                return [
+                    'service' => (string) ($option['service'] ?? $option['service_code'] ?? $option['code'] ?? ''),
+                    'cost' => (int) round($option['cost'] ?? $option['value'] ?? $option['price'] ?? 0),
+                    'etd' => (string) ($option['etd'] ?? $option['etd_time'] ?? $option['etd_text'] ?? ''),
+                    'raw' => $option,
+                ];
+            }
+        );
     }
 
-    protected function baseUrl(): string
+    private function extractFirstOption(?array $payload): ?array
     {
-        return rtrim(config('services.rajaongkir.base_url'), '/');
+        $data = $payload['data'] ?? null;
+        if (! $data) {
+            return null;
+        }
+
+        if (Arr::isAssoc($data)) {
+            $costs = $data['costs'] ?? $data['results'] ?? null;
+            if ($costs && is_array($costs)) {
+                return collect($costs)->first();
+            }
+            return $data;
+        }
+
+        $first = collect($data)->first();
+        if (! $first) {
+            return null;
+        }
+
+        if (isset($first['costs']) && is_array($first['costs'])) {
+            return collect($first['costs'])->first();
+        }
+
+        return $first;
     }
 
-    /**
-     * Ambil semua provinsi dari Komerce / RajaOngkir.
-     * Endpoint: GET /destination/province
-     */
-    public function provinces(): array
+    private function convertGramToKilogram(int $gram): float
     {
-        $response = $this->client()
-            ->get($this->baseUrl() . '/destination/province');
+        $kilogram = $gram / 1000;
+        $rounded = round($kilogram, 2);
 
-        return $response->json('data') ?? [];
-    }
-
-    /**
-     * Ambil semua kota berdasarkan ID provinsi.
-     * Endpoint: GET /destination/city/{provinceId}
-     */
-    public function cities(int $provinceId): array
-    {
-        $response = $this->client()
-            ->get($this->baseUrl() . '/destination/city/' . $provinceId);
-
-        return $response->json('data') ?? [];
-    }
-
-    /**
-     * Ambil semua kecamatan berdasarkan ID kota.
-     * Endpoint: GET /destination/district/{cityId}
-     */
-    public function districts(int $cityId): array
-    {
-        $response = $this->client()
-            ->get($this->baseUrl() . '/destination/district/' . $cityId);
-
-        return $response->json('data') ?? [];
-    }
-
-    /**
-     * Search alamat (optional, buat fitur autocomplete kalau mau).
-     * Endpoint: GET /destination/domestic-destination?search=...
-     */
-    public function searchDestination(string $keyword, int $limit = 20, int $offset = 0): array
-    {
-        $response = $this->client()
-            ->get($this->baseUrl() . '/destination/domestic-destination', [
-                'search' => $keyword,
-                'limit'  => $limit,
-                'offset' => $offset,
-            ]);
-
-        return $response->json('data') ?? [];
-    }
-
-    /**
-     * Hitung ongkir (calculate/domestic-cost).
-     * Ini nanti dipakai di task ongkir (checkout).
-     */
-    public function cost(int $originId, int $destinationId, int $weight, string $courier, bool $useLowestPrice = true): array
-    {
-        $response = $this->client()
-            ->asForm()
-            ->post($this->baseUrl() . '/calculate/domestic-cost', [
-                'origin'      => $originId,
-                'destination' => $destinationId,
-                'weight'      => $weight,
-                'courier'     => $courier,
-                'price'       => $useLowestPrice ? 'lowest' : 'highest',
-            ]);
-
-        return $response->json('data') ?? [];
+        return $rounded > 0 ? $rounded : self::MIN_WEIGHT_KG;
     }
 }

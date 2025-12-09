@@ -40,6 +40,10 @@ class CheckoutWizard extends Component
     public ?string $catatan = '';
 
     public float $ongkir = 0;
+    public int $shipping_fee = 0;
+    public ?string $etd = null;
+    public float $total_berat = 0.0;
+    public int $total_weight_gram = 0;
     public ?string $eta = null;
 
     /** @var array<int, array<string, mixed>> */
@@ -113,7 +117,9 @@ class CheckoutWizard extends Component
         $this->eta = $this->calculateEta();
         $this->recalculateTotals();
 
-        if ($this->wilayah_pengiriman_id) {
+        if ($this->kecamatan_id) {
+            $this->calculateShippingFee();
+        } elseif ($this->wilayah_pengiriman_id) {
             $this->calculateShipping();
         } else {
             // Ensure cascading dropdowns are hydrated when customer has a saved province/city
@@ -149,7 +155,7 @@ class CheckoutWizard extends Component
         $this->kecamatans = [];
         $this->kecamatan_id = null;
         $this->wilayah_pengiriman_id = null;
-        $this->ongkir = 0;
+        $this->resetShippingState();
         $this->recalculateTotals();
     }
 
@@ -160,7 +166,7 @@ class CheckoutWizard extends Component
             $this->wilayah_pengiriman_id = null;
             $this->kecamatans = [];
             $this->kecamatan_id = null;
-            $this->ongkir = 0;
+            $this->resetShippingState();
             $this->recalculateTotals();
             return;
         }
@@ -173,10 +179,7 @@ class CheckoutWizard extends Component
 
     public function updatedKecamatanId($value): void
     {
-        if (! $value) {
-            $this->kecamatan_id = null;
-            return;
-        }
+        $this->updatedSelectedDistrict($value);
     }
 
     public function updatedPaymentMethod(): void
@@ -203,7 +206,7 @@ class CheckoutWizard extends Component
     {
         if ($this->step === 1) {
             $this->validate($this->stepOneRules());
-            $this->calculateShipping();
+            $this->calculateShippingFee();
         } elseif ($this->step === 2) {
             $this->validate($this->stepTwoRules());
         } elseif ($this->step === 3) {
@@ -220,42 +223,7 @@ class CheckoutWizard extends Component
 
     public function calculateShipping(): void
     {
-        $this->mapWilayahFromKota();
-
-        if (! $this->wilayah_pengiriman_id) {
-            return;
-        }
-
-        $this->validateOnly('wilayah_pengiriman_id', [
-            'wilayah_pengiriman_id' => ['required', 'exists:wilayah_pengiriman,id'],
-        ]);
-
-        $destination = WilayahPengiriman::find($this->wilayah_pengiriman_id);
-        $estimatedCost = null;
-
-        if ($destination && class_exists(RajaOngkirService::class)) {
-            try {
-                $originSubdistrict = (int) config('services.rajaongkir.origin_subdistrict_id', 0);
-                $courier = config('services.rajaongkir.courier', 'jne');
-                $weight = $this->estimateWeight();
-
-                // TODO: Replace origin_subdistrict_id & weight with real values from settings/products.
-                if ($originSubdistrict > 0 && $destination->kecamatan_id && $weight > 0) {
-                    $response = app(RajaOngkirService::class)
-                        ->cost($originSubdistrict, (int) $destination->kecamatan_id, $weight, $courier);
-
-                    $estimatedCost = (int) (data_get($response, '0.cost') ?? 0);
-                }
-            } catch (\Throwable $th) {
-                logger()->warning('RajaOngkir cost calculation failed', [
-                    'error' => $th->getMessage(),
-                ]);
-            }
-        }
-
-        $this->ongkir = $estimatedCost !== null && $estimatedCost > 0 ? $estimatedCost : 15000;
-        $this->eta = $this->calculateEta();
-        $this->recalculateTotals();
+        $this->calculateShippingFee();
     }
 
     public function placeOrder()
@@ -273,7 +241,7 @@ class CheckoutWizard extends Component
 
         $this->eta = $this->eta ?? $this->calculateEta();
         $subtotal = $this->subtotal;
-        $ongkir = $this->ongkir;
+        $ongkir = (int) ($this->shipping_fee ?: $this->ongkir);
         $total = $subtotal + $ongkir;
 
         $pesanan = DB::transaction(function () use ($subtotal, $ongkir, $total) {
@@ -366,6 +334,7 @@ class CheckoutWizard extends Component
             'kecamatan_id' => ['nullable', 'exists:kecamatan,id'],
             'wilayah_pengiriman_id' => ['required', 'exists:wilayah_pengiriman,id'],
             'ongkir' => ['required', 'numeric', 'min:0'],
+            'shipping_fee' => ['required', 'numeric', 'min:0'],
         ];
     }
 
@@ -435,12 +404,6 @@ class CheckoutWizard extends Component
         return Carbon::now()->addMinutes((int) $maxProduction)->toDateTimeString();
     }
 
-    protected function estimateWeight(): int
-    {
-        $estimatedWeightPerItem = 500; // grams per item as placeholder; adjust when product weight exists.
-        return max(1, $this->totalQuantity * $estimatedWeightPerItem);
-    }
-
     protected function mapWilayahFromKota(): void
     {
         if (! $this->kota_id) {
@@ -453,7 +416,7 @@ class CheckoutWizard extends Component
 
         if (! $zone) {
             $this->wilayah_pengiriman_id = null;
-            $this->ongkir = 0;
+            $this->resetShippingState();
             $this->addError('kota_id', 'Kota belum didukung.');
             return;
         }
@@ -473,6 +436,7 @@ class CheckoutWizard extends Component
             ->first();
         if (! $zone) {
             $this->wilayah_pengiriman_id = null;
+            $this->resetShippingState();
             return;
         }
 
@@ -584,7 +548,9 @@ class CheckoutWizard extends Component
     protected function recalculateTotals(): void
     {
         $this->subtotal = collect($this->cartItems)->sum(fn ($item) => $item['price'] * $item['quantity']);
-        $this->total = $this->subtotal + (int) $this->ongkir;
+        $effectiveShipping = (int) ($this->shipping_fee ?: $this->ongkir);
+        $this->ongkir = $effectiveShipping;
+        $this->total = $this->subtotal + $effectiveShipping;
     }
 
     protected function loadCart(): void
@@ -595,6 +561,7 @@ class CheckoutWizard extends Component
             $this->subtotal = 0;
             $this->totalQuantity = 0;
             $this->total = 0;
+            $this->resetShippingState();
             return;
         }
 
@@ -614,13 +581,16 @@ class CheckoutWizard extends Component
                 'quantity' => (int) $qty,
                 'image_url' => $product->gambar ? asset('storage/' . $product->gambar) : 'https://via.placeholder.com/120x120',
                 'production_time' => (int) ($product->waktu_produksi ?? 0),
+                'weight_gram' => (int) ($product->berat ?? 0),
             ];
         }
 
         $this->cartItems = $items;
         $this->subtotal = collect($items)->sum(fn ($item) => $item['price'] * $item['quantity']);
         $this->totalQuantity = collect($items)->sum('quantity');
-        $this->total = $this->subtotal + (int) $this->ongkir;
+        $effectiveShipping = (int) ($this->shipping_fee ?: $this->ongkir);
+        $this->ongkir = $effectiveShipping;
+        $this->total = $this->subtotal + $effectiveShipping;
     }
 
     protected function generateOrderCode(): string
@@ -645,5 +615,96 @@ class CheckoutWizard extends Component
         }
 
         return $codes;
+    }
+
+    protected function calculateCartWeightGram(): int
+    {
+        $items = collect($this->cartItems);
+        $missingWeightIds = $items
+            ->filter(fn ($item) => ! isset($item['weight_gram']))
+            ->pluck('id')
+            ->filter()
+            ->unique()
+            ->all();
+
+        $weights = [];
+        if (! empty($missingWeightIds)) {
+            $weights = Produk::whereIn('id', $missingWeightIds)->pluck('berat', 'id')->toArray();
+        }
+
+        return $items->sum(function ($item) use ($weights) {
+            $qty = (int) ($item['quantity'] ?? 0);
+            $weight = (int) ($item['weight_gram'] ?? ($weights[$item['id']] ?? 0));
+            return $qty * $weight;
+        });
+    }
+
+    protected function calculateShippingFee(): void
+    {
+        $this->mapWilayahFromKota();
+
+        if (! $this->wilayah_pengiriman_id) {
+            $this->resetShippingState();
+            $this->recalculateTotals();
+            return;
+        }
+
+        if (! $this->kecamatan_id) {
+            $this->resetShippingState();
+            $this->recalculateTotals();
+            return;
+        }
+
+        $this->total_weight_gram = $this->calculateCartWeightGram();
+        $this->total_berat = round($this->total_weight_gram / 1000, 2);
+
+        if ($this->total_weight_gram <= 0) {
+            $this->resetShippingState();
+            $this->addError('ongkir', 'Berat produk belum tersedia.');
+            $this->recalculateTotals();
+            return;
+        }
+
+        $this->resetErrorBag(['ongkir']);
+        $courier = config('services.rajaongkir.courier', 'jne');
+
+        try {
+            $result = app(RajaOngkirService::class)
+                ->calculateDomesticCost((int) $this->kecamatan_id, $this->total_weight_gram, $courier);
+
+            $this->shipping_fee = (int) ($result['cost'] ?? 0);
+            $this->etd = $result['etd'] ?? null;
+        } catch (\Throwable $th) {
+            logger()->warning('RajaOngkir cost calculation failed', [
+                'error' => $th->getMessage(),
+                'destination_subdistrict' => $this->kecamatan_id,
+            ]);
+            $this->addError('ongkir', 'Gagal menghitung ongkir, silakan coba lagi.');
+            $this->resetShippingState();
+        }
+
+        $this->recalculateTotals();
+    }
+
+    public function updatedSelectedDistrict($value = null): void
+    {
+        if (! $value) {
+            $this->kecamatan_id = null;
+            $this->resetShippingState();
+            $this->recalculateTotals();
+            return;
+        }
+
+        $this->kecamatan_id = (int) $value;
+        $this->calculateShippingFee();
+    }
+
+    protected function resetShippingState(): void
+    {
+        $this->shipping_fee = 0;
+        $this->ongkir = 0;
+        $this->etd = null;
+        $this->total_berat = 0.0;
+        $this->total_weight_gram = 0;
     }
 }

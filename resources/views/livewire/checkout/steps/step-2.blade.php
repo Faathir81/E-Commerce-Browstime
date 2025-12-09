@@ -20,14 +20,19 @@
         </div>
         <div class="flex items-center justify-between">
             <span class="text-[#6f4c3b]">Shipping Fee</span>
-            <span class="font-semibold">{{ $wilayah_pengiriman_id ? 'Rp '. number_format($ongkir, 0, ',', '.') : 'Select zone first' }}</span>
+            <span class="font-semibold">{{ $shipping_fee > 0 ? 'Rp '. number_format($shipping_fee, 0, ',', '.') : 'Select zone first' }}</span>
+        </div>
+        <div class="flex items-center justify-between">
+            <span class="text-[#6f4c3b]">Total Weight</span>
+            <span class="font-semibold">{{ $total_berat > 0 ? number_format($total_berat, 2, ',', '.') . ' kg' : 'Pending calculation' }}</span>
         </div>
         <div class="flex items-center justify-between">
             <span class="text-[#6f4c3b]">ETA</span>
-            <span class="font-semibold">{{ $eta ? \Carbon\Carbon::parse($eta)->format('d M Y, H:i') : 'Pending calculation' }}</span>
+            <span class="font-semibold">{{ $etd ?: 'Pending calculation' }}</span>
         </div>
     </div>
 
     @error('wilayah_pengiriman_id') <p class="text-xs text-[#b3261e]">{{ $message }}</p> @enderror
     @error('ongkir') <p class="text-xs text-[#b3261e]">{{ $message }}</p> @enderror
+    @error('shipping_fee') <p class="text-xs text-[#b3261e]">{{ $message }}</p> @enderror
 </div>

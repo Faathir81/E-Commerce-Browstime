@@ -130,7 +130,7 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <span>Shipping Fee</span>
-                        <span class="text-[#3b241a]">{{ $wilayah_pengiriman_id ? 'Rp '. number_format($ongkir, 0, ',', '.') : 'Select zone' }}</span>
+                        <span class="text-[#3b241a]">{{ $shipping_fee > 0 ? 'Rp '. number_format($shipping_fee, 0, ',', '.') : 'Select zone' }}</span>
                     </div>
                 </div>
 
