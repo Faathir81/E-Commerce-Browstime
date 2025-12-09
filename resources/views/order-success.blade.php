@@ -16,6 +16,21 @@
     $statusOrder = ['confirmed', 'baking', 'delivery', 'delivered'];
     $currentStep = $statusMap[$pesanan?->status ?? ''] ?? null;
     $currentIndex = $currentStep ? array_search($currentStep, $statusOrder) : false;
+    $pelanggan = $pesanan?->resolvedPelanggan();
+    $alamatPengiriman = $pelanggan?->alamatPengiriman()->latest()->first();
+    $wilayah = $alamatPengiriman?->wilayah ?? $pesanan?->wilayahPengiriman;
+    $provinsiName = $wilayah?->provinsi->nama ?? null;
+    $kotaName = $wilayah?->kota->nama ?? null;
+    $kecamatanName = $wilayah?->kecamatan->nama ?? null;
+    $alamatLengkap = $pesanan?->alamat_lengkap ?: $alamatPengiriman?->alamat_lengkap;
+    $kodePos = $alamatPengiriman?->kode_pos;
+    $fullAddress = trim(collect([
+        $alamatLengkap,
+        $kecamatanName,
+        $kotaName,
+        $provinsiName,
+        $kodePos ? 'Kode Pos ' . $kodePos : null,
+    ])->filter()->implode(', '));
 @endphp
 
 <div class="bg-[#FFF9F4] min-h-screen">
@@ -35,7 +50,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-[1.2fr,0.8fr] gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-[1.2fr,0.8fr] gap-6 items-start">
             <div class="space-y-5">
                 <div class="bg-white border border-[#f1e8df] rounded-3xl p-5 space-y-4 shadow-sm">
                     <div class="flex items-center gap-2 text-sm font-semibold text-[#3b241a]">
@@ -115,35 +130,56 @@
                     </div>
                     <div class="pt-2 text-sm text-[#3b241a] space-y-1 border-t border-[#f1e8df] mt-2">
                         <p class="font-semibold">Delivery Address:</p>
-                        <p class="text-[#6f4c3b]">{{ $pesanan?->alamat_lengkap ?? 'Your shipping address' }}</p>
+                        <div class="text-[#6f4c3b] space-y-1">
+                            <p class="font-semibold text-[#3b241a]">{{ $pelanggan?->nama ?? $pesanan?->nama_penerima ?? 'Customer' }}</p>
+                            @if($fullAddress)
+                                <p class="text-xs text-[#9b7a64]">Complete: {{ $fullAddress }}</p>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-white border border-[#f1e8df] rounded-3xl p-5 space-y-4 shadow-sm">
-                <div class="text-sm font-semibold text-[#3b241a]">Order Summary</div>
+            <div class="bg-white border border-[#f1e8df] rounded-3xl p-5 space-y-4 shadow-sm w-full">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-semibold text-[#3b241a]">Order Summary</p>
+                        <p class="text-xs text-[#6f4c3b]">Detail item dan perhitungan biaya</p>
+                    </div>
+                    <span class="rounded-full bg-[#fff3e6] text-[#7a4b24] px-3 py-1 text-xs font-semibold">Total {{ $pesanan?->detailPesanans->count() ?? 0 }} items</span>
+                </div>
 
-                <div class="space-y-1 text-sm text-[#3b241a]">
+                <div class="rounded-2xl border border-[#f1e8df] bg-[#fffdfb] divide-y divide-[#f1e8df]">
                     @foreach($pesanan?->detailPesanans ?? [] as $detail)
-                        <div class="flex items-center justify-between">
-                            <span class="text-[#3b241a]">{{ $detail->produk->nama ?? 'Produk' }}</span>
-                            <span class="text-[#3b241a]">x{{ $detail->qty }}</span>
-                        </div>
-                        <div class="flex items-center justify-between text-xs text-[#6f4c3b]">
-                            <span>Harga</span>
-                            <span>Rp {{ number_format($detail->subtotal ?? 0, 0, ',', '.') }}</span>
+                        <div class="grid grid-cols-[1fr,auto] gap-3 p-3">
+                            <div>
+                                <p class="text-sm font-semibold text-[#3b241a]">{{ $detail->produk->nama ?? 'Produk' }}</p>
+                                <p class="text-xs text-[#6f4c3b]">Harga</p>
+                            </div>
+                            <div class="text-right text-sm text-[#3b241a]">
+                                <p>x{{ $detail->qty }}</p>
+                                <p class="text-xs text-[#6f4c3b]">Rp {{ number_format($detail->subtotal ?? 0, 0, ',', '.') }}</p>
+                            </div>
                         </div>
                     @endforeach
                 </div>
 
-                <hr class="border-[#f1e8df]">
-
-                <div class="flex items-center justify-between text-base font-semibold text-[#3b241a]">
-                    <span>Total</span>
-                    <span>Rp {{ number_format($pesanan?->total ?? 0, 0, ',', '.') }}</span>
+                <div class="rounded-2xl border border-[#f1e8df] bg-[#fffaf5] p-4 space-y-2 text-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[#6f4c3b]">Subtotal</span>
+                        <span class="font-semibold text-[#3b241a]">Rp {{ number_format($pesanan?->subtotal ?? 0, 0, ',', '.') }}</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-[#6f4c3b]">Shipping Fee</span>
+                        <span class="font-semibold text-[#3b241a]">Rp {{ number_format($pesanan?->ongkir ?? 0, 0, ',', '.') }}</span>
+                    </div>
+                    <div class="flex items-center justify-between text-base font-semibold text-[#3b241a] pt-2 border-t border-[#f1e8df]">
+                        <span>Total</span>
+                        <span>Rp {{ number_format($pesanan?->total ?? 0, 0, ',', '.') }}</span>
+                    </div>
                 </div>
 
-                <div class="pt-1">
+                <div class="pt-1 space-y-2">
                     <a href="{{ route('landing') }}"
                        class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#7a4b24] text-white px-5 py-3 text-sm font-semibold hover:bg-[#693f1d] transition">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -153,10 +189,10 @@
                         </svg>
                         Back to Home
                     </a>
-                </div>
 
-                <div class="rounded-2xl bg-[#f8f1e7] px-3 py-2 text-xs text-[#6f4c3b]">
-                    Order confirmation has been sent to {{ auth()->user()->email ?? ($pesanan?->guest_email ?? '-') }}
+                    <div class="rounded-2xl bg-[#f8f1e7] px-3 py-2 text-xs text-[#6f4c3b] text-center">
+                        Order confirmation has been sent to {{ auth()->user()->email ?? ($pesanan?->guest_email ?? '-') }}
+                    </div>
                 </div>
             </div>
         </div>

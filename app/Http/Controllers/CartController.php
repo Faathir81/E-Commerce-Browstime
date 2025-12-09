@@ -27,13 +27,13 @@ class CartController extends Controller
         })->values();
 
         $subtotal = $cartItems->sum(fn ($item) => $item->price * $item->quantity);
-        $deliveryFee = $subtotal > 0 ? 15000 : 0;
-        $total = $subtotal + $deliveryFee;
+        $deliveryFeeLabel = 'Calculated at checkout';
+        $total = $subtotal;
 
         return view('cart.index', [
             'cartItems'   => $cartItems,
             'subtotal'    => $subtotal,
-            'deliveryFee' => $deliveryFee,
+            'deliveryFeeLabel' => $deliveryFeeLabel,
             'total'       => $total,
         ]);
     }

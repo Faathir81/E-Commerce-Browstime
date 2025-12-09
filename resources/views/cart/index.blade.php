@@ -89,20 +89,20 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <span>Delivery Fee</span>
-                        <span class="text-[#3b241a]" data-cart-delivery>Rp {{ number_format($deliveryFee ?? 0, 0, ',', '.') }}</span>
+                        <span class="text-[#3b241a]" data-cart-delivery>{{ $deliveryFeeLabel ?? 'Calculated at checkout' }}</span>
                     </div>
                 </div>
                 <div class="border-t border-[#f1e8df] pt-3">
                     <div class="flex items-center justify-between text-base font-semibold text-[#3b241a]">
                         <span>Total</span>
-                        <span data-cart-total>Rp {{ number_format($total ?? 0, 0, ',', '.') }}</span>
+                        <span data-cart-total>Rp {{ number_format($subtotal ?? 0, 0, ',', '.') }}</span>
                     </div>
                 </div>
                 <div class="space-y-3">
                     @php $totalQty = array_sum(session('cart', [])); @endphp
                     <a href="{{ url('/checkout') }}"
                        data-proceed-btn
-                       class="block w-full text-center rounded-full bg-[#7a4b24] text-white py-3 text-sm font-semibold hover:bg-[#693f1d] transition {{ $totalQty > 0 ? '' : 'pointer-events-none opacity-60' }}">
+                       class="block w-full text-center rounded-full bg-[#7a4b24] text-white py-3 text-sm font-semibold hover:bg-[#693f1d] transition">
                         Proceed to Checkout
                     </a>
                     <a href="{{ route('product.all') }}" class="block w-full text-center rounded-full border border-[#e4d6c6] text-[#3b241a] py-3 text-sm font-medium hover:bg-[#f5ece3] transition">
