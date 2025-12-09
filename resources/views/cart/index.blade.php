@@ -59,17 +59,17 @@
                             </button>
                         </div>
                         <button type="button"
-                                class="text-[#b3261e] hover:text-[#8f1f18] transition"
+                                class="h-9 w-9 flex items-center justify-center rounded-full text-[#b3261e] hover:text-white hover:bg-[#d4183d] transition"
                                 data-remove-btn
                                 data-id="{{ $item->id }}"
                                 data-remove-url="{{ url('/cart/remove/' . $item->id) }}">
                             <span class="sr-only">Remove</span>
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6.6665 7.33337V11.3334" stroke="#D4183D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M9.3335 7.33337V11.3334" stroke="#D4183D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M12.6668 4V13.3333C12.6668 13.687 12.5264 14.0261 12.2763 14.2761C12.0263 14.5262 11.6871 14.6667 11.3335 14.6667H4.66683C4.31321 14.6667 3.97407 14.5262 3.72402 14.2761C3.47397 14.0261 3.3335 13.687 3.3335 13.3333V4" stroke="#D4183D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M2 4H14" stroke="#D4183D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M5.3335 4.00004V2.66671C5.3335 2.31309 5.47397 1.97395 5.72402 1.7239C5.97407 1.47385 6.31321 1.33337 6.66683 1.33337H9.3335C9.68712 1.33337 10.0263 1.47385 10.2763 1.7239C10.5264 1.97395 10.6668 2.31309 10.6668 2.66671V4.00004" stroke="#D4183D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M6.6665 7.33337V11.3334" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9.3335 7.33337V11.3334" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12.6668 4V13.3333C12.6668 13.687 12.5264 14.0261 12.2763 14.2761C12.0263 14.5262 11.6871 14.6667 11.3335 14.6667H4.66683C4.31321 14.6667 3.97407 14.5262 3.72402 14.2761C3.47397 14.0261 3.3335 13.687 3.3335 13.3333V4" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 4H14" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M5.3335 4.00004V2.66671C5.3335 2.31309 5.47397 1.97395 5.72402 1.7239C5.97407 1.47385 6.31321 1.33337 6.66683 1.33337H9.3335C9.68712 1.33337 10.0263 1.47385 10.2763 1.7239C10.5264 1.97395 10.6668 2.31309 10.6668 2.66671V4.00004" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </button>
                     </div>

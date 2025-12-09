@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->foreignId('kategori_id')->constrained('kategoris');
             $table->integer('harga');
+            $table->integer('berat')->default(0); // NEW: berat produk dalam gram
             $table->text('deskripsi')->nullable();
             $table->integer('waktu_produksi')->default(0); // minute / hour
             $table->string('gambar')->nullable();
