@@ -1,5 +1,6 @@
 @php
-    $hideSearchOnMobile = request()->routeIs('landing') || request()->routeIs('search');
+    // Hide the search bar on mobile for landing, search, and product detail to keep the header compact
+    $hideSearchOnMobile = request()->routeIs('landing') || request()->routeIs('search') || request()->routeIs('product.show');
 @endphp
 <nav class="w-full border-b border-[#f1e6dc] bg-white sticky top-0 z-50">
     <div class="mx-auto flex w-full max-w-screen-2xl items-center flex-wrap justify-between gap-3 sm:gap-6 px-4 sm:px-6 lg:px-14 py-3 min-w-0">

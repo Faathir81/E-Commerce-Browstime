@@ -3,15 +3,15 @@
     <div class="mx-auto max-w-screen-2xl px-6 sm:px-8 lg:px-14">
 
         {{-- HEADER --}}
-        <div class="flex items-center justify-between mb-6">
-            <div>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
+            <div class="text-left">
                 <h2 class="text-xl font-semibold text-[#3b241a]">Our Best Sellers</h2>
                 <p class="text-sm text-[#7c6a5a]">Customer favorites you'll absolutely love</p>
             </div>
 
             <a 
                 href="{{ route('search') }}" 
-                class="inline-flex items-center rounded-full border border-[#d3b58f] px-5 py-2 text-sm font-medium text-[#3b241a] transition-colors hover:bg-[#c79c68] hover:text-[#2b1a14]"
+                class="inline-flex items-center justify-center w-full sm:w-auto text-center rounded-full border border-[#d3b58f] px-5 py-2 text-sm font-medium text-[#3b241a] transition-colors hover:bg-[#c79c68] hover:text-[#2b1a14]"
             >
                 View All Products
             </a>

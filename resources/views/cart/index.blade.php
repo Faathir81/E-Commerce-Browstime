@@ -4,7 +4,7 @@
 <div class="bg-[#FFF9F4] min-h-screen">
     <div class="w-full bg-white border-b border-[rgb(241,230,220)]">
         <div class="mx-auto max-w-screen-2xl px-6 sm:px-8 lg:px-14 h-16 flex items-center gap-3">
-            <a href="{{ route('product.all') }}"
+            <a href="{{ route('landing') }}"
                class="inline-flex items-center justify-center gap-2 text-sm font-medium text-[#3b241a] h-10 px-3 rounded-full transition hover:bg-[#d3b58f] hover:text-[#3b241a]">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9.6665 12.6667L5.33317 8.33333L9.6665 4" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
@@ -103,7 +103,7 @@
                     <a href="{{ url('/checkout') }}" class="block w-full text-center rounded-full bg-[#7a4b24] text-white py-3 text-sm font-semibold hover:bg-[#693f1d] transition">
                         Proceed to Checkout
                     </a>
-                    <a href="{{ route('product.all') }}" class="block w-full text-center rounded-full border border-[#e4d6c6] text-[#3b241a] py-3 text-sm font-medium hover:bg-[#f5ece3] transition">
+                    <a href="{{ route('landing') }}" class="block w-full text-center rounded-full border border-[#e4d6c6] text-[#3b241a] py-3 text-sm font-medium hover:bg-[#f5ece3] transition">
                         Continue Shopping
                     </a>
                 </div>

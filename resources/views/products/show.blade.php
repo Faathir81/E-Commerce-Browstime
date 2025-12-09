@@ -46,7 +46,7 @@
                             </svg>
                         </span>
                         <div>
-                            <p class="text-xs text-[#6f4c3b]">Delivery Time</p>
+                            <p class="text-xs text-[#6f4c3b]">Production Time</p>
                             <p class="font-semibold">
                                 {{ $product->waktu_produksi ?? '1-2 Days' }}
                                 @if(is_numeric($product->waktu_produksi))
