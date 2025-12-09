@@ -2,9 +2,10 @@
 
 namespace App\Filament\Admin\Resources\WilayahPengirimen\Schemas;
 
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
@@ -15,58 +16,57 @@ class WilayahPengirimanForm
     {
         return $schema->components([
 
-        Select::make('kecamatan_id')
-            ->label('Kecamatan')
-            ->options(function (Get $get, ?string $state) {
+            Select::make('kota_id')
+                ->label('Kota/Kabupaten')
+                ->options(function (Get $get, ?string $state) {
+                    $usedIds = \App\Models\WilayahPengiriman::pluck('kota_id')->toArray();
 
-                // ID kecamatan yang sudah dipakai (kecuali yang sedang diedit)
-                $usedIds = \App\Models\WilayahPengiriman::pluck('kecamatan_id')->toArray();
+                    if ($state && in_array((int) $state, $usedIds, true)) {
+                        $index = array_search((int) $state, $usedIds, true);
+                        unset($usedIds[$index]);
+                    }
 
-                // Jika sedang edit -> biarkan kecamatan miliknya tetap muncul
-                if ($state && in_array($state, $usedIds)) {
-                    $index = array_search($state, $usedIds);
-                    unset($usedIds[$index]);
-                }
+                    return \App\Models\Kota::whereNotIn('id', $usedIds)
+                        ->orderBy('nama')
+                        ->pluck('nama', 'id');
+                })
+                ->searchable()
+                ->required()
+                ->live()
+                ->afterStateUpdated(function (Get $get, Set $set, $state) {
+                    if (! $state) {
+                        return;
+                    }
 
-                return \App\Models\Kecamatan::whereNotIn('kode_rajaongkir', $usedIds)
-                    ->orderBy('nama')
-                    ->pluck('nama', 'kode_rajaongkir');
-            })
-            ->searchable()
-            ->required()
-            ->live()
-            ->afterStateUpdated(function (Get $get, Set $set, $state) {
-                if (!$state) return;
-
-                $kecamatan = \App\Models\Kecamatan::where('kode_rajaongkir', $state)->first();
-
-                if ($kecamatan) {
-                    $set('kota_id', $kecamatan->kota_id);
-
-                    $kota = $kecamatan->kota;
+                    $kota = \App\Models\Kota::find($state);
+                    $provinsi = $kota?->provinsi;
 
                     if ($kota) {
-                        $set('provinsi_id', $kota->provinsi_id);
-                        $set('nama', $kecamatan->nama . ', ' . $kota->nama);
+                        $set('provinsi_id', $provinsi?->id);
+                        $set('kota_label', $kota->nama);
+                        $set('provinsi_label', $provinsi?->nama);
+                        $set('nama', $kota->nama);
                     }
-                }
-            }),
+                }),
 
-            TextInput::make('nama')
-                ->label('Nama Wilayah')
+            Hidden::make('nama')
                 ->required()
-                ->disabled() // auto generate
                 ->dehydrated(true),
 
-            TextInput::make('provinsi_id')
-                ->label('Provinsi ID')
-                ->disabled()
-                ->dehydrated(true),
+            Hidden::make('provinsi_id'),
 
-            TextInput::make('kota_id')
-                ->label('Kota/Kabupaten ID')
+            Hidden::make('kecamatan_id')
+                ->default(0),
+
+            TextInput::make('provinsi_label')
+                ->label('Provinsi')
                 ->disabled()
-                ->dehydrated(true),
+                ->dehydrated(false)
+                ->afterStateHydrated(function (Set $set, Get $get) {
+                    if ($id = $get('provinsi_id')) {
+                        $set('provinsi_label', optional(\App\Models\Provinsi::find($id))->nama);
+                    }
+                }),
 
             Toggle::make('aktif')
                 ->label('Aktif')

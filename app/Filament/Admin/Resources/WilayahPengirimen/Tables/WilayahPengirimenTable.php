@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\WilayahPengirimen\Tables;
 
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\IconColumn;
@@ -15,13 +16,15 @@ class WilayahPengirimenTable
     {
         return $table
             ->columns([
-                TextColumn::make('nama')
-                    ->label('Nama Wilayah')
+                TextColumn::make('kota.nama')
+                    ->label('Kota/Kabupaten')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('kecamatan_id')
-                    ->label('Kecamatan ID'),
+                TextColumn::make('provinsi.nama')
+                    ->label('Provinsi')
+                    ->searchable()
+                    ->sortable(),
 
                 IconColumn::make('aktif')
                     ->boolean()
@@ -31,6 +34,7 @@ class WilayahPengirimenTable
                     ->label('Dibuat')
                     ->dateTime(),
             ])
+            ->modifyQueryUsing(fn (Builder $query) => $query->where('aktif', true))
             ->recordActions([
                 EditAction::make(),
             ])

@@ -15,6 +15,7 @@ class SearchBar extends Component
     public function getResultsProperty()
     {
         $term = trim($this->search);
+        $termLower = mb_strtolower($term);
 
         if ($term === '') {
             return collect();
@@ -23,10 +24,14 @@ class SearchBar extends Component
         return Produk::active()
             ->select('id', 'nama', 'slug', 'harga', 'gambar', 'kategori_id')
             ->with('kategori:id,nama')
-            ->where(function ($q) use ($term) {
-                // Contains match untuk hasil luas, dibatasi limit untuk kontrol beban.
-                $q->where('nama', 'like', "%{$term}%")
-                  ->orWhere('deskripsi', 'like', "%{$term}%");
+            ->where(function ($q) use ($termLower) {
+                $like = '%' . $termLower . '%';
+                $q->whereRaw('LOWER(nama) LIKE ?', [$like])
+                  ->orWhereRaw('LOWER(deskripsi) LIKE ?', [$like])
+                  ->orWhereRaw('LOWER(slug) LIKE ?', [$like])
+                  ->orWhereHas('kategori', function ($cat) use ($like) {
+                      $cat->whereRaw('LOWER(nama) LIKE ?', [$like]);
+                  });
             })
             ->orderBy('nama')
             ->limit(10)
@@ -37,6 +42,7 @@ class SearchBar extends Component
     {
         // Livewire 3 → pakai dispatch, PARAMETER HARUS DI-NAME
         $this->dispatch('search-updated', search: $this->search);
+        $this->dropdownOpen = trim($this->search) !== '';
     }
 
     public function goToResults()
