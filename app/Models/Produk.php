@@ -16,6 +16,7 @@ class Produk extends Model
         'slug',
         'kategori_id',
         'harga',
+        'berat',
         'deskripsi',
         'waktu_produksi',
         'gambar',

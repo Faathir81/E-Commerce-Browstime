@@ -54,10 +54,17 @@ class ProdukForm
 
             Section::make('Produksi & Gambar')
                 ->schema([
-
                     TextInput::make('waktu_produksi')
                         ->label('Waktu Produksi (menit)')
                         ->numeric()
+                        ->required(),
+
+                    TextInput::make('berat')
+                        ->label('Berat (gram)')
+                        ->numeric()
+                        ->minValue(1)
+                        ->suffix('gr')
+                        ->helperText('Masukkan berat bersih dalam gram')
                         ->required(),
 
                     FileUpload::make('gambar')
