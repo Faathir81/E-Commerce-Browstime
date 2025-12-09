@@ -76,7 +76,7 @@
         <textarea rows="3"
                   wire:model.defer="alamat_lengkap"
                   class="w-full rounded-xl border border-[#e4d6c6] bg-[#fffdfb] px-4 py-3 text-sm focus:border-[#bb936c] focus:ring-[#bb936c]"
-                  placeholder="Street, RT/RW, Kelurahan, Kecamatan, Kota"></textarea>
+                  placeholder="Street, RT/RW, Kelurahan, Kecamatan, Kota/Kabupaten"></textarea>
         @error('alamat_lengkap') <p class="text-xs text-[#b3261e]">{{ $message }}</p> @enderror
     </div>
 

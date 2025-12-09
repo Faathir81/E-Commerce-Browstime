@@ -15,4 +15,18 @@ class WilayahPengiriman extends Model
         'kecamatan_id',
         'aktif',
     ];
+
+    protected $casts = [
+        'aktif' => 'boolean',
+    ];
+
+    public function kota()
+    {
+        return $this->belongsTo(Kota::class);
+    }
+
+    public function provinsi()
+    {
+        return $this->belongsTo(Provinsi::class);
+    }
 }

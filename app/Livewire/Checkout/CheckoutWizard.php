@@ -110,7 +110,7 @@ class CheckoutWizard extends Component
         if ($this->wilayah_pengiriman_id) {
             $this->calculateShipping();
         } else {
-            // Ensure cascading dropdowns are hydrated when customer has a saved province/city/kecamatan
+            // Ensure cascading dropdowns are hydrated when customer has a saved province/city
             $this->hydrateLocationFromIds();
         }
 
@@ -140,9 +140,9 @@ class CheckoutWizard extends Component
             : [];
 
         $this->kota_id = null;
+        $this->kecamatans = [];
         $this->kecamatan_id = null;
         $this->wilayah_pengiriman_id = null;
-        $this->kecamatans = [];
         $this->ongkir = 0;
         $this->recalculateTotals();
     }
@@ -151,26 +151,26 @@ class CheckoutWizard extends Component
     {
         if (! $value) {
             $this->kota_id = null;
+            $this->wilayah_pengiriman_id = null;
+            $this->kecamatans = [];
+            $this->kecamatan_id = null;
+            $this->ongkir = 0;
+            $this->recalculateTotals();
+            return;
         }
 
-        $this->kecamatans = $value
-            ? $this->getSupportedKecamatans((int) $value)
-            : [];
-
+        $this->kecamatans = $this->getSupportedKecamatans((int) $value);
         $this->kecamatan_id = null;
-        $this->wilayah_pengiriman_id = null;
-        $this->ongkir = 0;
-        $this->recalculateTotals();
+        $this->mapWilayahFromKota();
+        $this->calculateShipping();
     }
 
     public function updatedKecamatanId($value): void
     {
         if (! $value) {
             $this->kecamatan_id = null;
+            return;
         }
-
-        $this->mapWilayahFromKecamatan();
-        $this->calculateShipping();
     }
 
     public function updatedPaymentMethod(): void
@@ -214,7 +214,7 @@ class CheckoutWizard extends Component
 
     public function calculateShipping(): void
     {
-        $this->mapWilayahFromKecamatan();
+        $this->mapWilayahFromKota();
 
         if (! $this->wilayah_pengiriman_id) {
             return;
@@ -356,7 +356,8 @@ class CheckoutWizard extends Component
     protected function stepTwoRules(): array
     {
         return [
-            'kecamatan_id' => ['required', 'exists:kecamatan,id'],
+            'kota_id' => ['required', 'exists:kota,id'],
+            'kecamatan_id' => ['nullable', 'exists:kecamatan,id'],
             'wilayah_pengiriman_id' => ['required', 'exists:wilayah_pengiriman,id'],
             'ongkir' => ['required', 'numeric', 'min:0'],
         ];
@@ -434,30 +435,25 @@ class CheckoutWizard extends Component
         return max(1, $this->totalQuantity * $estimatedWeightPerItem);
     }
 
-    protected function mapWilayahFromKecamatan(): void
+    protected function mapWilayahFromKota(): void
     {
-        if (! $this->kecamatan_id) {
+        if (! $this->kota_id) {
             return;
         }
 
-        $kecamatan = Kecamatan::find($this->kecamatan_id);
-        $kodeRajaOngkir = $kecamatan?->kode_rajaongkir;
+        $zone = WilayahPengiriman::where('kota_id', $this->kota_id)
+            ->where('aktif', true)
+            ->first();
 
-        $zone = $kodeRajaOngkir
-            ? WilayahPengiriman::where('kecamatan_id', $kodeRajaOngkir)
-                ->where('aktif', true)
-                ->first()
-            : null;
         if (! $zone) {
             $this->wilayah_pengiriman_id = null;
             $this->ongkir = 0;
-            $this->addError('kecamatan_id', 'Area belum didukung.');
+            $this->addError('kota_id', 'Kota belum didukung.');
             return;
         }
 
         $this->wilayah_pengiriman_id = $zone->id;
         $this->provinsi_id = $zone->provinsi_id;
-        $this->kota_id = $zone->kota_id;
     }
 
     protected function hydrateLocationFromWilayah(): void
@@ -476,7 +472,6 @@ class CheckoutWizard extends Component
 
         $this->provinsi_id = $zone->provinsi_id;
         $this->kota_id = $zone->kota_id;
-        $this->kecamatan_id = Kecamatan::where('kode_rajaongkir', $zone->kecamatan_id)->value('id');
 
         $this->hydrateLocationFromIds();
     }
@@ -519,17 +514,7 @@ class CheckoutWizard extends Component
 
     protected function getSupportedKecamatans(int $kotaId): array
     {
-        $supportedKecCodes = WilayahPengiriman::where('kota_id', $kotaId)
-            ->where('aktif', true)
-            ->pluck('kecamatan_id')
-            ->unique()
-            ->toArray();
-        if (empty($supportedKecCodes)) {
-            return [];
-        }
-
         return Kecamatan::where('kota_id', $kotaId)
-            ->whereIn('kode_rajaongkir', $supportedKecCodes)
             ->orderBy('nama')
             ->get()
             ->toArray();
