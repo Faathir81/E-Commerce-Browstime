@@ -18,7 +18,18 @@ class WilayahPengirimanForm
 
             Select::make('kota_id')
                 ->label('Kota/Kabupaten')
-                ->options(fn () => \App\Models\Kota::orderBy('nama')->pluck('nama', 'id'))
+                ->options(function (Get $get, ?string $state) {
+                    $usedIds = \App\Models\WilayahPengiriman::pluck('kota_id')->toArray();
+
+                    if ($state && in_array((int) $state, $usedIds, true)) {
+                        $index = array_search((int) $state, $usedIds, true);
+                        unset($usedIds[$index]);
+                    }
+
+                    return \App\Models\Kota::whereNotIn('id', $usedIds)
+                        ->orderBy('nama')
+                        ->pluck('nama', 'id');
+                })
                 ->searchable()
                 ->required()
                 ->live()

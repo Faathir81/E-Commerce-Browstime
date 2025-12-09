@@ -7,7 +7,7 @@
             <input type="text"
                    wire:model.defer="nama_penerima"
                    class="w-full rounded-xl border border-[#e4d6c6] bg-[#fffdfb] px-4 py-3 text-sm focus:border-[#bb936c] focus:ring-[#bb936c]"
-                   placeholder="e.g., John Doe">
+                   placeholder="e.g., Masbro">
             @error('nama_penerima') <p class="text-xs text-[#b3261e]">{{ $message }}</p> @enderror
         </div>
         <div class="space-y-1">
@@ -15,7 +15,7 @@
             <input type="text"
                    wire:model.defer="no_hp"
                    class="w-full rounded-xl border border-[#e4d6c6] bg-[#fffdfb] px-4 py-3 text-sm focus:border-[#bb936c] focus:ring-[#bb936c]"
-                   placeholder="08xxxxxxxxxx">
+                   placeholder="e.g., 08xxxxxxxxx">
             @error('no_hp') <p class="text-xs text-[#b3261e]">{{ $message }}</p> @enderror
         </div>
         @guest
@@ -76,7 +76,7 @@
         <textarea rows="3"
                   wire:model.defer="alamat_lengkap"
                   class="w-full rounded-xl border border-[#e4d6c6] bg-[#fffdfb] px-4 py-3 text-sm focus:border-[#bb936c] focus:ring-[#bb936c]"
-                  placeholder="Street, RT/RW, Kelurahan, Kecamatan, Kota/Kabupaten"></textarea>
+                  placeholder="Street, RT/RW, Kelurahan"></textarea>
         @error('alamat_lengkap') <p class="text-xs text-[#b3261e]">{{ $message }}</p> @enderror
     </div>
 
