@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="bg-[#FFF9F4] min-h-screen">
-    <div class="w-full bg-white border-b border-[rgb(241,230,220)]">
+    <div class="w-full bg-white border-b border-[rgb(241,230,220)] sticky top-0 z-30">
         <div class="mx-auto max-w-screen-2xl px-6 sm:px-8 lg:px-14 h-16 flex items-center gap-3">
             <a href="{{ route('product.all') }}"
                class="inline-flex items-center justify-center gap-2 text-sm font-medium text-[#3b241a] h-10 px-3 rounded-full transition hover:bg-[#d3b58f] hover:text-[#3b241a]">
@@ -20,8 +20,8 @@
     <div class="mx-auto max-w-screen-2xl px-6 sm:px-8 lg:px-14 py-6">
         <div class="grid grid-cols-1 lg:grid-cols-[1.1fr,0.9fr] gap-6 items-start">
             {{-- LEFT: CART ITEMS --}}
-            <div class="space-y-4">
-                @forelse ($cartItems as $item)
+            <div class="space-y-4" data-cart-items>
+                @foreach ($cartItems as $item)
                     <div class="bg-white border border-[#f1e8df] rounded-xl shadow-sm px-4 py-3 flex gap-4 items-center" data-cart-item>
                         <div class="h-20 w-20 rounded-lg overflow-hidden bg-[#f9f2eb] border border-[#f1e8df]">
                             <img src="{{ $item->image_url ?? 'https://via.placeholder.com/120x120' }}"
@@ -73,15 +73,14 @@
                             </svg>
                         </button>
                     </div>
-                @empty
-                    <div class="bg-white border border-[#f1e8df] rounded-xl shadow-sm px-4 py-6 text-center text-sm text-[#6f4c3b]">
-                        Your cart is empty.
-                    </div>
-                @endforelse
+                @endforeach
+            </div>
+            <div class="bg-white border border-[#f1e8df] rounded-xl shadow-sm px-4 py-6 text-center text-sm text-[#6f4c3b] {{ count($cartItems) > 0 ? 'hidden' : '' }}" data-empty-state>
+                Your cart is empty.
             </div>
 
             {{-- RIGHT: ORDER SUMMARY --}}
-            <div class="bg-white border border-[#f1e8df] rounded-2xl shadow-sm p-5 lg:p-6 space-y-4">
+            <div class="bg-white border border-[#f1e8df] rounded-2xl shadow-sm p-5 lg:p-6 space-y-4 sticky top-20">
                 <h2 class="text-sm font-semibold text-[#3b241a]">Order Summary</h2>
                 <div class="space-y-2 text-sm text-[#6f4c3b]">
                     <div class="flex items-center justify-between">
@@ -100,7 +99,10 @@
                     </div>
                 </div>
                 <div class="space-y-3">
-                    <a href="{{ url('/checkout') }}" class="block w-full text-center rounded-full bg-[#7a4b24] text-white py-3 text-sm font-semibold hover:bg-[#693f1d] transition">
+                    @php $totalQty = array_sum(session('cart', [])); @endphp
+                    <a href="{{ url('/checkout') }}"
+                       data-proceed-btn
+                       class="block w-full text-center rounded-full bg-[#7a4b24] text-white py-3 text-sm font-semibold hover:bg-[#693f1d] transition {{ $totalQty > 0 ? '' : 'pointer-events-none opacity-60' }}">
                         Proceed to Checkout
                     </a>
                     <a href="{{ route('product.all') }}" class="block w-full text-center rounded-full border border-[#e4d6c6] text-[#3b241a] py-3 text-sm font-medium hover:bg-[#f5ece3] transition">
@@ -110,5 +112,6 @@
             </div>
         </div>
     </div>
+    <div data-cart-meta data-total-quantity="{{ array_sum(session('cart', [])) }}"></div>
 </div>
 @endsection

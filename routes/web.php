@@ -6,9 +6,21 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Livewire\Payment\UploadProof;
+use App\Livewire\Checkout\CheckoutWizard;
 
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::get('/checkout', CheckoutWizard::class)->name('checkout');
+Route::get('/order-success/{kode}', function (string $kode) {
+    $pesanan = \App\Models\Pesanan::with('pembayaran')->where('kode', $kode)->first();
+    return view('order-success', [
+        'kode' => $kode,
+        'pesanan' => $pesanan,
+        'pembayaran' => $pesanan?->pembayaran,
+    ]);
+})->name('order.success');
+Route::get('/orders/{order}/upload-proof', UploadProof::class)->name('order.upload-proof');
 
 Route::get('/products', function () {
     return 'all products here'; // nanti diganti view asli
