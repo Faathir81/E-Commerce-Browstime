@@ -206,11 +206,11 @@ Branch: feat/rajaongkir-wilayah
 **Branch:** `feat/frontend-checkout`
 
 -   [X] Form alamat (provinsi → kota → kecamatan)
--   [ ] Hitung ongkir → API RajaOngkir /cost
+-   [X] Hitung ongkir → API RajaOngkir /cost
 -   [X] Tampilkan ETA pengiriman
 -   [X] Pilih metode pembayaran
 -   [X] Hitung total
--   [ ] Buat pesanan + simpan ongkir final
+-   [X] Buat pesanan + simpan ongkir final
 
 ---
 
