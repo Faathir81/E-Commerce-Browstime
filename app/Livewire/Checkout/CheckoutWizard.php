@@ -88,7 +88,13 @@ class CheckoutWizard extends Component
             ->get()
             ->toArray();
 
-        $this->provinsis = Provinsi::orderBy('nama')->get()->toArray();
+        $this->provinsis = Provinsi::whereIn(
+                'id',
+                WilayahPengiriman::where('aktif', true)->pluck('provinsi_id')->unique()
+            )
+            ->orderBy('nama')
+            ->get()
+            ->toArray();
 
         $this->paymentMethods = MetodePembayaran::where('aktif', true)
             ->orderBy('id')
@@ -505,9 +511,6 @@ class CheckoutWizard extends Component
             ->pluck('kota_id')
             ->unique()
             ->toArray();
-        if (empty($supportedKotaIds)) {
-            return [];
-        }
 
         return Kota::whereIn('id', $supportedKotaIds)->orderBy('nama')->get()->toArray();
     }
