@@ -14,29 +14,29 @@
         </div>
     </div>
 
-    <div class="mx-auto max-w-screen-2xl px-6 sm:px-8 lg:px-14 py-8 lg:py-10">
+    <div class="mx-auto max-w-screen-lg px-4 sm:px-8 lg:px-12 py-8 lg:py-10">
         <div class="grid grid-cols-1 lg:grid-cols-[1.15fr,0.85fr] gap-6 items-start">
             <div class="space-y-6">
-                <div class="flex items-center gap-3 text-sm text-[#6f4c3b]">
-                    <div class="flex items-center gap-2">
-                        <div class="h-7 w-7 rounded-full flex items-center justify-center {{ $step >= 1 ? 'bg-[#7a4b24] text-white' : 'bg-[#f1e8df] text-[#6f4c3b]' }}">1</div>
-                        <span class="{{ $step >= 1 ? 'text-[#3b241a] font-semibold' : '' }}">Customer</span>
-                    </div>
-                    <span class="h-[1px] w-10 bg-[#e4d6c6]"></span>
-                    <div class="flex items-center gap-2">
-                        <div class="h-7 w-7 rounded-full flex items-center justify-center {{ $step >= 2 ? 'bg-[#7a4b24] text-white' : 'bg-[#f1e8df] text-[#6f4c3b]' }}">2</div>
-                        <span class="{{ $step >= 2 ? 'text-[#3b241a] font-semibold' : '' }}">Shipping</span>
-                    </div>
-                    <span class="h-[1px] w-10 bg-[#e4d6c6]"></span>
-                    <div class="flex items-center gap-2">
-                        <div class="h-7 w-7 rounded-full flex items-center justify-center {{ $step >= 3 ? 'bg-[#7a4b24] text-white' : 'bg-[#f1e8df] text-[#6f4c3b]' }}">3</div>
-                        <span class="{{ $step >= 3 ? 'text-[#3b241a] font-semibold' : '' }}">Payment</span>
-                    </div>
-                    <span class="h-[1px] w-10 bg-[#e4d6c6]"></span>
-                    <div class="flex items-center gap-2">
-                        <div class="h-7 w-7 rounded-full flex items-center justify-center {{ $step >= 4 ? 'bg-[#7a4b24] text-white' : 'bg-[#f1e8df] text-[#6f4c3b]' }}">4</div>
-                        <span class="{{ $step >= 4 ? 'text-[#3b241a] font-semibold' : '' }}">Confirm</span>
-                    </div>
+                <div class="overflow-x-auto pb-2 -mx-1">
+                <div class="flex items-center gap-3 min-w-max text-sm text-[#6f4c3b] px-1">
+                    @php
+                        $steps = [
+                            ['label' => 'Customer', 'index' => 1],
+                            ['label' => 'Shipping', 'index' => 2],
+                            ['label' => 'Payment', 'index' => 3],
+                            ['label' => 'Confirm', 'index' => 4],
+                        ];
+                    @endphp
+                    @foreach($steps as $s)
+                        <div class="flex items-center gap-2">
+                            <div class="h-7 w-7 rounded-full flex items-center justify-center {{ $step >= $s['index'] ? 'bg-[#7a4b24] text-white' : 'bg-[#f1e8df] text-[#6f4c3b]' }}">{{ $s['index'] }}</div>
+                            <span class="{{ $step >= $s['index'] ? 'text-[#3b241a] font-semibold' : '' }}">{{ $s['label'] }}</span>
+                        </div>
+                        @if(!$loop->last)
+                            <span class="h-[1px] w-10 bg-[#e4d6c6]"></span>
+                        @endif
+                    @endforeach
+                </div>
                 </div>
 
                 @if ($step === 1)

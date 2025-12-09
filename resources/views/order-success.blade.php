@@ -87,14 +87,16 @@
                         </span>
                         <p>Delivery Status</p>
                     </div>
-                    <div class="flex items-center gap-2 text-xs text-[#6f4c3b]">
-                        <span class="inline-flex items-center rounded-full bg-[#f9e8c7] text-[#a36a0f] px-3 py-1 text-xs font-semibold">Processing Order</span>
+                    <div class="flex flex-wrap items-center gap-3 text-xs text-[#6f4c3b]">
+                        <span class="inline-flex items-center rounded-full bg-[#f9e8c7] text-[#a36a0f] px-3 py-1 text-xs font-semibold whitespace-nowrap">
+                            Processing Order
+                        </span>
                         <span class="flex items-center gap-1">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M12 8V12L14 14" stroke="#6f4c3b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#6f4c3b" stroke-width="1.5"/>
                             </svg>
-                            Estimated delivery: {{ $pesanan?->eta ? \Carbon\Carbon::parse($pesanan->eta)->format('d M Y, H:i') : '1-2 days' }}
+                            <span class="whitespace-nowrap">Estimated delivery: {{ $pesanan?->eta ? \Carbon\Carbon::parse($pesanan->eta)->format('d M Y, H:i') : '1-2 days' }}</span>
                         </span>
                     </div>
                     <div class="space-y-3 text-sm text-[#3b241a]">
@@ -116,8 +118,16 @@
                             <div class="flex items-start gap-3 {{ $active ? 'text-[#3b241a]' : 'text-[#6f4c3b]' }}">
                                 <span class="mt-1 h-4 w-4 rounded-full border-2 {{ $dotClasses }} flex items-center justify-center">
                                     @if($active)
-                                        <svg width="10" height="10" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M6.00016 8.66667L7.3335 10L10.0002 6.66667" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <g clip-path="url(#clip0_79_56)">
+                                                <path d="M7.99485 14.6572C11.6743 14.6572 14.6572 11.6743 14.6572 7.99485C14.6572 4.31534 11.6743 1.33252 7.99485 1.33252C4.31534 1.33252 1.33252 4.31534 1.33252 7.99485C1.33252 11.6743 4.31534 14.6572 7.99485 14.6572Z" stroke="#FDF8F3" stroke-width="1.33247" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M5.99609 7.99457L7.32856 9.32704L9.99349 6.66211" stroke="#FDF8F3" stroke-width="1.33247" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </g>
+                                            <defs>
+                                                <clipPath id="clip0_79_56">
+                                                    <rect width="15.9896" height="15.9896" fill="white"/>
+                                                </clipPath>
+                                            </defs>
                                         </svg>
                                     @endif
                                 </span>

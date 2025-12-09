@@ -17,24 +17,24 @@
         </div>
     </div>
 
-    <div class="mx-auto max-w-screen-2xl px-6 sm:px-8 lg:px-14 py-6">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-8 lg:px-14 py-6">
         <div class="grid grid-cols-1 lg:grid-cols-[1.1fr,0.9fr] gap-6 items-start">
             {{-- LEFT: CART ITEMS --}}
             <div class="space-y-4" data-cart-items>
                 @foreach ($cartItems as $item)
-                    <div class="bg-white border border-[#f1e8df] rounded-xl shadow-sm px-4 py-3 flex gap-4 items-center" data-cart-item>
-                        <div class="h-20 w-20 rounded-lg overflow-hidden bg-[#f9f2eb] border border-[#f1e8df]">
+                    <div class="bg-white border border-[#f1e8df] rounded-xl shadow-sm px-4 py-3 flex gap-3 sm:gap-4 items-center" data-cart-item>
+                        <div class="h-16 w-16 sm:h-20 sm:w-20 rounded-lg overflow-hidden bg-[#f9f2eb] border border-[#f1e8df] flex-shrink-0">
                             <img src="{{ $item->image_url ?? 'https://via.placeholder.com/120x120' }}"
                                  alt="{{ $item->name }}"
                                  class="h-full w-full object-cover">
                         </div>
-                        <div class="flex-1">
-                            <p class="text-sm font-semibold text-[#3b241a]">{{ $item->name }}</p>
-                            <p class="text-sm text-[#6f4c3b]">Rp {{ number_format($item->price, 0, ',', '.') }}</p>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-semibold text-[#3b241a] leading-snug line-clamp-2">{{ $item->name }}</p>
+                            <p class="text-sm text-[#6f4c3b] mt-1">Rp {{ number_format($item->price, 0, ',', '.') }}</p>
                         </div>
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2 sm:gap-3 text-xs">
                         <button type="button"
-                                class="h-9 w-9 flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] hover:bg-[#f5ece3] transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                class="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] hover:bg-[#f5ece3] transition disabled:opacity-50 disabled:cursor-not-allowed"
                                 data-qty-btn
                                 data-id="{{ $item->id }}"
                                 data-action="decrease"
@@ -44,9 +44,9 @@
                                     <path d="M3.3335 8H12.6668" stroke="#3B241A" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
-                            <span class="w-8 text-center text-sm font-medium text-[#3b241a]" data-qty-display data-id="{{ $item->id }}">{{ $item->quantity }}</span>
+                            <span class="w-7 sm:w-8 text-center text-sm font-medium text-[#3b241a]" data-qty-display data-id="{{ $item->id }}">{{ $item->quantity }}</span>
                             <button type="button"
-                                    class="h-9 w-9 flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] hover:bg-[#f5ece3] transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                    class="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] hover:bg-[#f5ece3] transition disabled:opacity-50 disabled:cursor-not-allowed"
                                     data-qty-btn
                                     data-id="{{ $item->id }}"
                                     data-action="increase"
@@ -59,7 +59,7 @@
                             </button>
                         </div>
                         <button type="button"
-                                class="h-9 w-9 flex items-center justify-center rounded-full text-[#b3261e] hover:text-white hover:bg-[#d4183d] transition"
+                                class="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center rounded-full text-[#b3261e] hover:text-white hover:bg-[#d4183d] transition"
                                 data-remove-btn
                                 data-id="{{ $item->id }}"
                                 data-remove-url="{{ url('/cart/remove/' . $item->id) }}">
@@ -102,7 +102,8 @@
                     @php $totalQty = array_sum(session('cart', [])); @endphp
                     <a href="{{ url('/checkout') }}"
                        data-proceed-btn
-                       class="block w-full text-center rounded-full bg-[#7a4b24] text-white py-3 text-sm font-semibold hover:bg-[#693f1d] transition">
+                       class="block w-full text-center rounded-full bg-[#7a4b24] text-white py-3 text-sm font-semibold hover:bg-[#693f1d] transition {{ $totalQty > 0 ? '' : 'pointer-events-none opacity-60' }}"
+                       aria-disabled="{{ $totalQty > 0 ? 'false' : 'true' }}">
                         Proceed to Checkout
                     </a>
                     <a href="{{ route('product.all') }}" class="block w-full text-center rounded-full border border-[#e4d6c6] text-[#3b241a] py-3 text-sm font-medium hover:bg-[#f5ece3] transition">
