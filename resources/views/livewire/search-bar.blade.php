@@ -23,47 +23,25 @@
             focus:outline-none focus:ring-2 focus:ring-[#bb936c]"
         >
 
-        @if (strlen(trim($search)) > 0)
+        @if ($showClear)
             <button type="button"
                     wire:click="clearSearch"
                     class="absolute right-2 inline-flex items-center justify-center w-8 h-8 rounded-full text-[#3a2a22] transition bg-transparent hover:bg-[#c19a6b] hover:text-white">
-                ✕
+                バ
             </button>
         @endif
     </label>
 
-    @if (strlen(trim($search)) >= 1 && $dropdownOpen)
-        <div
-            class="absolute left-0 right-0 mt-2 bg-white rounded-2xl shadow-lg border border-[#e0c8b0] max-h-80 overflow-y-auto overflow-x-hidden z-[60] p-2 max-w-[calc(100vw-2.5rem)] mx-auto"
-        >
+    @if ($dropdownOpen && $hasSearch)
+        <div class="{{ $dropdownClasses }}">
             <div wire:loading.class="opacity-50">
-                @if ($this->results->isEmpty())
+                @if ($results->isEmpty())
                     <div class="p-4 text-center text-sm text-gray-500">
                         No matching products.
                     </div>
                 @else
-                    @foreach ($this->results as $item)
-                        <a wire:key="result-{{ $item->id }}"
-                           href="{{ route('product.show', $item->slug) }}"
-                           class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#f9f1ea] transition">
-
-                            <img src="{{ $item->gambar ? asset('storage/'.$item->gambar) : 'https://via.placeholder.com/60' }}"
-                                 class="w-12 h-12 rounded-lg object-cover"
-                                 alt="{{ $item->nama }}">
-
-                            <div class="flex-1 min-w-0">
-                                <p class="font-medium text-[#3b241a] truncate">
-                                    {{ $item->nama }}
-                                </p>
-                                <p class="text-sm text-[#6f4c3b]">
-                                    Rp {{ number_format($item->harga, 0, ',', '.') }}
-                                </p>
-                            </div>
-
-                            <span class="text-xs bg-[#d7b28a] text-white px-3 py-1 rounded-full">
-                                {{ optional($item->kategori)->nama ?? 'Produk' }}
-                            </span>
-                        </a>
+                    @foreach ($results as $item)
+                        <x-search.result-item :item="$item" />
                     @endforeach
                 @endif
             </div>

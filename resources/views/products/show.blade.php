@@ -3,36 +3,28 @@
 @section('content')
 <div class="max-w-screen-2xl mx-auto px-6 sm:px-8 lg:px-14 py-8 lg:py-10 text-[#3b241a]">
 
-    @php $isInStock = $product->hasSufficientStock(); @endphp
-
     <div class="grid grid-cols-1 lg:grid-cols-[0.9fr,1.1fr] gap-8 lg:gap-12 items-start">
         {{-- IMAGE PANEL --}}
         <div class="relative bg-white rounded-3xl overflow-hidden shadow-lg max-w-[520px] lg:sticky lg:top-24 self-start">
-            <img src="{{ $product->gambar ? asset('storage/' . $product->gambar) : 'https://via.placeholder.com/800x800' }}"
-                 alt="{{ $product->nama }}"
+            <img src="{{ $productDetail->image_url }}"
+                 alt="{{ $productDetail->name }}"
                  class="w-full h-full max-h-[75vh] object-cover">
         </div>
 
         {{-- DETAILS PANEL --}}
         <div class="bg-white/70 rounded-3xl p-6 lg:p-8 shadow-sm border border-[#f1e8df]">
             <div class="flex flex-wrap items-center gap-2 mb-2 text-xs">
-                @if(optional($product->kategori)->nama)
-                    <span class="rounded-full bg-[#f1e8df] text-[#3b241a] px-3 py-1">{{ $product->kategori->nama }}</span>
-                @endif
-                @if($isInStock)
-                    <span class="rounded-full bg-[#e8f7e5] text-[#2f7a3d] px-3 py-1">In Stock</span>
-                @else
-                    <span class="rounded-full bg-[#fdecea] text-[#b3261e] px-3 py-1">Out Stock</span>
-                @endif
+                <x-product.category-badge :category="$product->kategori" />
+                <x-product.stock-badge :in-stock="$productDetail->in_stock" />
             </div>
 
-            <h1 class="text-2xl lg:text-3xl font-semibold mb-2">{{ $product->nama }}</h1>
-            <div class="text-3xl font-bold mb-4">Rp {{ number_format($product->harga, 0, ',', '.') }}</div>
+            <h1 class="text-2xl lg:text-3xl font-semibold mb-2">{{ $productDetail->name }}</h1>
+            <div class="text-3xl font-bold mb-4">Rp {{ $productDetail->price_formatted }}</div>
 
             <div class="space-y-3 mb-6">
                 <h3 class="font-semibold text-base">Description</h3>
                 <p class="text-sm leading-relaxed text-[#5a4135]">
-                    {{ $product->deskripsi ?? 'Delicious handcrafted product made with premium ingredients.' }}
+                    {{ $productDetail->description }}
                 </p>
             </div>
 
@@ -47,12 +39,7 @@
                         </span>
                         <div>
                             <p class="text-xs text-[#6f4c3b]">Delivery Time</p>
-                            <p class="font-semibold">
-                                {{ $product->waktu_produksi ?? '1-2 Days' }}
-                                @if(is_numeric($product->waktu_produksi))
-                                    Minutes
-                                @endif
-                            </p>
+                            <p class="font-semibold">{{ $productDetail->delivery_time }}</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
@@ -67,98 +54,32 @@
                         <div>
                             <p class="text-xs text-[#6f4c3b]">Available</p>
                             <p class="font-semibold">
-                                {{ $availableUnits !== null ? $availableUnits . ' units' : 'Ready to order' }}
+                                {{ $productDetail->available_units_text }}
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="space-y-3 mb-6">
-                <h3 class="font-semibold text-base">Quantity</h3>
-                <div class="flex items-center gap-3">
-                    <button type="button"
-                            data-qty-minus
-                            class="w-10 h-10 flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] transition {{ $isInStock ? 'hover:bg-[#f5ece3]' : 'opacity-50 cursor-not-allowed' }}"
-                            {{ $isInStock ? '' : 'disabled' }}>
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3.33118 7.99463H12.6584" stroke="#3E2723" stroke-width="1.33247" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                    <input type="number"
-                           value="1"
-                           min="1"
-                           inputmode="numeric"
-                           pattern="[0-9]*"
-                           data-qty-input
-                           data-max="{{ $availableUnits !== null ? $availableUnits : 100 }}"
-                           class="no-spinner w-16 h-10 text-center border border-[#e4d6c6] rounded-lg focus:ring-[#bb936c] focus:border-[#bb936c]" />
-                    <button type="button"
-                            data-qty-plus
-                            class="w-10 h-10 flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] transition {{ $isInStock ? 'hover:bg-[#f5ece3]' : 'opacity-50 cursor-not-allowed' }}"
-                            {{ $isInStock ? '' : 'disabled' }}>
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3.33118 7.99463H12.6584" stroke="#3E2723" stroke-width="1.33247" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M7.99481 3.33105V12.6583" stroke="#3E2723" stroke-width="1.33247" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                    <span class="text-xs text-[#6f4c3b]">Max: {{ $availableUnits !== null ? $availableUnits : '100' }} units</span>
-                </div>
+            <div class="mb-6">
+                <livewire:product.quantity-selector
+                    :product-id="$productDetail->id"
+                    :max="$productDetail->available_units ?? 100"
+                    :in-stock="$productDetail->in_stock"
+                />
             </div>
 
             <button type="button"
                     data-add-cart
-                    data-product-id="{{ $product->id }}"
-                    class="w-full mt-2 inline-flex items-center justify-center gap-3 rounded-full text-white py-3 text-sm font-semibold transition {{ $isInStock ? 'bg-[#7a4b24] hover:bg-[#693f1d]' : 'bg-gray-400 cursor-not-allowed' }}"
-                    {{ $isInStock ? '' : 'disabled' }}>
+                    data-product-id="{{ $productDetail->id }}"
+                    class="{{ $productDetail->add_button_classes }}"
+                    @disabled(! $productDetail->in_stock)>
                 <x-heroicon-o-shopping-cart class="w-5 h-5" />
                 Add to Cart
             </button>
 
-            @if(optional($product->resep)->detail && $product->resep->detail->isNotEmpty())
-                <div class="mt-8 rounded-2xl border border-[#f1e8df] bg-white p-5">
-                    <h3 class="font-semibold text-base mb-1">Ingredients Used</h3>
-                    <p class="text-xs text-[#6f4c3b] mb-4">Premium quality ingredients per batch</p>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        @foreach ($product->resep->detail as $detail)
-                            @php
-                                $rawAmount = $detail->jumlah;
-                                $formattedAmount = $rawAmount === null
-                                    ? '-'
-                                    : rtrim(rtrim((string) $rawAmount, '0'), '.');
-                            @endphp
-                            <div class="flex flex-col gap-1 rounded-xl bg-[#f9f2eb] px-4 py-3 border border-[#f1e8df]">
-                                <div class="flex items-start gap-2 text-sm font-semibold text-[#3b241a]">
-                                    <span class="mt-1 h-2 w-2 rounded-full bg-[#7a4b24]"></span>
-                                    <p class="truncate">{{ optional($detail->bahan)->nama ?? 'Bahan' }}</p>
-                                </div>
-                                <p class="text-sm text-[#6f4c3b] ml-4">
-                                    {{ $formattedAmount }} {{ optional($detail->satuan)->symbol ?? optional($detail->satuan)->nama }}
-                                </p>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
+            <x-product.ingredients :items="$productDetail->ingredients" />
         </div>
     </div>
 </div>
-
-@push('styles')
-<style>
-.no-spinner::-webkit-outer-spin-button,
-.no-spinner::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-.no-spinner {
-    -moz-appearance: textfield;
-}
-</style>
-@endpush
-
-@push('scripts')
-    @vite('resources/js/cart.js')
-@endpush
 @endsection

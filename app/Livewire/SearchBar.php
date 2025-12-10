@@ -5,12 +5,24 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\Attributes\Url;
 use App\Models\Produk;
+use Illuminate\Support\Facades\Storage;
 
 class SearchBar extends Component
 {
     #[Url(as: 'keyword')]
     public $search = '';
     public bool $dropdownOpen = false;
+    public bool $hasSearch = false;
+    public bool $showClear = false;
+    public string $dropdownClasses = 'absolute left-0 right-0 mt-2 bg-white rounded-2xl shadow-lg border border-[#e0c8b0] max-h-80 overflow-y-auto overflow-x-hidden z-[60] p-2 max-w-[calc(100vw-2.5rem)] mx-auto';
+
+    public function mount(): void
+    {
+        $this->search = trim((string) $this->search);
+        $this->hasSearch = $this->search !== '';
+        $this->showClear = $this->hasSearch;
+        $this->dropdownOpen = false;
+    }
 
     public function getResultsProperty()
     {
@@ -35,14 +47,28 @@ class SearchBar extends Component
             })
             ->orderBy('nama')
             ->limit(10)
-            ->get();
+            ->get()
+            ->map(function (Produk $product) {
+                return [
+                    'id' => $product->id,
+                    'name' => $product->nama,
+                    'url' => route('product.show', $product->slug),
+                    'image_url' => $product->gambar
+                        ? Storage::disk('public')->url($product->gambar)
+                        : 'https://via.placeholder.com/60',
+                    'price' => formatCurrency($product->harga),
+                    'category' => $product->kategori->nama ?? 'Produk',
+                ];
+            });
     }
 
     public function updatedSearch()
     {
         // Livewire 3 → pakai dispatch, PARAMETER HARUS DI-NAME
         $this->dispatch('search-updated', search: $this->search);
-        $this->dropdownOpen = trim($this->search) !== '';
+        $this->hasSearch = trim($this->search) !== '';
+        $this->dropdownOpen = $this->hasSearch;
+        $this->showClear = $this->hasSearch;
     }
 
     public function goToResults()
@@ -60,12 +86,14 @@ class SearchBar extends Component
     {
         $this->search = '';
         $this->dropdownOpen = false;
+        $this->hasSearch = false;
+        $this->showClear = false;
         return redirect()->route('search');
     }
 
     public function openDropdown()
     {
-        $this->dropdownOpen = true;
+        $this->dropdownOpen = $this->hasSearch;
     }
 
     public function closeDropdown()

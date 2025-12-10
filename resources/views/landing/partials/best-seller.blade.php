@@ -45,7 +45,7 @@
                         {{-- Status --}}
                         <p class="text-xs flex items-center gap-1.5 {{ $inStock ? 'text-[#7d6b5c]' : 'text-[#8b5a2b]' }}">
                             <span class="inline-block w-2.5 h-2.5 rounded-full {{ $inStock ? 'bg-green-600' : 'bg-red-500' }}"></span>
-                            {{ $inStock ? 'In Stock' : 'Out Stock' }}
+                            {{ $inStock ? 'In Stock' : 'Out of Stock' }}
                         </p>
 
                         {{-- Judul --}}

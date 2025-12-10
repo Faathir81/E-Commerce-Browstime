@@ -14,8 +14,8 @@
         </div>
     </div>
 
-    <div class="mx-auto max-w-screen-lg px-4 sm:px-8 lg:px-12 py-8 lg:py-10">
-        <div class="grid grid-cols-1 lg:grid-cols-[1.15fr,0.85fr] gap-6 items-start">
+    <div class="mx-auto max-w-screen-2xl px-6 sm:px-8 lg:px-14 py-8 lg:py-10">
+        <div class="grid grid-cols-1 lg:grid-cols-[1.05fr,0.95fr] gap-6 items-start">
             <div class="space-y-6">
                 <div class="overflow-x-auto pb-2 -mx-1">
                 <div class="flex items-center gap-3 min-w-max text-sm text-[#6f4c3b] px-1">

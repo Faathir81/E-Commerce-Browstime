@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="cart-add-url" content="{{ route('cart.add') }}">
     <title>{{ config('app.name', 'Browstime') }}</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/cart.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/cart.js', 'resources/js/product-card.js'])
     @livewireStyles
     @stack('styles')
 </head>

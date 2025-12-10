@@ -1,38 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-@php
-    $firstItem = $pesanan?->detailPesanans->first();
-    $productName = $firstItem?->produk?->nama ?? ($firstItem?->produk_id ? 'Produk #' . $firstItem->produk_id : '-');
-    $qty = $firstItem?->qty ?? 0;
-    $paymentMethod = $pembayaran?->metode ?? '-';
-    $qrImage = $pembayaran?->qrisSetting?->gambar_qris ?? null;
-    $statusMap = [
-        'paid' => 'confirmed',
-        'produksi' => 'baking',
-        'dikirim' => 'delivery',
-        'selesai' => 'delivered',
-    ];
-    $statusOrder = ['confirmed', 'baking', 'delivery', 'delivered'];
-    $currentStep = $statusMap[$pesanan?->status ?? ''] ?? null;
-    $currentIndex = $currentStep ? array_search($currentStep, $statusOrder) : false;
-    $pelanggan = $pesanan?->resolvedPelanggan();
-    $alamatPengiriman = $pelanggan?->alamatPengiriman()->latest()->first();
-    $wilayah = $alamatPengiriman?->wilayah ?? $pesanan?->wilayahPengiriman;
-    $provinsiName = $wilayah?->provinsi->nama ?? null;
-    $kotaName = $wilayah?->kota->nama ?? null;
-    $kecamatanName = $wilayah?->kecamatan->nama ?? null;
-    $alamatLengkap = $pesanan?->alamat_lengkap ?: $alamatPengiriman?->alamat_lengkap;
-    $kodePos = $alamatPengiriman?->kode_pos;
-    $fullAddress = trim(collect([
-        $alamatLengkap,
-        $kecamatanName,
-        $kotaName,
-        $provinsiName,
-        $kodePos ? 'Kode Pos ' . $kodePos : null,
-    ])->filter()->implode(', '));
-@endphp
-
 <div class="bg-[#FFF9F4] min-h-screen">
     <div class="mx-auto max-w-screen-2xl px-6 sm:px-8 lg:px-14 py-10 space-y-6">
 
@@ -45,8 +13,8 @@
             </div>
             <div>
                 <h1 class="text-xl font-semibold text-[#3b241a]">Order Confirmed!</h1>
-                <p class="text-sm text-[#6f4c3b]">Thank you for your order, {{ auth()->user()->name ?? 'customer' }}.</p>
-                <p class="text-xs text-[#6f4c3b] mt-1">Order ID: <span class="font-semibold text-[#3b241a]">{{ $pesanan?->kode ?? $kode ?? '-' }}</span></p>
+                <p class="text-sm text-[#6f4c3b]">Thank you for your order, {{ $customerName }}.</p>
+                <p class="text-xs text-[#6f4c3b] mt-1">Order ID: <span class="font-semibold text-[#3b241a]">{{ $orderCode }}</span></p>
             </div>
         </div>
 
@@ -57,22 +25,13 @@
                         <span class="h-2 w-2 rounded-full bg-[#c79c68]"></span>
                         <p>Payment Status</p>
                     </div>
-                    @php
-                        $paymentStatus = $pembayaran?->status ?? 'pending';
-                        $statusBadge = [
-                            'pending' => ['label' => 'Waiting Payment', 'bg' => 'bg-[#fff3d4]', 'text' => 'text-[#a36a0f]'],
-                            'menunggu_verifikasi' => ['label' => 'Waiting Verification', 'bg' => 'bg-[#fff3d4]', 'text' => 'text-[#a36a0f]'],
-                            'valid' => ['label' => 'Confirmed', 'bg' => 'bg-[#e8f7e5]', 'text' => 'text-[#2f7a3d]'],
-                            'invalid' => ['label' => 'Declined', 'bg' => 'bg-[#fdecea]', 'text' => 'text-[#b3261e]'],
-                        ][$paymentStatus] ?? ['label' => 'Waiting Payment', 'bg' => 'bg-[#fff3d4]', 'text' => 'text-[#a36a0f]'];
-                    @endphp
                     <div class="flex items-center gap-2">
-                        <span class="inline-flex items-center rounded-full {{ $statusBadge['bg'] }} {{ $statusBadge['text'] }} px-3 py-1 text-xs font-semibold">{{ $statusBadge['label'] }}</span>
-                        <p class="text-xs text-[#6f4c3b] capitalize">{{ $paymentMethod }}</p>
+                        <span class="inline-flex items-center rounded-full {{ $paymentInfo['badge']['bg'] }} {{ $paymentInfo['badge']['text'] }} px-3 py-1 text-xs font-semibold">{{ $paymentInfo['badge']['label'] }}</span>
+                        <p class="text-xs text-[#6f4c3b] capitalize">{{ $paymentInfo['method'] }}</p>
                     </div>
-                    @if($paymentMethod === 'qris' && $qrImage)
+                    @if($paymentInfo['method'] === 'qris' && $paymentInfo['qr_image_url'])
                         <div class="rounded-2xl border border-[#f1e8df] bg-[#fffaf5] p-4 flex items-center justify-center">
-                            <img src="{{ Storage::disk('public')->url($qrImage) }}" alt="QRIS" class="max-h-56 object-contain rounded-xl">
+                            <img src="{{ $paymentInfo['qr_image_url'] }}" alt="QRIS" class="max-h-56 object-contain rounded-xl">
                         </div>
                     @endif
                 </div>
@@ -96,28 +55,14 @@
                                 <path d="M12 8V12L14 14" stroke="#6f4c3b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#6f4c3b" stroke-width="1.5"/>
                             </svg>
-                            <span class="whitespace-nowrap">Estimated delivery: {{ $pesanan?->eta ? \Carbon\Carbon::parse($pesanan->eta)->format('d M Y, H:i') : '1-2 days' }}</span>
+                            <span class="whitespace-nowrap">Estimated delivery: {{ $deliveryInfo['eta_text'] }}</span>
                         </span>
                     </div>
                     <div class="space-y-3 text-sm text-[#3b241a]">
-                        @php
-                            $steps = [
-                                ['key' => 'confirmed', 'title' => 'Order Confirmed', 'desc' => 'Your order has been received'],
-                                ['key' => 'baking', 'title' => 'Baking in Progress', 'desc' => "We're preparing your order"],
-                                ['key' => 'delivery', 'title' => 'Out for Delivery', 'desc' => 'Your order is on the way'],
-                                ['key' => 'delivered', 'title' => 'Delivered', 'desc' => 'Package arrived'],
-                            ];
-                        @endphp
-                        @foreach($steps as $idx => $step)
-                            @php
-                                $active = $currentIndex !== false && $idx <= $currentIndex;
-                                $dotClasses = $active
-                                    ? 'border-[#7a4b24] bg-[#7a4b24]'
-                                    : 'border-[#d9c7b7] bg-[#f6eee4]';
-                            @endphp
-                            <div class="flex items-start gap-3 {{ $active ? 'text-[#3b241a]' : 'text-[#6f4c3b]' }}">
-                                <span class="mt-1 h-4 w-4 rounded-full border-2 {{ $dotClasses }} flex items-center justify-center">
-                                    @if($active)
+                        @foreach($deliverySteps as $step)
+                            <div class="flex items-start gap-3 {{ $step['text_classes'] }}">
+                                <span class="mt-1 h-4 w-4 rounded-full border-2 {{ $step['dot_classes'] }} flex items-center justify-center">
+                                    @if($step['is_active'])
                                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <g clip-path="url(#clip0_79_56)">
                                                 <path d="M7.99485 14.6572C11.6743 14.6572 14.6572 11.6743 14.6572 7.99485C14.6572 4.31534 11.6743 1.33252 7.99485 1.33252C4.31534 1.33252 1.33252 4.31534 1.33252 7.99485C1.33252 11.6743 4.31534 14.6572 7.99485 14.6572Z" stroke="#FDF8F3" stroke-width="1.33247" stroke-linecap="round" stroke-linejoin="round"/>
@@ -141,7 +86,7 @@
                     <div class="pt-2 text-sm text-[#3b241a] space-y-1 border-t border-[#f1e8df] mt-2">
                         <p class="font-semibold">Delivery Address:</p>
                         <div class="text-[#6f4c3b] space-y-1">
-                            <p class="font-semibold text-[#3b241a]">{{ $pelanggan?->nama ?? $pesanan?->nama_penerima ?? 'Customer' }}</p>
+                            <p class="font-semibold text-[#3b241a]">{{ $customerName }}</p>
                             @if($fullAddress)
                                 <p class="text-xs text-[#9b7a64]">Complete: {{ $fullAddress }}</p>
                             @endif
@@ -156,19 +101,19 @@
                         <p class="text-sm font-semibold text-[#3b241a]">Order Summary</p>
                         <p class="text-xs text-[#6f4c3b]">Detail item dan perhitungan biaya</p>
                     </div>
-                    <span class="rounded-full bg-[#fff3e6] text-[#7a4b24] px-3 py-1 text-xs font-semibold">Total {{ $pesanan?->detailPesanans->count() ?? 0 }} items</span>
+                    <span class="rounded-full bg-[#fff3e6] text-[#7a4b24] px-3 py-1 text-xs font-semibold">Total {{ $orderSummary['items_count'] }} items</span>
                 </div>
 
                 <div class="rounded-2xl border border-[#f1e8df] bg-[#fffdfb] divide-y divide-[#f1e8df]">
-                    @foreach($pesanan?->detailPesanans ?? [] as $detail)
+                    @foreach($orderSummary['items'] as $detail)
                         <div class="grid grid-cols-[1fr,auto] gap-3 p-3">
                             <div>
-                                <p class="text-sm font-semibold text-[#3b241a]">{{ $detail->produk->nama ?? 'Produk' }}</p>
+                                <p class="text-sm font-semibold text-[#3b241a]">{{ $detail['product_name'] }}</p>
                                 <p class="text-xs text-[#6f4c3b]">Harga</p>
                             </div>
                             <div class="text-right text-sm text-[#3b241a]">
-                                <p>x{{ $detail->qty }}</p>
-                                <p class="text-xs text-[#6f4c3b]">Rp {{ number_format($detail->subtotal ?? 0, 0, ',', '.') }}</p>
+                                <p>x{{ $detail['qty'] }}</p>
+                                <p class="text-xs text-[#6f4c3b]">Rp {{ $detail['subtotal_display'] }}</p>
                             </div>
                         </div>
                     @endforeach
@@ -177,15 +122,15 @@
                 <div class="rounded-2xl border border-[#f1e8df] bg-[#fffaf5] p-4 space-y-2 text-sm">
                     <div class="flex items-center justify-between">
                         <span class="text-[#6f4c3b]">Subtotal</span>
-                        <span class="font-semibold text-[#3b241a]">Rp {{ number_format($pesanan?->subtotal ?? 0, 0, ',', '.') }}</span>
+                        <span class="font-semibold text-[#3b241a]">Rp {{ $orderSummary['subtotal_display'] }}</span>
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="text-[#6f4c3b]">Shipping Fee</span>
-                        <span class="font-semibold text-[#3b241a]">Rp {{ number_format($pesanan?->ongkir ?? 0, 0, ',', '.') }}</span>
+                        <span class="font-semibold text-[#3b241a]">Rp {{ $orderSummary['shipping_display'] }}</span>
                     </div>
                     <div class="flex items-center justify-between text-base font-semibold text-[#3b241a] pt-2 border-t border-[#f1e8df]">
                         <span>Total</span>
-                        <span>Rp {{ number_format($pesanan?->total ?? 0, 0, ',', '.') }}</span>
+                        <span>Rp {{ $orderSummary['total_display'] }}</span>
                     </div>
                 </div>
 
@@ -201,7 +146,7 @@
                     </a>
 
                     <div class="rounded-2xl bg-[#f8f1e7] px-3 py-2 text-xs text-[#6f4c3b] text-center">
-                        Order confirmation has been sent to {{ auth()->user()->email ?? ($pesanan?->guest_email ?? '-') }}
+                        Order confirmation has been sent to {{ $confirmationEmail }}
                     </div>
                 </div>
             </div>

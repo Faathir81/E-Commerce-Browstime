@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produk;
+use App\ViewModels\ProductCardViewModel;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
@@ -15,7 +16,10 @@ class SearchController extends Controller
 
         $query = Produk::active()
             ->select('id', 'nama', 'slug', 'harga', 'gambar', 'kategori_id')
-            ->with('kategori:id,nama')
+            ->with([
+                'kategori:id,nama',
+                'resep.detail.bahan',
+            ])
             ->orderBy('nama');
 
         if ($keyword !== '') {
@@ -30,7 +34,10 @@ class SearchController extends Controller
             });
         }
 
-        $results = $query->paginate(24)->withQueryString();
+        $results = $query
+            ->paginate(24)
+            ->through(fn (Produk $product) => ProductCardViewModel::fromProduct($product))
+            ->withQueryString();
 
         return view('search.results', [
             'keyword' => $keyword,
