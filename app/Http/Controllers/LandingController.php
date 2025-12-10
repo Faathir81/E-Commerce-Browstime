@@ -9,13 +9,13 @@ class LandingController extends Controller
 {
     public function index()
     {
-        $bestSellers = Produk::active()
+        $shopDisplay = Produk::active()
             ->with(['resep.detail.bahan'])
             ->latest()
             ->limit(5)
             ->get();
 
-        $bestSellers = $bestSellers->map(function (Produk $product) {
+        $shopDisplay = $shopDisplay->map(function (Produk $product) {
             $imagePath = $product->gambar ?? 'placeholder.jpg';
             $imageUrl = $product->gambar
                 ? asset('storage/' . $imagePath)
@@ -32,7 +32,7 @@ class LandingController extends Controller
         });
 
         return view('landing.index', [
-            'bestSellers' => $bestSellers,
+            'shopDisplay' => $shopDisplay,
         ]);
     }
 }

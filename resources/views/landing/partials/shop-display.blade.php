@@ -19,7 +19,7 @@
 
         {{-- GRID PRODUK --}}
         <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-            @foreach ($bestSellers as $product)
+            @foreach ($shopDisplay as $product)
 
                 <div class="group relative w-full bg-white shadow-md rounded-2xl overflow-hidden border border-[#f1e8df] transition-shadow duration-200 hover:shadow-lg cursor-pointer flex flex-col h-full"
                      data-product-url="{{ $product['product_url'] }}">

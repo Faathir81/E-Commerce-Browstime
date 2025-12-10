@@ -8,7 +8,7 @@
     {{-- CATEGORY SECTION --}}
     <x-category-section />
 
-    {{-- BEST SELLER SECTION --}}
-    @include('landing.partials.shop-display', ['bestSellers' => $bestSellers])
+    {{-- SHOP DISPLAY SECTION --}}
+    @include('landing.partials.shop-display', ['shopDisplay' => $shopDisplay])
 
 @endsection
