@@ -2,7 +2,7 @@
     <div class="flex items-start justify-between gap-3">
         <div>
             <h3 class="text-base font-semibold text-[#3b241a]">Review Your Order</h3>
-            <p class="text-xs text-[#6f4c3b]">Pastikan detail pelanggan, pengiriman, dan pembayaran sudah benar.</p>
+            <p class="text-xs text-[#6f4c3b]">Ensure that the customer, shipping, and payment details are correct.</p>
         </div>
     </div>
 
@@ -45,7 +45,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <span class="text-[#6f4c3b]">Subtotal</span>
-                <p class="text-xs text-[#9b7a64]">Termasuk semua item di keranjang</p>
+                <p class="text-xs text-[#9b7a64]">Including all items in the cart</p>
             </div>
             <span class="font-semibold text-[#3b241a]">{{ $formattedSubtotalLabel }}</span>
         </div>
