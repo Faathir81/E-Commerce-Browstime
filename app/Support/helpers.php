@@ -8,3 +8,12 @@ if (! function_exists('formatCurrency')) {
         return number_format($amount, 0, ',', '.');
     }
 }
+
+if (! function_exists('formatRupiah')) {
+    function formatRupiah(int|float|null $value, bool $withPrefix = true): string
+    {
+        $prefix = $withPrefix ? 'Rp ' : '';
+
+        return $prefix . formatCurrency($value);
+    }
+}

@@ -99,7 +99,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-semibold text-[#3b241a]">Order Summary</p>
-                        <p class="text-xs text-[#6f4c3b]">Detail item dan perhitungan biaya</p>
+                        <p class="text-xs text-[#6f4c3b]">Item details and cost calculations</p>
                     </div>
                     <span class="rounded-full bg-[#fff3e6] text-[#7a4b24] px-3 py-1 text-xs font-semibold">Total {{ $orderSummary['items_count'] }} items</span>
                 </div>
@@ -109,7 +109,7 @@
                         <div class="grid grid-cols-[1fr,auto] gap-3 p-3">
                             <div>
                                 <p class="text-sm font-semibold text-[#3b241a]">{{ $detail['product_name'] }}</p>
-                                <p class="text-xs text-[#6f4c3b]">Harga</p>
+                                <p class="text-xs text-[#6f4c3b]">Price</p>
                             </div>
                             <div class="text-right text-sm text-[#3b241a]">
                                 <p>x{{ $detail['qty'] }}</p>
