@@ -150,6 +150,9 @@ class CheckoutWizard extends Component
             'kotas' => $this->kotas,
             'kecamatans' => $this->kecamatans,
             'stepData' => $this->stepData,
+            'selectedZone' => $this->selectedZone,
+            'selectedMethod' => $this->selectedMethod,
+            'selectedBank' => $this->selectedBank,
         ]);
     }
 
@@ -810,6 +813,93 @@ class CheckoutWizard extends Component
         return 'Select zone';
     }
 
+    public function getFormattedSubtotalLabelProperty(): string
+    {
+        return 'Rp ' . formatRupiah($this->subtotal ?? 0, false);
+    }
+
+    public function getFormattedOngkirLabelProperty(): string
+    {
+        return 'Rp ' . formatRupiah(($this->ongkir ?? 0), false);
+    }
+
+    public function getFormattedTotalLabelProperty(): string
+    {
+        return 'Rp ' . formatRupiah($this->total ?? 0, false);
+    }
+
+    public function getFormattedTotalWeightProperty(): string
+    {
+        return $this->total_berat > 0
+            ? formatWeight($this->total_berat)
+            : 'Pending calculation';
+    }
+
+    public function getFormattedEtdProperty(): string
+    {
+        return $this->etd ?: 'Pending calculation';
+    }
+
+    public function getSelectedZoneProperty(): ?array
+    {
+        return collect($this->shippingZones)->firstWhere('id', $this->wilayah_pengiriman_id) ?: null;
+    }
+
+    public function getSelectedZoneNameProperty(): string
+    {
+        return $this->selectedZone['nama'] ?? 'Not selected';
+    }
+
+    public function getSelectedMethodProperty(): ?array
+    {
+        return collect($this->paymentMethods)->firstWhere('kode', $this->paymentMethod) ?: null;
+    }
+
+    public function getSelectedBankProperty(): ?array
+    {
+        if (! $this->akun_bank_id) {
+            return null;
+        }
+
+        return collect($this->banks)->firstWhere('id', $this->akun_bank_id) ?: null;
+    }
+
+    public function getSelectedQrisProperty(): ?array
+    {
+        if ($this->qris_setting_id) {
+            return collect($this->qrisSettings)->firstWhere('id', $this->qris_setting_id) ?: null;
+        }
+
+        return $this->qrisSettings[0] ?? null;
+    }
+
+    public function getIsPaymentProofImageProperty(): bool
+    {
+        if (! $this->payment_proof) {
+            return false;
+        }
+
+        $ext = strtolower($this->payment_proof->getClientOriginalExtension());
+        return in_array($ext, ['jpg', 'jpeg', 'png']);
+    }
+
+    public function getPaymentProofNameProperty(): ?string
+    {
+        return $this->payment_proof?->getClientOriginalName();
+    }
+
+    public function getPaymentProofPreviewUrlProperty(): ?string
+    {
+        return $this->payment_proof ? $this->payment_proof->temporaryUrl() : null;
+    }
+
+    public function getFormattedTotalWeightNoteProperty(): string
+    {
+        return $this->total_berat > 0
+            ? 'Berbasis berat total: ' . formatWeight($this->total_berat)
+            : 'Berbasis berat total: Pending calculation';
+    }
+
     public function getStepDataProperty(): array
     {
         return match ($this->step) {
@@ -829,9 +919,10 @@ class CheckoutWizard extends Component
             2 => [
                 'shippingZones' => $this->shippingZones,
                 'wilayah_pengiriman_id' => $this->wilayah_pengiriman_id,
-                'shipping_fee' => $this->shipping_fee,
-                'total_berat' => $this->total_berat,
-                'etd' => $this->etd,
+                'formattedShippingFee' => $this->formattedShippingFee,
+                'formattedTotalWeight' => $this->formattedTotalWeight,
+                'formattedEtd' => $this->formattedEtd,
+                'selectedZoneName' => $this->selectedZoneName,
             ],
             3 => [
                 'paymentMethods' => $this->paymentMethods,
@@ -841,6 +932,10 @@ class CheckoutWizard extends Component
                 'payment_proof' => $this->payment_proof,
                 'akun_bank_id' => $this->akun_bank_id,
                 'qris_setting_id' => $this->qris_setting_id,
+                'selectedQris' => $this->selectedQris,
+                'isPaymentProofImage' => $this->isPaymentProofImage,
+                'paymentProofName' => $this->paymentProofName,
+                'paymentProofPreviewUrl' => $this->paymentProofPreviewUrl,
             ],
             default => [
                 'shippingZones' => $this->shippingZones,
@@ -856,11 +951,14 @@ class CheckoutWizard extends Component
                 'email' => $this->email,
                 'alamat_lengkap' => $this->alamat_lengkap,
                 'catatan' => $this->catatan,
-                'etd' => $this->etd,
-                'subtotal' => $this->subtotal,
-                'total_berat' => $this->total_berat,
-                'ongkir' => $this->ongkir,
-                'total' => $this->total,
+                'selectedZone' => $this->selectedZone,
+                'selectedMethod' => $this->selectedMethod,
+                'selectedBank' => $this->selectedBank,
+                'formattedSubtotalLabel' => $this->formattedSubtotalLabel,
+                'formattedOngkirLabel' => $this->formattedOngkirLabel,
+                'formattedTotalLabel' => $this->formattedTotalLabel,
+                'formattedTotalWeightNote' => $this->formattedTotalWeightNote,
+                'formattedEtd' => $this->formattedEtd,
             ],
         };
     }

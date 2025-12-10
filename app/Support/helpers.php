@@ -17,3 +17,12 @@ if (! function_exists('formatRupiah')) {
         return $prefix . formatCurrency($value);
     }
 }
+
+if (! function_exists('formatWeight')) {
+    function formatWeight(float|int|null $kg): string
+    {
+        $weight = $kg ?? 0;
+
+        return number_format($weight, 2, ',', '.') . ' kg';
+    }
+}
