@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produk;
+use Illuminate\Support\Facades\Storage;
 
 class LandingController extends Controller
 {
@@ -10,10 +11,28 @@ class LandingController extends Controller
     {
         $bestSellers = Produk::active()
             ->with(['resep.detail.bahan'])
-            ->orderBy('created_at', 'desc')
-            ->take(5)
+            ->latest()
+            ->limit(5)
             ->get();
 
-        return view('landing.index', compact('bestSellers'));
+        $bestSellers = $bestSellers->map(function (Produk $product) {
+            $imagePath = $product->gambar ?? 'placeholder.jpg';
+            $imageUrl = $product->gambar
+                ? asset('storage/' . $imagePath)
+                : asset('storage/placeholder.jpg');
+
+            return [
+                'id' => $product->id,
+                'name' => $product->nama,
+                'product_url' => route('product.show', $product->slug),
+                'in_stock' => $product->hasSufficientStock(),
+                'formatted_price' => number_format($product->harga ?? 0, 0, ',', '.'),
+                'image_url' => $imageUrl,
+            ];
+        });
+
+        return view('landing.index', [
+            'bestSellers' => $bestSellers,
+        ]);
     }
 }
