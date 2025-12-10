@@ -11,7 +11,4 @@
     {{-- BEST SELLER SECTION --}}
     @include('landing.partials.best-seller', ['bestSellers' => $bestSellers])
 
-    {{-- FOOTER --}}
-    @include('layouts.partials.footer')
-
 @endsection

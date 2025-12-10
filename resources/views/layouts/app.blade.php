@@ -22,7 +22,11 @@
         {{ $slot ?? '' }}
         @yield('content')
     </main>
-    
+
+    @unless (request()->routeIs('cart.index') || request()->routeIs('checkout.*'))
+        <x-footer />
+    @endunless
+
     @livewireScripts
     @stack('scripts')
 </body>
