@@ -14,23 +14,21 @@
         </div>
     </div>
 
-    <div class="mx-auto max-w-screen-lg px-4 sm:px-8 lg:px-12 py-8 lg:py-10">
-        <div class="grid grid-cols-1 lg:grid-cols-[1.15fr,0.85fr] gap-6 items-start">
+    <div class="mx-auto max-w-screen-2xl px-6 sm:px-8 lg:px-14 py-8 lg:py-10">
+        <div class="grid grid-cols-1 lg:grid-cols-[1.05fr,0.95fr] gap-6 items-start">
             <div class="space-y-6">
                 <div class="overflow-x-auto pb-2 -mx-1">
                 <div class="flex items-center gap-3 min-w-max text-sm text-[#6f4c3b] px-1">
-                    @php
-                        $steps = [
-                            ['label' => 'Customer', 'index' => 1],
-                            ['label' => 'Shipping', 'index' => 2],
-                            ['label' => 'Payment', 'index' => 3],
-                            ['label' => 'Confirm', 'index' => 4],
-                        ];
-                    @endphp
                     @foreach($steps as $s)
                         <div class="flex items-center gap-2">
-                            <div class="h-7 w-7 rounded-full flex items-center justify-center {{ $step >= $s['index'] ? 'bg-[#7a4b24] text-white' : 'bg-[#f1e8df] text-[#6f4c3b]' }}">{{ $s['index'] }}</div>
-                            <span class="{{ $step >= $s['index'] ? 'text-[#3b241a] font-semibold' : '' }}">{{ $s['label'] }}</span>
+                            <div @class([
+                                'h-7 w-7 rounded-full flex items-center justify-center',
+                                'bg-[#7a4b24] text-white' => $this->isStepActive($s['index']),
+                                'bg-[#f1e8df] text-[#6f4c3b]' => ! $this->isStepActive($s['index']),
+                            ])>{{ $s['index'] }}</div>
+                            <span @class([
+                                'text-[#3b241a] font-semibold' => $this->isStepActive($s['index']),
+                            ])>{{ $s['label'] }}</span>
                         </div>
                         @if(!$loop->last)
                             <span class="h-[1px] w-10 bg-[#e4d6c6]"></span>
@@ -39,107 +37,28 @@
                 </div>
                 </div>
 
-                @if ($step === 1)
-                    <form wire:submit.prevent="nextStep" class="space-y-6">
-                        @include('livewire.checkout.steps.step-1')
-                        <div class="flex justify-end">
-                            <button type="submit"
-                                    class="inline-flex items-center justify-center rounded-full bg-[#7a4b24] text-white px-6 py-3 text-sm font-semibold hover:bg-[#693f1d] transition"
-                                    wire:loading.attr="disabled">
-                                Continue to Shipping
-                            </button>
-                        </div>
-                    </form>
-                @elseif ($step === 2)
-                    <form wire:submit.prevent="nextStep" class="space-y-6">
-                        @include('livewire.checkout.steps.step-2')
-                        <div class="flex justify-between">
-                            <button type="button"
-                                    class="inline-flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] px-5 py-3 text-sm font-semibold hover:bg-[#f5ece3] transition"
-                                    wire:click="previousStep">
-                                Back
-                            </button>
-                            <button type="submit"
-                                    class="inline-flex items-center justify-center rounded-full bg-[#7a4b24] text-white px-6 py-3 text-sm font-semibold hover:bg-[#693f1d] transition"
-                                    wire:loading.attr="disabled">
-                                Continue to Payment
-                            </button>
-                        </div>
-                    </form>
-                @elseif ($step === 3)
-                    <form wire:submit.prevent="nextStep" class="space-y-6">
-                        @include('livewire.checkout.steps.step-3')
-                        <div class="flex justify-between">
-                            <button type="button"
-                                    class="inline-flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] px-5 py-3 text-sm font-semibold hover:bg-[#f5ece3] transition"
-                                    wire:click="previousStep">
-                                Back
-                            </button>
-                            <button type="submit"
-                                    class="inline-flex items-center justify-center rounded-full bg-[#7a4b24] text-white px-6 py-3 text-sm font-semibold hover:bg-[#693f1d] transition"
-                                    wire:loading.attr="disabled">
-                                Confirm Payment
-                            </button>
-                        </div>
-                    </form>
-                @else
-                    <form wire:submit.prevent="placeOrder" class="space-y-6">
-                        @include('livewire.checkout.steps.step-4')
-                        <div class="flex justify-between">
-                            <button type="button"
-                                    class="inline-flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] px-5 py-3 text-sm font-semibold hover:bg-[#f5ece3] transition"
-                                    wire:click="previousStep">
-                                Back
-                            </button>
-                            <button type="submit"
-                                    class="inline-flex items-center justify-center gap-2 rounded-full bg-[#7a4b24] text-white px-6 py-3 text-sm font-semibold hover:bg-[#693f1d] transition"
-                                    wire:loading.attr="disabled">
-                                <span>Place Order</span>
-                            </button>
-                        </div>
-                    </form>
-                @endif
+                <x-checkout.step
+                    :step="$step"
+                    :step-view="$stepView"
+                    :config="$stepConfig"
+                    :step-data="$stepData"
+                />
             </div>
 
             <div class="bg-white border border-[#f1e8df] rounded-2xl shadow-sm p-5 lg:p-6 space-y-4 sticky top-24">
                 <h2 class="text-sm font-semibold text-[#3b241a]">Order Summary</h2>
 
                 <div class="space-y-4">
-                    @foreach ($cartItems as $item)
-                        <div class="flex items-start gap-3">
-                            <div class="h-14 w-14 rounded-xl overflow-hidden bg-[#f9f2eb] border border-[#f1e8df]">
-                                <img src="{{ $item['image_url'] ?? 'https://via.placeholder.com/80x80' }}"
-                                     alt="{{ $item['name'] }}"
-                                     class="h-full w-full object-cover">
-                            </div>
-                            <div class="flex-1 text-sm text-[#3b241a]">
-                                <p class="font-semibold">{{ $item['name'] }}</p>
-                                <p class="text-[#6f4c3b]">Qty: {{ $item['quantity'] }}</p>
-                            </div>
-                            <div class="text-sm font-semibold text-[#3b241a]">
-                                Rp {{ number_format($item['price'] * $item['quantity'], 0, ',', '.') }}
-                            </div>
-                        </div>
+                    @foreach ($displayCartItems as $item)
+                        <x-checkout.summary-item :item="$item" />
                     @endforeach
                 </div>
 
-                <div class="space-y-2 text-sm text-[#6f4c3b]">
-                    <div class="flex items-center justify-between">
-                        <span>Subtotal</span>
-                        <span class="text-[#3b241a]">Rp {{ number_format($subtotal ?? 0, 0, ',', '.') }}</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span>Shipping Fee</span>
-                        <span class="text-[#3b241a]">{{ $shipping_fee > 0 ? 'Rp '. number_format($shipping_fee, 0, ',', '.') : 'Select zone' }}</span>
-                    </div>
-                </div>
-
-                <div class="border-t border-[#f1e8df] pt-3">
-                    <div class="flex items-center justify-between text-base font-semibold text-[#3b241a]">
-                        <span>Total</span>
-                        <span>Rp {{ number_format($total ?? 0, 0, ',', '.') }}</span>
-                    </div>
-                </div>
+                <x-checkout.totals
+                    :subtotal="$formattedSubtotal"
+                    :shipping="$formattedShippingFee"
+                    :total="$formattedTotal"
+                />
 
                 <div class="text-xs text-[#6f4c3b] space-y-2">
                     @guest

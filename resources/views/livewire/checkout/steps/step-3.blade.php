@@ -37,7 +37,6 @@
     @endif
 
     @if ($paymentMethod === 'qris')
-        @php $selectedQris = $qrisSettings[0] ?? null; @endphp
         <div class="space-y-2">
             <label class="text-xs text-[#6f4c3b]">QRIS *</label>
             @if($selectedQris)
@@ -71,18 +70,14 @@
             @error('payment_proof') <p class="text-xs text-[#b3261e]">{{ $message }}</p> @enderror
 
             @if(in_array($paymentMethod, ['transfer','qris']) && $payment_proof)
-                @php
-                    $ext = strtolower($payment_proof->getClientOriginalExtension());
-                    $isImage = in_array($ext, ['jpg','jpeg','png']);
-                @endphp
                 <div class="mt-2 rounded-xl border border-[#e4d6c6] bg-[#fffaf5] p-3 space-y-2 flex flex-col items-center">
                     <p class="text-xs text-[#6f4c3b]">Preview bukti pembayaran:</p>
-                    @if($isImage)
-                        <img src="{{ $payment_proof->temporaryUrl() }}"
+                    @if($isPaymentProofImage)
+                        <img src="{{ $paymentProofPreviewUrl }}"
                              alt="Bukti pembayaran"
                              class="max-h-64 rounded-lg border border-[#f1e8df] object-contain">
                     @else
-                        <p class="text-sm text-[#3b241a] text-center">{{ $payment_proof->getClientOriginalName() }}</p>
+                        <p class="text-sm text-[#3b241a] text-center">{{ $paymentProofName }}</p>
                     @endif
                 </div>
             @endif

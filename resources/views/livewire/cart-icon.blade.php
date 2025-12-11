@@ -1,4 +1,4 @@
-<a href="{{ url('/cart') }}" class="relative inline-flex h-9 w-9 items-center justify-center rounded-full text-[#3a2a22] transition-colors bg-transparent hover:bg-[#c79c68]">
+<a href="{{ $cartUrl }}" class="relative inline-flex h-9 w-9 items-center justify-center rounded-full text-[#3a2a22] transition-colors bg-transparent hover:bg-[#c79c68]">
     <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g clip-path="url(#clip0_11_282)">
             <path d="M15.3333 24.6667C15.7015 24.6667 16 24.3682 16 24C16 23.6318 15.7015 23.3333 15.3333 23.3333C14.9651 23.3333 14.6667 23.6318 14.6667 24C14.6667 24.3682 14.9651 24.6667 15.3333 24.6667Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
@@ -11,7 +11,10 @@
             </clipPath>
         </defs>
     </svg>
-    <span data-cart-count class="absolute -top-1 -right-1 min-w-[22px] h-5 px-1.5 rounded-full bg-[#7a4b24] text-white text-xs font-semibold flex items-center justify-center {{ $totalQuantity > 0 ? '' : 'hidden' }}">
+    <span data-cart-count @class([
+        'absolute -top-1 -right-1 min-w-[22px] h-5 px-1.5 rounded-full bg-[#7a4b24] text-white text-xs font-semibold flex items-center justify-center',
+        'hidden' => ! $showBadge,
+    ])>
         {{ $totalQuantity }}
     </span>
 </a>

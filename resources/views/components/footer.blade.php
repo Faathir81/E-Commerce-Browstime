@@ -46,7 +46,7 @@
         {{-- COPYRIGHT --}}
         <div class="mt-10 pt-6 border-t border-[#e8ded3] text-center">
             <p class="text-xs text-[#7c6a5a]">
-                © 2025 BROWSTIME. All rights reserved.
+                ЖИ 2025 BROWSTIME. All rights reserved.
             </p>
         </div>
 

@@ -15,20 +15,19 @@
     <div class="rounded-2xl border border-[#f1e8df] bg-[#fffdfb] p-4 space-y-3 text-sm text-[#3b241a]">
         <div class="flex items-center justify-between">
             <span class="text-[#6f4c3b]">Shipping Zone</span>
-            @php $selectedZone = collect($shippingZones)->firstWhere('id', $wilayah_pengiriman_id); @endphp
-            <span class="font-semibold">{{ $selectedZone['nama'] ?? 'Not selected' }}</span>
+            <span class="font-semibold">{{ $selectedZoneName }}</span>
         </div>
         <div class="flex items-center justify-between">
             <span class="text-[#6f4c3b]">Shipping Fee</span>
-            <span class="font-semibold">{{ $shipping_fee > 0 ? 'Rp '. number_format($shipping_fee, 0, ',', '.') : 'Select zone first' }}</span>
+            <span class="font-semibold">{{ $formattedShippingFee }}</span>
         </div>
         <div class="flex items-center justify-between">
             <span class="text-[#6f4c3b]">Total Weight</span>
-            <span class="font-semibold">{{ $total_berat > 0 ? number_format($total_berat, 2, ',', '.') . ' kg' : 'Pending calculation' }}</span>
+            <span class="font-semibold">{{ $formattedTotalWeight }}</span>
         </div>
         <div class="flex items-center justify-between">
             <span class="text-[#6f4c3b]">ETA</span>
-            <span class="font-semibold">{{ $etd ?: 'Pending calculation' }}</span>
+            <span class="font-semibold">{{ $formattedEtd }}</span>
         </div>
     </div>
 

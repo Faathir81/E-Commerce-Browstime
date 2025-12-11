@@ -20,10 +20,9 @@ class MigrateFreshSelective extends Command
         // DAFTAR TABEL YANG TIDAK BOLEH DIHAPUS
         // SILAKAN EDIT SESUAI KEBUTUHAN
         $exclude = [
-            'provinsis',
-            'kotakabs',
-            'kecamatans',
-            'subdistricts',
+            'provinsi',
+            'kota',
+            'kecamatan',
             'wilayah_pengiriman',    // mungkin mau dipertahankan
         ];
 

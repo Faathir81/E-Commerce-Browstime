@@ -31,6 +31,12 @@ class CheckoutWizard extends Component
     use WithFileUploads;
 
     public int $step = 1;
+    public array $steps = [
+        ['label' => 'Customer', 'index' => 1],
+        ['label' => 'Shipping', 'index' => 2],
+        ['label' => 'Payment', 'index' => 3],
+        ['label' => 'Confirm', 'index' => 4],
+    ];
 
     public string $nama_penerima = '';
     public string $no_hp = '';
@@ -133,7 +139,21 @@ class CheckoutWizard extends Component
     public function render()
     {
         $this->ensureLocationOptions();
-        return view('livewire.checkout.wizard');
+        return view('livewire.checkout.wizard', [
+            'stepView' => $this->stepView,
+            'stepConfig' => $this->stepConfig,
+            'displayCartItems' => $this->displayCartItems,
+            'formattedSubtotal' => $this->formattedSubtotal,
+            'formattedTotal' => $this->formattedTotal,
+            'formattedShippingFee' => $this->formattedShippingFee,
+            'provinsis' => $this->provinsis,
+            'kotas' => $this->kotas,
+            'kecamatans' => $this->kecamatans,
+            'stepData' => $this->stepData,
+            'selectedZone' => $this->selectedZone,
+            'selectedMethod' => $this->selectedMethod,
+            'selectedBank' => $this->selectedBank,
+        ]);
     }
 
     public function updatedWilayahPengirimanId(): void
@@ -579,7 +599,7 @@ class CheckoutWizard extends Component
                 'name' => $product->nama,
                 'price' => (int) $product->harga,
                 'quantity' => (int) $qty,
-                'image_url' => $product->gambar ? asset('storage/' . $product->gambar) : 'https://via.placeholder.com/120x120',
+                'image_url' => $product->gambar ? asset('storage/' . $product->gambar) : 'https://via.placeholder.com/80x80',
                 'production_time' => (int) ($product->waktu_produksi ?? 0),
                 'weight_gram' => (int) ($product->berat ?? 0),
             ];
@@ -706,5 +726,240 @@ class CheckoutWizard extends Component
         $this->etd = null;
         $this->total_berat = 0.0;
         $this->total_weight_gram = 0;
+    }
+
+    public function isStepActive(int $index): bool
+    {
+        return $this->step >= $index;
+    }
+
+    public function getStepViewProperty(): string
+    {
+        return match ($this->step) {
+            1 => 'livewire.checkout.steps.step-1',
+            2 => 'livewire.checkout.steps.step-2',
+            3 => 'livewire.checkout.steps.step-3',
+            default => 'livewire.checkout.steps.step-4',
+        };
+    }
+
+    public function getStepConfigProperty(): array
+    {
+        return match ($this->step) {
+            1 => [
+                'submit_action' => 'nextStep',
+                'submit_label' => 'Continue to Shipping',
+                'show_back' => false,
+                'back_action' => null,
+                'back_label' => 'Back',
+            ],
+            2 => [
+                'submit_action' => 'nextStep',
+                'submit_label' => 'Continue to Payment',
+                'show_back' => true,
+                'back_action' => 'previousStep',
+                'back_label' => 'Back',
+            ],
+            3 => [
+                'submit_action' => 'nextStep',
+                'submit_label' => 'Confirm Payment',
+                'show_back' => true,
+                'back_action' => 'previousStep',
+                'back_label' => 'Back',
+            ],
+            default => [
+                'submit_action' => 'placeOrder',
+                'submit_label' => 'Place Order',
+                'show_back' => true,
+                'back_action' => 'previousStep',
+                'back_label' => 'Back',
+            ],
+        };
+    }
+
+    public function getDisplayCartItemsProperty(): array
+    {
+        return collect($this->cartItems)->map(function ($item) {
+            $subtotal = (int) ($item['price'] ?? 0) * (int) ($item['quantity'] ?? 0);
+
+            return [
+                'id' => $item['id'],
+                'name' => $item['name'],
+                'quantity' => $item['quantity'],
+                'image_url' => $item['image_url'] ?? 'https://via.placeholder.com/120x120',
+                'price_formatted' => formatRupiah($item['price'] ?? 0, false),
+                'subtotal_formatted' => formatRupiah($subtotal, false),
+            ];
+        })->values()->all();
+    }
+
+    public function getFormattedSubtotalProperty(): string
+    {
+        return formatRupiah($this->subtotal, false);
+    }
+
+    public function getFormattedTotalProperty(): string
+    {
+        return formatRupiah($this->total, false);
+    }
+
+    public function getFormattedShippingFeeProperty(): string
+    {
+        if ($this->shipping_fee > 0 || $this->ongkir > 0) {
+            $fee = (int) ($this->shipping_fee ?: $this->ongkir);
+            return 'Rp ' . formatRupiah($fee, false);
+        }
+
+        return 'Select zone';
+    }
+
+    public function getFormattedSubtotalLabelProperty(): string
+    {
+        return 'Rp ' . formatRupiah($this->subtotal ?? 0, false);
+    }
+
+    public function getFormattedOngkirLabelProperty(): string
+    {
+        return 'Rp ' . formatRupiah(($this->ongkir ?? 0), false);
+    }
+
+    public function getFormattedTotalLabelProperty(): string
+    {
+        return 'Rp ' . formatRupiah($this->total ?? 0, false);
+    }
+
+    public function getFormattedTotalWeightProperty(): string
+    {
+        return $this->total_berat > 0
+            ? formatWeight($this->total_berat)
+            : 'Pending calculation';
+    }
+
+    public function getFormattedEtdProperty(): string
+    {
+        return $this->etd ?: 'Pending calculation';
+    }
+
+    public function getSelectedZoneProperty(): ?array
+    {
+        return collect($this->shippingZones)->firstWhere('id', $this->wilayah_pengiriman_id) ?: null;
+    }
+
+    public function getSelectedZoneNameProperty(): string
+    {
+        return $this->selectedZone['nama'] ?? 'Not selected';
+    }
+
+    public function getSelectedMethodProperty(): ?array
+    {
+        return collect($this->paymentMethods)->firstWhere('kode', $this->paymentMethod) ?: null;
+    }
+
+    public function getSelectedBankProperty(): ?array
+    {
+        if (! $this->akun_bank_id) {
+            return null;
+        }
+
+        return collect($this->banks)->firstWhere('id', $this->akun_bank_id) ?: null;
+    }
+
+    public function getSelectedQrisProperty(): ?array
+    {
+        if ($this->qris_setting_id) {
+            return collect($this->qrisSettings)->firstWhere('id', $this->qris_setting_id) ?: null;
+        }
+
+        return $this->qrisSettings[0] ?? null;
+    }
+
+    public function getIsPaymentProofImageProperty(): bool
+    {
+        if (! $this->payment_proof) {
+            return false;
+        }
+
+        $ext = strtolower($this->payment_proof->getClientOriginalExtension());
+        return in_array($ext, ['jpg', 'jpeg', 'png']);
+    }
+
+    public function getPaymentProofNameProperty(): ?string
+    {
+        return $this->payment_proof?->getClientOriginalName();
+    }
+
+    public function getPaymentProofPreviewUrlProperty(): ?string
+    {
+        return $this->payment_proof ? $this->payment_proof->temporaryUrl() : null;
+    }
+
+    public function getFormattedTotalWeightNoteProperty(): string
+    {
+        return $this->total_berat > 0
+            ? 'Berbasis berat total: ' . formatWeight($this->total_berat)
+            : 'Berbasis berat total: Pending calculation';
+    }
+
+    public function getStepDataProperty(): array
+    {
+        return match ($this->step) {
+            1 => [
+                'provinsis' => $this->provinsis,
+                'kotas' => $this->kotas,
+                'kecamatans' => $this->kecamatans,
+                'provinsi_id' => $this->provinsi_id,
+                'kota_id' => $this->kota_id,
+                'kecamatan_id' => $this->kecamatan_id,
+                'nama_penerima' => $this->nama_penerima,
+                'no_hp' => $this->no_hp,
+                'email' => $this->email,
+                'alamat_lengkap' => $this->alamat_lengkap,
+                'catatan' => $this->catatan,
+            ],
+            2 => [
+                'shippingZones' => $this->shippingZones,
+                'wilayah_pengiriman_id' => $this->wilayah_pengiriman_id,
+                'formattedShippingFee' => $this->formattedShippingFee,
+                'formattedTotalWeight' => $this->formattedTotalWeight,
+                'formattedEtd' => $this->formattedEtd,
+                'selectedZoneName' => $this->selectedZoneName,
+            ],
+            3 => [
+                'paymentMethods' => $this->paymentMethods,
+                'paymentMethod' => $this->paymentMethod,
+                'banks' => $this->banks,
+                'qrisSettings' => $this->qrisSettings,
+                'payment_proof' => $this->payment_proof,
+                'akun_bank_id' => $this->akun_bank_id,
+                'qris_setting_id' => $this->qris_setting_id,
+                'selectedQris' => $this->selectedQris,
+                'isPaymentProofImage' => $this->isPaymentProofImage,
+                'paymentProofName' => $this->paymentProofName,
+                'paymentProofPreviewUrl' => $this->paymentProofPreviewUrl,
+            ],
+            default => [
+                'shippingZones' => $this->shippingZones,
+                'wilayah_pengiriman_id' => $this->wilayah_pengiriman_id,
+                'paymentMethods' => $this->paymentMethods,
+                'paymentMethod' => $this->paymentMethod,
+                'banks' => $this->banks,
+                'qrisSettings' => $this->qrisSettings,
+                'akun_bank_id' => $this->akun_bank_id,
+                'qris_setting_id' => $this->qris_setting_id,
+                'nama_penerima' => $this->nama_penerima,
+                'no_hp' => $this->no_hp,
+                'email' => $this->email,
+                'alamat_lengkap' => $this->alamat_lengkap,
+                'catatan' => $this->catatan,
+                'selectedZone' => $this->selectedZone,
+                'selectedMethod' => $this->selectedMethod,
+                'selectedBank' => $this->selectedBank,
+                'formattedSubtotalLabel' => $this->formattedSubtotalLabel,
+                'formattedOngkirLabel' => $this->formattedOngkirLabel,
+                'formattedTotalLabel' => $this->formattedTotalLabel,
+                'formattedTotalWeightNote' => $this->formattedTotalWeightNote,
+                'formattedEtd' => $this->formattedEtd,
+            ],
+        };
     }
 }
