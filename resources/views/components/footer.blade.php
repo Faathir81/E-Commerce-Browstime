@@ -28,8 +28,6 @@
                 <h3 class="text-[#3b241a] font-semibold mb-3">Support</h3>
                 <ul class="space-y-2 text-sm text-[#7c6a5a]">
                     <li><a href="#" class="hover:text-[#3b241a]">Contact Us</a></li>
-                    <li><a href="#" class="hover:text-[#3b241a]">Delivery Info</a></li>
-                    <li><a href="#" class="hover:text-[#3b241a]">Returns</a></li>
                 </ul>
             </div>
 
