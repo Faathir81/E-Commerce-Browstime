@@ -50,11 +50,11 @@
                     @else
                         <p class="text-sm text-[#6f4c3b]">QRIS</p>
                     @endif
-                    <p class="text-xs text-[#6f4c3b]">Scan kode QR di atas untuk pembayaran.</p>
+                    <p class="text-xs text-[#6f4c3b]">Scan the QR code above to pay.</p>
                 </div>
                 <input type="hidden" wire:model.live="qris_setting_id" value="{{ $selectedQris['id'] }}">
             @else
-                <p class="text-sm text-[#b3261e]">QRIS belum tersedia.</p>
+                <p class="text-sm text-[#b3261e]">QRIS is not available yet.</p>
             @endif
             @error('qris_setting_id') <p class="text-xs text-[#b3261e]">{{ $message }}</p> @enderror
         </div>
@@ -62,7 +62,7 @@
 
     @if (in_array($paymentMethod, ['transfer', 'qris']))
         <div class="space-y-2">
-            <label class="text-xs text-[#6f4c3b]">Upload Bukti Pembayaran (JPG/PNG/PDF, maks 5MB)</label>
+            <label class="text-xs text-[#6f4c3b]">Upload payment proof (JPG/PNG/PDF, max 5MB)</label>
             <input type="file"
                    wire:model="payment_proof"
                    accept=".jpg,.jpeg,.png,.pdf"
@@ -71,10 +71,10 @@
 
             @if(in_array($paymentMethod, ['transfer','qris']) && $payment_proof)
                 <div class="mt-2 rounded-xl border border-[#e4d6c6] bg-[#fffaf5] p-3 space-y-2 flex flex-col items-center">
-                    <p class="text-xs text-[#6f4c3b]">Preview bukti pembayaran:</p>
+                    <p class="text-xs text-[#6f4c3b]">Payment proof preview:</p>
                     @if($isPaymentProofImage)
                         <img src="{{ $paymentProofPreviewUrl }}"
-                             alt="Bukti pembayaran"
+                             alt="Payment proof"
                              class="max-h-64 rounded-lg border border-[#f1e8df] object-contain">
                     @else
                         <p class="text-sm text-[#3b241a] text-center">{{ $paymentProofName }}</p>

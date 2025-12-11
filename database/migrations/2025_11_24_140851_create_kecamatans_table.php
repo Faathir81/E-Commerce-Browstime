@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kecamatan', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('kode_rajaongkir'); // subdistrict_id / id tujuan
-            $table->string('nama');
-            $table->foreignId('kota_id')->constrained('kota')->cascadeOnDelete();
-            $table->string('kode_pos')->nullable();
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('kecamatan')) {
+            Schema::create('kecamatan', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('kode_rajaongkir'); // subdistrict_id / id tujuan
+                $table->string('nama');
+                $table->foreignId('kota_id')->constrained('kota')->cascadeOnDelete();
+                $table->string('kode_pos')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

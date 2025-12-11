@@ -11,8 +11,8 @@
     </a>
 
     <div class="p-4 flex-1 flex flex-col gap-2">
-        <p class="text-xs flex items-center gap-1 {{ $product->stock_badge['text_class'] }}">
-            <span class="{{ $product->stock_badge['dot_class'] }}">&bull;</span>
+        <p class="text-xs flex items-center gap-1.5 {{ $product->stock_badge['text_class'] }}">
+            <span class="{{ $product->stock_badge['dot_class'] }}" aria-hidden="true"></span>
             {{ $product->stock_badge['label'] }}
         </p>
 

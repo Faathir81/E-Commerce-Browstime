@@ -9,10 +9,10 @@
     <div class="mx-auto max-w-screen-sm px-6 sm:px-8 lg:px-10 py-10">
         <div class="bg-white border border-[#f1e8df] rounded-2xl shadow-sm p-6 space-y-6">
             <div class="space-y-1">
-                <h1 class="text-lg font-semibold text-[#3b241a]">Upload Bukti Pembayaran</h1>
-                <p class="text-sm text-[#6f4c3b]">Kode Pesanan: <span class="font-semibold text-[#3b241a]">{{ $pesanan?->kode ?? '-' }}</span></p>
+                <h1 class="text-lg font-semibold text-[#3b241a]">Upload Proof of Payment</h1>
+                <p class="text-sm text-[#6f4c3b]">Order Code: <span class="font-semibold text-[#3b241a]">{{ $pesanan?->kode ?? '-' }}</span></p>
                 @if($pembayaran)
-                    <p class="text-sm text-[#6f4c3b]">Metode: <span class="font-semibold text-[#3b241a]">{{ strtoupper($pembayaran->metode) }}</span></p>
+                    <p class="text-sm text-[#6f4c3b]">Method: <span class="font-semibold text-[#3b241a]">{{ strtoupper($pembayaran->metode) }}</span></p>
                 @endif
             </div>
 
@@ -24,12 +24,12 @@
 
             @if($pembayaran && $pembayaran->bukti_bayar)
                 <div class="space-y-2">
-                    <p class="text-xs text-[#6f4c3b]">Bukti saat ini:</p>
+                    <p class="text-xs text-[#6f4c3b]">Current proof of payment:</p>
                     @if(Str::endsWith(strtolower($pembayaran->bukti_bayar), ['.jpg','.jpeg','.png']))
-                        <img src="{{ Storage::disk('public')->url($pembayaran->bukti_bayar) }}" alt="Bukti pembayaran" class="rounded-xl border border-[#f1e8df] max-h-72 object-contain">
+                        <img src="{{ Storage::disk('public')->url($pembayaran->bukti_bayar) }}" alt="Payment proof" class="rounded-xl border border-[#f1e8df] max-h-72 object-contain">
                     @else
                         <a class="text-sm text-[#7a4b24] underline" href="{{ Storage::disk('public')->url($pembayaran->bukti_bayar) }}" target="_blank" rel="noopener">
-                            Lihat bukti pembayaran (PDF)
+                            See proof of payment (PDF)
                         </a>
                     @endif
                 </div>
@@ -37,7 +37,7 @@
 
             <form wire:submit.prevent="submit" class="space-y-4" enctype="multipart/form-data">
                 <div class="space-y-1">
-                    <label class="text-xs text-[#6f4c3b]">Unggah Bukti Pembayaran (JPG/PNG/PDF, maks 5MB)</label>
+                    <label class="text-xs text-[#6f4c3b]">Upload proof of payment (JPG/PNG/PDF, max 5MB)</label>
                     <input type="file"
                            wire:model="payment_proof"
                            accept=".jpg,.jpeg,.png,.pdf"
@@ -53,7 +53,7 @@
                     </button>
                     <a href="{{ route('order.success', ['kode' => $pesanan?->kode ?? '']) }}"
                        class="inline-flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] px-5 py-3 text-sm font-semibold hover:bg-[#f5ece3] transition">
-                        Kembali
+                        Back
                     </a>
                 </div>
             </form>

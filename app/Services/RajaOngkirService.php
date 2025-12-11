@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Http;
 class RajaOngkirService
 {
     private const CACHE_TTL_SECONDS = 30;
+    private const CACHE_TTL_REGION = 3600;
     private const MIN_WEIGHT_KG = 0.01;
 
     public function calculateDomesticCost(int $destinationSubdistrictId, int $weightGram, string $courier = 'jne'): array
@@ -72,6 +73,144 @@ class RajaOngkirService
                 ];
             }
         );
+    }
+
+    /**
+     * Ambil daftar provinsi dari RajaOngkir dan normalisasi field id/nama.
+     */
+    public function provinces(): array
+    {
+        return Cache::remember(
+            'rajaongkir.provinces',
+            now()->addSeconds(self::CACHE_TTL_REGION),
+            fn () => $this->fetchAndNormalizeRegion(
+                endpoint: '/provinces',
+                normalizer: fn (array $row) => [
+                    'id' => $row['id'] ?? $row['province_id'] ?? null,
+                    'name' => $row['name'] ?? $row['province'] ?? null,
+                ]
+            )
+        );
+    }
+
+    /**
+     * Ambil daftar kota/kabupaten berdasarkan provinsi.
+     */
+    public function cities(int $provinceId): array
+    {
+        return Cache::remember(
+            "rajaongkir.cities.{$provinceId}",
+            now()->addSeconds(self::CACHE_TTL_REGION),
+            fn () => $this->fetchAndNormalizeRegion(
+                endpoint: '/cities',
+                query: ['province_id' => $provinceId],
+                normalizer: function (array $row) use ($provinceId) {
+                    return [
+                        'id' => $row['id'] ?? $row['city_id'] ?? null,
+                        'name' => $row['name'] ?? $row['city_name'] ?? null,
+                        'province_id' => $row['province_id'] ?? $provinceId ?? null,
+                        'postal_code' => $row['postal_code'] ?? null,
+                    ];
+                }
+            )
+        );
+    }
+
+    /**
+     * Ambil daftar kecamatan berdasarkan kota/kabupaten.
+     */
+    public function districts(int $cityId): array
+    {
+        return Cache::remember(
+            "rajaongkir.districts.{$cityId}",
+            now()->addSeconds(self::CACHE_TTL_REGION),
+            fn () => $this->fetchAndNormalizeRegion(
+                endpoint: '/subdistricts',
+                query: ['city_id' => $cityId],
+                normalizer: function (array $row) use ($cityId) {
+                    return [
+                        'id' => $row['id'] ?? $row['subdistrict_id'] ?? null,
+                        'name' => $row['name'] ?? $row['subdistrict_name'] ?? null,
+                        'city_id' => $row['city_id'] ?? $cityId ?? null,
+                        'zip_code' => $row['zip_code'] ?? $row['postal_code'] ?? null,
+                    ];
+                }
+            )
+        );
+    }
+
+    /**
+     * Helper request data wilayah dan normalisasi hasil agar konsisten.
+     */
+    private function fetchAndNormalizeRegion(string $endpoint, array $query = [], callable $normalizer = null): array
+    {
+        $payload = $this->performGetRequest($endpoint, $query);
+        $items = $this->extractList($payload);
+
+        if (! $items) {
+            return [];
+        }
+
+        if (! $normalizer) {
+            return $items;
+        }
+
+        return collect($items)
+            ->map(fn ($row) => $normalizer(is_array($row) ? $row : []))
+            ->filter(fn ($row) => ! empty($row['id']) && ! empty($row['name']))
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Lakukan GET ke RajaOngkir dengan header API key.
+     */
+    private function performGetRequest(string $endpoint, array $query = []): array
+    {
+        $baseUrl = rtrim(config('services.rajaongkir.base_url', 'https://rajaongkir.komerce.id/api/v1'), '/');
+        $apiKey = (string) config('services.rajaongkir.key');
+
+        try {
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'key' => $apiKey,
+            ])
+                ->timeout(15)
+                ->get($baseUrl . $endpoint, $query);
+        } catch (\Throwable $exception) {
+            throw new \RuntimeException('Failed to connect to RajaOngkir: ' . $exception->getMessage(), 0, $exception);
+        }
+
+        if ($response->failed()) {
+            try {
+                $response->throw();
+            } catch (RequestException $exception) {
+                $message = $exception->response?->json('message') ?? $exception->getMessage();
+                throw new \RuntimeException('RajaOngkir error: ' . $message, $exception->getCode(), $exception);
+            }
+        }
+
+        return $response->json() ?? [];
+    }
+
+    /**
+     * Ekstrak list data dari payload RajaOngkir (mencoba beberapa bentuk umum).
+     */
+    private function extractList(array $payload): array
+    {
+        if (isset($payload['data']) && is_array($payload['data'])) {
+            return $payload['data'];
+        }
+
+        $rajaOngkir = $payload['rajaongkir'] ?? null;
+        if (is_array($rajaOngkir)) {
+            $results = $rajaOngkir['results'] ?? $rajaOngkir['result'] ?? null;
+            if (is_array($results)) {
+                return $results;
+            }
+        }
+
+        return [];
     }
 
     private function extractFirstOption(?array $payload): ?array
