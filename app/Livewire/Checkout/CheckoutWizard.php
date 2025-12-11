@@ -43,14 +43,15 @@ class CheckoutWizard extends Component
     public ?string $email = null;
     public ?int $wilayah_pengiriman_id = null;
     public string $alamat_lengkap = '';
+    public ?string $kode_pos = null;
     public ?string $catatan = '';
 
     public float $ongkir = 0;
     public int $shipping_fee = 0;
     public ?string $etd = null;
+    public ?int $etd_days = null;
     public float $total_berat = 0.0;
     public int $total_weight_gram = 0;
-    public ?string $eta = null;
 
     /** @var array<int, array<string, mixed>> */
     public array $cartItems = [];
@@ -120,7 +121,6 @@ class CheckoutWizard extends Component
         $this->qrisSettings = QrisSetting::query()->get()->toArray();
 
         $this->prefillCustomer();
-        $this->eta = $this->calculateEta();
         $this->recalculateTotals();
 
         if ($this->kecamatan_id) {
@@ -259,14 +259,13 @@ class CheckoutWizard extends Component
             $this->stepThreeRules()
         ));
 
-        $this->eta = $this->eta ?? $this->calculateEta();
+        $etaDateTime = $this->computeEtaDateTime();
         $subtotal = $this->subtotal;
         $ongkir = (int) ($this->shipping_fee ?: $this->ongkir);
         $total = $subtotal + $ongkir;
 
-        $pesanan = DB::transaction(function () use ($subtotal, $ongkir, $total) {
+        $pesanan = DB::transaction(function () use ($subtotal, $ongkir, $total, $etaDateTime) {
             $guestEmail = Auth::check() ? null : $this->email;
-            $etaValue = $this->eta ? Carbon::parse($this->eta) : null;
 
             $pelanggan = $this->persistCustomerProfile();
             $this->persistShippingAddress($pelanggan);
@@ -280,7 +279,7 @@ class CheckoutWizard extends Component
                 'ongkir' => $ongkir,
                 'total' => $total,
                 'status' => Pesanan::STATUS_PENDING,
-                'eta' => $etaValue,
+                'eta' => $etaDateTime,
             ]);
 
             foreach ($this->cartItems as $item) {
@@ -337,6 +336,7 @@ class CheckoutWizard extends Component
             'kota_id' => ['required', 'integer', 'exists:kota,id'],
             'kecamatan_id' => ['required', 'integer', 'exists:kecamatan,id'],
             'alamat_lengkap' => ['required', 'string', 'min:8'],
+            'kode_pos' => ['required', 'string', 'min:4', 'max:10'],
             'catatan' => ['nullable', 'string'],
         ];
 
@@ -401,6 +401,7 @@ class CheckoutWizard extends Component
             $alamat = $pelanggan->alamatPengiriman->first();
             if ($alamat) {
                 $this->alamat_lengkap = $alamat->alamat_lengkap ?? '';
+                $this->kode_pos = $alamat->kode_pos ?? null;
                 $this->wilayah_pengiriman_id = $alamat->wilayah_pengiriman_id;
                 $this->hydrateLocationFromWilayah();
             }
@@ -410,18 +411,35 @@ class CheckoutWizard extends Component
         }
     }
 
-    protected function calculateEta(): ?string
+    /**
+     * Hitung ETA sederhana: gunakan ETD (hari) dari RajaOngkir, default +2 hari dari sekarang.
+     */
+    protected function computeEtaDateTime(): \Carbon\Carbon
     {
-        if (empty($this->cartItems)) {
+        $days = $this->etd_days ?? $this->parseEtdDays($this->etd) ?? 2;
+
+        return Carbon::now('Asia/Jakarta')
+            ->startOfDay()
+            ->addDays($days)
+            ->setTimezone('UTC');
+    }
+
+    /**
+     * Ambil angka hari dari string ETD RajaOngkir (mis. "2-3", "2 HARI").
+     */
+    protected function parseEtdDays(?string $etd): ?int
+    {
+        if (! $etd) {
             return null;
         }
 
-        $maxProduction = collect($this->cartItems)
-            ->pluck('production_time')
-            ->filter(fn ($value) => is_numeric($value))
-            ->max() ?? 0;
+        // Cari angka pertama saja.
+        if (preg_match('/(\\d+)/', $etd, $matches)) {
+            $days = (int) $matches[1];
+            return $days > 0 ? $days : null;
+        }
 
-        return Carbon::now()->addMinutes((int) $maxProduction)->toDateTimeString();
+        return null;
     }
 
     protected function mapWilayahFromKota(): void
@@ -560,7 +578,7 @@ class CheckoutWizard extends Component
             'nama_penerima' => $this->nama_penerima,
             'no_hp' => $this->no_hp,
             'alamat_lengkap' => $this->alamat_lengkap,
-            'kode_pos' => null,
+            'kode_pos' => $this->kode_pos,
             'wilayah_pengiriman_id' => $this->wilayah_pengiriman_id,
         ]);
     }
@@ -694,6 +712,7 @@ class CheckoutWizard extends Component
 
             $this->shipping_fee = (int) ($result['cost'] ?? 0);
             $this->etd = $result['etd'] ?? null;
+            $this->etd_days = $this->parseEtdDays($this->etd);
         } catch (\Throwable $th) {
             logger()->warning('RajaOngkir cost calculation failed', [
                 'error' => $th->getMessage(),
@@ -724,6 +743,7 @@ class CheckoutWizard extends Component
         $this->shipping_fee = 0;
         $this->ongkir = 0;
         $this->etd = null;
+        $this->etd_days = null;
         $this->total_berat = 0.0;
         $this->total_weight_gram = 0;
     }
@@ -914,6 +934,7 @@ class CheckoutWizard extends Component
                 'no_hp' => $this->no_hp,
                 'email' => $this->email,
                 'alamat_lengkap' => $this->alamat_lengkap,
+                'kode_pos' => $this->kode_pos,
                 'catatan' => $this->catatan,
             ],
             2 => [
@@ -959,6 +980,7 @@ class CheckoutWizard extends Component
                 'formattedTotalLabel' => $this->formattedTotalLabel,
                 'formattedTotalWeightNote' => $this->formattedTotalWeightNote,
                 'formattedEtd' => $this->formattedEtd,
+                'kode_pos' => $this->kode_pos,
             ],
         };
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produk;
+use App\ViewModels\ProductCardViewModel;
 use Illuminate\Support\Facades\Storage;
 
 class LandingController extends Controller
@@ -16,19 +17,7 @@ class LandingController extends Controller
             ->get();
 
         $shopDisplay = $shopDisplay->map(function (Produk $product) {
-            $imagePath = $product->gambar ?? 'placeholder.jpg';
-            $imageUrl = $product->gambar
-                ? asset('storage/' . $imagePath)
-                : asset('storage/placeholder.jpg');
-
-            return [
-                'id' => $product->id,
-                'name' => $product->nama,
-                'product_url' => route('product.show', $product->slug),
-                'in_stock' => $product->hasSufficientStock(),
-                'formatted_price' => number_format($product->harga ?? 0, 0, ',', '.'),
-                'image_url' => $imageUrl,
-            ];
+            return ProductCardViewModel::fromProduct($product);
         });
 
         return view('landing.index', [

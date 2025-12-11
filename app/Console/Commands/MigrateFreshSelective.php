@@ -23,7 +23,6 @@ class MigrateFreshSelective extends Command
             'provinsi',
             'kota',
             'kecamatan',
-            'wilayah_pengiriman',    // mungkin mau dipertahankan
         ];
 
         Schema::disableForeignKeyConstraints();

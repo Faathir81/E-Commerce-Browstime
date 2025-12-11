@@ -43,12 +43,12 @@ class ProductCardViewModel
             ? [
                 'label' => 'In Stock',
                 'text_class' => 'text-[#7d6b5c]',
-                'dot_class' => 'text-green-600',
+                'dot_class' => 'inline-block w-2.5 h-2.5 rounded-full bg-green-600 flex-shrink-0',
             ]
             : [
                 'label' => 'Out of Stock',
                 'text_class' => 'text-[#8b5a2b]',
-                'dot_class' => 'text-red-500',
+                'dot_class' => 'inline-block w-2.5 h-2.5 rounded-full bg-red-500 flex-shrink-0',
             ];
     }
 

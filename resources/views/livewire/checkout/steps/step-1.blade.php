@@ -34,10 +34,10 @@
 <div class="bg-white border border-[#f1e8df] rounded-2xl shadow-sm p-5 lg:p-6 space-y-4">
     <h3 class="text-base font-semibold text-[#3b241a]">Shipping Information</h3>
     <div class="space-y-1">
-        <label class="text-xs text-[#6f4c3b]">Provinsi *</label>
+        <label class="text-xs text-[#6f4c3b]">Province *</label>
         <select wire:model.live="provinsi_id"
                 class="w-full rounded-xl border border-[#e4d6c6] bg-[#fffdfb] px-4 py-3 text-sm focus:border-[#bb936c] focus:ring-[#bb936c]">
-            <option value="">Pilih provinsi</option>
+            <option value="">Select province</option>
             @foreach ($provinsis as $provinsi)
                 <option value="{{ $provinsi['id'] }}">{{ $provinsi['nama'] }}</option>
             @endforeach
@@ -46,11 +46,11 @@
     </div>
 
     <div class="space-y-1">
-        <label class="text-xs text-[#6f4c3b]">Kota/Kabupaten *</label>
+        <label class="text-xs text-[#6f4c3b]">City / Regency *</label>
         <select wire:model.live="kota_id"
                 class="w-full rounded-xl border border-[#e4d6c6] bg-[#fffdfb] px-4 py-3 text-sm focus:border-[#bb936c] focus:ring-[#bb936c]"
                 @disabled(! $provinsi_id)>
-            <option value="">{{ empty($provinsi_id) ? 'Pilih provinsi dahulu' : 'Pilih kota/kabupaten' }}</option>
+            <option value="">{{ empty($provinsi_id) ? 'Select province first' : 'Select city/regency' }}</option>
             @foreach ($kotas as $kota)
                 <option value="{{ $kota['id'] }}">{{ $kota['nama'] }}</option>
             @endforeach
@@ -59,11 +59,11 @@
     </div>
 
     <div class="space-y-1">
-        <label class="text-xs text-[#6f4c3b]">Kecamatan *</label>
+        <label class="text-xs text-[#6f4c3b]">District *</label>
         <select wire:model.live="kecamatan_id"
                 class="w-full rounded-xl border border-[#e4d6c6] bg-[#fffdfb] px-4 py-3 text-sm focus:border-[#bb936c] focus:ring-[#bb936c]"
                 @disabled(! $kota_id)>
-            <option value="">{{ empty($kota_id) ? 'Pilih kota dahulu' : 'Pilih kecamatan' }}</option>
+            <option value="">{{ empty($kota_id) ? 'Select city first' : 'Select district' }}</option>
             @foreach ($kecamatans as $kecamatan)
                 <option value="{{ $kecamatan['id'] }}">{{ $kecamatan['nama'] }}</option>
             @endforeach
@@ -78,6 +78,15 @@
                   class="w-full rounded-xl border border-[#e4d6c6] bg-[#fffdfb] px-4 py-3 text-sm focus:border-[#bb936c] focus:ring-[#bb936c]"
                   placeholder="Street, RT/RW, Kelurahan"></textarea>
         @error('alamat_lengkap') <p class="text-xs text-[#b3261e]">{{ $message }}</p> @enderror
+    </div>
+
+    <div class="space-y-1">
+        <label class="text-xs text-[#6f4c3b]">Postal Code *</label>
+        <input type="text"
+               wire:model.defer="kode_pos"
+               class="w-full rounded-xl border border-[#e4d6c6] bg-[#fffdfb] px-4 py-3 text-sm focus:border-[#bb936c] focus:ring-[#bb936c]"
+               placeholder="e.g., 12345">
+        @error('kode_pos') <p class="text-xs text-[#b3261e]">{{ $message }}</p> @enderror
     </div>
 
     <div class="space-y-1">

@@ -14,11 +14,16 @@ class OrderSuccessController extends Controller
     {
         $pesanan = Pesanan::with([
             'pembayaran.qrisSetting',
+            'pembayaran.akunBank',
             'detailPesanans.produk',
             'wilayahPengiriman.provinsi',
             'wilayahPengiriman.kota',
             'wilayahPengiriman.kecamatan',
         ])->where('kode', $kode)->first();
+
+        if (! $pesanan) {
+            abort(404);
+        }
 
         $pembayaran = $pesanan?->pembayaran;
         $pelanggan = $pesanan?->resolvedPelanggan();
@@ -56,18 +61,39 @@ class OrderSuccessController extends Controller
         /** @var \Illuminate\Filesystem\FilesystemAdapter $publicDisk */
         $publicDisk = Storage::disk('public');
 
+        $etaText = $pesanan?->eta
+            ? Carbon::parse($pesanan->eta)->timezone('Asia/Jakarta')->format('d M Y')
+            : ($pesanan
+                ? $pesanan->created_at->copy()->addDays(2)->timezone('Asia/Jakarta')->format('d M Y')
+                : 'ETA unavailable');
+
         $paymentInfo = [
             'method' => $pembayaran?->metode ?? '-',
+            'method_label' => \App\Support\StatusStyle::metodePembayaran($pembayaran?->metode)['label'] ?? '-',
             'qr_image_url' => $pembayaran?->qrisSetting?->gambar_qris
                 ? $publicDisk->url($pembayaran->qrisSetting->gambar_qris)
                 : null,
+            'proof_image_url' => $pembayaran?->bukti_bayar
+                ? $publicDisk->url($pembayaran->bukti_bayar)
+                : null,
             'badge' => $paymentBadge,
+            'status_label' => \App\Support\StatusStyle::pembayaran($pembayaran?->status)['label'] ?? '-',
+            'is_transfer' => ($pembayaran?->metode ?? null) === 'transfer',
+            'account' => $pembayaran?->akunBank ? [
+                'bank' => $pembayaran->akunBank->nama_bank ?? 'Bank',
+                'owner' => $pembayaran->akunBank->nama_pemilik ?? null,
+                'number' => $pembayaran->akunBank->nomor_rekening ?? null,
+            ] : null,
         ];
 
         $deliveryInfo = [
-            'eta_text' => $pesanan?->eta
-                ? Carbon::parse($pesanan->eta)->format('d M Y, H:i')
-                : '1-2 days',
+            'eta_text' => $etaText,
+            'tracking_number' => $pesanan?->no_resi ?: null,
+            'tracking_url' => $pesanan?->no_resi
+                ? 'https://cekresi.com/?no=' . urlencode($pesanan->no_resi)
+                : null,
+            'is_shipped' => $pesanan?->status === \App\Models\Pesanan::STATUS_DIKIRIM
+                || $pesanan?->status === \App\Models\Pesanan::STATUS_SELESAI,
         ];
 
         return view('order-success', [

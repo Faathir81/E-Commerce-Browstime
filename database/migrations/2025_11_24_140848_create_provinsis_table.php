@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('provinsi', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('kode_rajaongkir'); // id dari API
-            $table->string('nama');
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('provinsi')) {
+            Schema::create('provinsi', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('kode_rajaongkir'); // id dari API
+                $table->string('nama');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

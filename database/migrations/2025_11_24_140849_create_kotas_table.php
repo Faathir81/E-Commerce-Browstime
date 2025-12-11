@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kota', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('kode_rajaongkir'); // city_id
-            $table->string('nama');
-            $table->foreignId('provinsi_id')->constrained('provinsi')->cascadeOnDelete();
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('kota')) {
+            Schema::create('kota', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('kode_rajaongkir'); // city_id
+                $table->string('nama');
+                $table->foreignId('provinsi_id')->constrained('provinsi')->cascadeOnDelete();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

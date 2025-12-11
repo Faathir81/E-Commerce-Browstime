@@ -30,7 +30,7 @@ class OrderSuccessHelper
         $status = $paymentStatus ?: 'pending';
 
         $badges = [
-            'pending' => ['label' => 'Waiting Payment', 'bg' => 'bg-[#fff3d4]', 'text' => 'text-[#a36a0f]'],
+            'pending' => ['label' => 'Pls wait us to verificate your payment :D', 'bg' => 'bg-[#fff3d4]', 'text' => 'text-[#a36a0f]'],
             'menunggu_verifikasi' => ['label' => 'Waiting Verification', 'bg' => 'bg-[#fff3d4]', 'text' => 'text-[#a36a0f]'],
             'valid' => ['label' => 'Confirmed', 'bg' => 'bg-[#e8f7e5]', 'text' => 'text-[#2f7a3d]'],
             'invalid' => ['label' => 'Declined', 'bg' => 'bg-[#fdecea]', 'text' => 'text-[#b3261e]'],
