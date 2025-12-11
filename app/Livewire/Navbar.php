@@ -33,7 +33,8 @@ class Navbar extends Component
     {
         return request()->routeIs('landing')
             || request()->routeIs('search')
-            || request()->routeIs('order.success');
+            || request()->routeIs('order.success')
+            || request()->routeIs('product.show');
     }
 
     protected function shouldShowBackButton(): bool
