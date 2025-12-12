@@ -84,7 +84,7 @@ class RajaOngkirService
             'rajaongkir.provinces',
             now()->addSeconds(self::CACHE_TTL_REGION),
             fn () => $this->fetchAndNormalizeRegion(
-                endpoint: '/provinces',
+                endpoint: '/destination/province',  // ✅ PERBAIKAN
                 normalizer: fn (array $row) => [
                     'id' => $row['id'] ?? $row['province_id'] ?? null,
                     'name' => $row['name'] ?? $row['province'] ?? null,
@@ -102,8 +102,8 @@ class RajaOngkirService
             "rajaongkir.cities.{$provinceId}",
             now()->addSeconds(self::CACHE_TTL_REGION),
             fn () => $this->fetchAndNormalizeRegion(
-                endpoint: '/cities',
-                query: ['province_id' => $provinceId],
+                endpoint: "/destination/city/{$provinceId}",  // ✅ PERBAIKAN: pakai path param
+                // HAPUS: query: ['province_id' => $provinceId],
                 normalizer: function (array $row) use ($provinceId) {
                     return [
                         'id' => $row['id'] ?? $row['city_id'] ?? null,
@@ -125,8 +125,8 @@ class RajaOngkirService
             "rajaongkir.districts.{$cityId}",
             now()->addSeconds(self::CACHE_TTL_REGION),
             fn () => $this->fetchAndNormalizeRegion(
-                endpoint: '/subdistricts',
-                query: ['city_id' => $cityId],
+                endpoint: "/destination/district/{$cityId}",  // ✅ PERBAIKAN: path param + district bukan subdistricts
+                // HAPUS: query: ['city_id' => $cityId],
                 normalizer: function (array $row) use ($cityId) {
                     return [
                         'id' => $row['id'] ?? $row['subdistrict_id'] ?? null,

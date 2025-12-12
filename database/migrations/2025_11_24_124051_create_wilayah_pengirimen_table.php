@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('nama');
             $table->unsignedBigInteger('provinsi_id');
             $table->unsignedBigInteger('kota_id');
-            $table->unsignedBigInteger('kecamatan_id'); // ID RajaOngkir
             $table->boolean('aktif')->default(true);
             $table->timestamps();
         });
