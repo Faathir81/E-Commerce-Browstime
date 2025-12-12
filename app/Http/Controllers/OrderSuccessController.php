@@ -18,7 +18,7 @@ class OrderSuccessController extends Controller
             'detailPesanans.produk',
             'wilayahPengiriman.provinsi',
             'wilayahPengiriman.kota',
-            'wilayahPengiriman.kecamatan',
+            'kecamatan',
         ])->where('kode', $kode)->first();
 
         if (! $pesanan) {

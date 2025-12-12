@@ -275,6 +275,7 @@ class CheckoutWizard extends Component
                 'user_id' => Auth::id(),
                 'guest_email' => $guestEmail,
                 'wilayah_pengiriman_id' => $this->wilayah_pengiriman_id,
+                'kecamatan_id' => $this->kecamatan_id,
                 'subtotal' => $subtotal,
                 'ongkir' => $ongkir,
                 'total' => $total,
@@ -916,8 +917,8 @@ class CheckoutWizard extends Component
     public function getFormattedTotalWeightNoteProperty(): string
     {
         return $this->total_berat > 0
-            ? 'Berbasis berat total: ' . formatWeight($this->total_berat)
-            : 'Berbasis berat total: Pending calculation';
+            ? 'Based on total weight: ' . formatWeight($this->total_berat)
+            : 'Based on total weight: Pending calculation';
     }
 
     public function getStepDataProperty(): array

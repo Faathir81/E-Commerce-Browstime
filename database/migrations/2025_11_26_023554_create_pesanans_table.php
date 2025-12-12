@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable();         // customer login
             $table->string('guest_email')->nullable();        // kalau guest
             $table->foreignId('wilayah_pengiriman_id');       // atau supported_area_id
+            $table->foreignId('kecamatan_id')->nullable()->constrained('kecamatan');
             $table->decimal('subtotal', 15, 2);
             $table->decimal('ongkir', 15, 2)->default(0);
             $table->decimal('total', 15, 2);
