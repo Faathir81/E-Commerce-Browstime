@@ -10,7 +10,7 @@ use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 
-class ListProduksi extends ListRecords
+class ListProduksis extends ListRecords
 {
     protected static string $resource = ProduksiResource::class;
 

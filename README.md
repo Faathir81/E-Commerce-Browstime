@@ -220,7 +220,7 @@ Branch: feat/rajaongkir-wilayah
 
 -   [X] Form checkout tanpa login
 -   [X] Assign guest sebagai “pelanggan guest”
--   [ ] Kirim email tracking
+-   [X] Kirim email tracking
 -   [X] Instruksi pembayaran
 
 ---
