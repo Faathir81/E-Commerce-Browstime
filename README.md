@@ -239,9 +239,9 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/frontend-upload-bukti`
 
--   [ ] Upload bukti bayar
--   [ ] Update status menunggu verifikasi
--   [ ] Notifikasi email opsional
+-   [X] Upload bukti bayar
+-   [X] Update status menunggu verifikasi
+-   [X] Notifikasi email opsional
 
 ---
 
