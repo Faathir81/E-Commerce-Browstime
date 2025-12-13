@@ -50,6 +50,9 @@ class OrderSuccessController extends Controller
         $confirmationEmail = $authUser?->email ?? ($pesanan?->guest_email ?? '-');
         $orderCode = $pesanan?->kode ?? $kode ?? '-';
 
+        $canConfirmCompletion = $pesanan?->status === \App\Models\Pesanan::STATUS_DIKIRIM;
+        $isCompleted = $pesanan?->status === \App\Models\Pesanan::STATUS_SELESAI;
+
         $orderSummary = [
             'items' => $orderItems,
             'items_count' => $orderItems->count(),
@@ -110,6 +113,8 @@ class OrderSuccessController extends Controller
             'deliveryInfo' => $deliveryInfo,
             'confirmationEmail' => $confirmationEmail,
             'orderCode' => $orderCode,
+            'canConfirmCompletion' => $canConfirmCompletion,
+            'isCompleted' => $isCompleted,
         ]);
     }
 }

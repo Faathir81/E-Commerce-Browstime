@@ -215,111 +215,111 @@ class BrowstimeSeeder extends Seeder
 
         // 1. Classic Dark Chocolate – Pouch (90g)
         $classicPouch = Produk::create([
-            'nama'          => 'Classic Dark Chocolate – Pouch',
-            'slug'          => 'classic-dark-chocolate-pouch',
+            'nama'          => 'Classic Dark Chocolate – Pouch (90 grams)',
+            'slug'          => 'classic-dark-chocolate-pouch-90-grams',
             'kategori_id'   => $katCookies->id,
             'harga'         => 15000,
             'berat'         => 90,
-            'deskripsi'     => 'Enjoy the rich, authentic taste... (90 grams) – 10 pcs',
+            'deskripsi'     => 'Enjoy the rich, authentic taste. | 10 pcs',
             'waktu_produksi'=> 120,
         ]);
 
         // 2. Classic Dark Chocolate – Jar (180g)
         $classicJar = Produk::create([
-            'nama'          => 'Classic Dark Chocolate – Jar',
-            'slug'          => 'classic-dark-chocolate-jar',
+            'nama'          => 'Classic Dark Chocolate – Jar (180 grams)',
+            'slug'          => 'classic-dark-chocolate-jar-180-grams',
             'kategori_id'   => $katCookies->id,
             'harga'         => 35000,
             'berat'         => 180,
-            'deskripsi'     => 'Dive into the rich... (180 grams) – 18–20 pcs',
+            'deskripsi'     => 'Dive into the rich. | 18–20 pcs',
             'waktu_produksi'=> 120,
         ]);
 
         // 3. Dark Chocolate Golden Raisin – Pouch (90g)
         $raisinPouch = Produk::create([
-            'nama'          => 'Dark Chocolate Golden Raisin – Pouch',
-            'slug'          => 'dark-chocolate-golden-raisin-pouch',
+            'nama'          => 'Dark Chocolate Golden Raisin – Pouch (90 grams)',
+            'slug'          => 'dark-chocolate-golden-raisin-pouch-90-grams',
             'kategori_id'   => $katCookies->id,
             'harga'         => 15000,
             'berat'         => 90,
-            'deskripsi'     => 'Experience the natural sweetness... (90 grams) – 10 pcs',
+            'deskripsi'     => 'Experience the natural sweetness. | 10 pcs',
             'waktu_produksi'=> 120,
         ]);
 
         // 4. Dark Chocolate Golden Raisin – Jar (180g)
         $raisinJar = Produk::create([
-            'nama'          => 'Dark Chocolate Golden Raisin – Jar',
-            'slug'          => 'dark-chocolate-golden-raisin-jar',
+            'nama'          => 'Dark Chocolate Golden Raisin – Jar (180 grams)',
+            'slug'          => 'dark-chocolate-golden-raisin-jar-180-grams',
             'kategori_id'   => $katCookies->id,
             'harga'         => 35000,
             'berat'         => 180,
-            'deskripsi'     => 'A delicious blend... (180 grams) – 18–20 pcs',
+            'deskripsi'     => 'A delicious blend. | 18–20 pcs',
             'waktu_produksi'=> 120,
         ]);
 
         // 5. Matcha Green Tea – Pouch (90g)
         $matchaPouch = Produk::create([
-            'nama'          => 'Matcha Green Tea – Pouch',
-            'slug'          => 'matcha-green-tea-pouch',
+            'nama'          => 'Matcha Green Tea – Pouch (90 grams)',
+            'slug'          => 'matcha-green-tea-pouch-90-grams',
             'kategori_id'   => $katCookies->id,
             'harga'         => 15000,
             'berat'         => 90,
-            'deskripsi'     => 'Experience the calming... (90 grams) – 10 pcs',
+            'deskripsi'     => 'Experience the calming. | 10 pcs',
             'waktu_produksi'=> 120,
         ]);
 
         // 6. Matcha Green Tea – Jar (180g)
         $matchaJar = Produk::create([
-            'nama'          => 'Matcha Green Tea – Jar',
-            'slug'          => 'matcha-green-tea-jar',
+            'nama'          => 'Matcha Green Tea – Jar (180 grams)',
+            'slug'          => 'matcha-green-tea-jar-180-grams',
             'kategori_id'   => $katCookies->id,
             'harga'         => 35000,
             'berat'         => 180,
-            'deskripsi'     => 'Savor the rich aroma... (180 grams) – 18–20 pcs',
+            'deskripsi'     => 'Savor the rich aroma. | 18–20 pcs',
             'waktu_produksi'=> 120,
         ]);
 
         // 7. Warm Ginger Spice – Pouch (90g)
         $gingerPouch = Produk::create([
-            'nama'          => 'Warm Ginger Spice – Pouch',
-            'slug'          => 'warm-ginger-spice-pouch',
+            'nama'          => 'Warm Ginger Spice – Pouch (90 grams)',
+            'slug'          => 'warm-ginger-spice-pouch-90-grams',
             'kategori_id'   => $katCookies->id,
             'harga'         => 15000,
             'berat'         => 90,
-            'deskripsi'     => 'Enjoy the warm... (90 grams) – 10 pcs',
+            'deskripsi'     => 'Enjoy the warm. | 10 pcs',
             'waktu_produksi'=> 120,
         ]);
 
         // 8. Warm Ginger Spice – Jar (180g)
         $gingerJar = Produk::create([
-            'nama'          => 'Warm Ginger Spice – Jar',
-            'slug'          => 'warm-ginger-spice-jar',
+            'nama'          => 'Warm Ginger Spice – Jar (180 grams)',
+            'slug'          => 'warm-ginger-spice-jar-180-grams',
             'kategori_id'   => $katCookies->id,
             'harga'         => 35000,
             'berat'         => 180,
-            'deskripsi'     => 'Delight in the harmonious blend... (180 grams) – 18–20 pcs',
+            'deskripsi'     => 'Delight in the harmonious blend. | 18–20 pcs',
             'waktu_produksi'=> 120,
         ]);
 
         // 9. Brownies Crispy Chocolate – Ziplock (50g)
         $browniesChocoPouch = Produk::create([
-            'nama'          => 'Brownies Crispy Chocolate – Ziplock',
-            'slug'          => 'brownies-crispy-chocolate-ziplock',
+            'nama'          => 'Brownies Crispy Chocolate – Ziplock (50 grams)',
+            'slug'          => 'brownies-crispy-chocolate-ziplock-50-grams',
             'kategori_id'   => $katBrownies->id,
             'harga'         => 15000,
             'berat'         => 50,
-            'deskripsi'     => 'Enjoy the irresistible crunch... (50 grams)',
+            'deskripsi'     => 'Enjoy the irresistible crunch.',
             'waktu_produksi'=> 120,
         ]);
 
         // 10. Brownies Crispy Matcha – Ziplock (50g)
         $browniesMatchaPouch = Produk::create([
-            'nama'          => 'Brownies Crispy Matcha – Ziplock',
-            'slug'          => 'brownies-crispy-matcha-ziplock',
+            'nama'          => 'Brownies Crispy Matcha – Ziplock (50 grams)',
+            'slug'          => 'brownies-crispy-matcha-ziplock-50-grams',
             'kategori_id'   => $katBrownies->id,
             'harga'         => 15000,
             'berat'         => 50,
-            'deskripsi'     => 'Delight in the fragrant... (50 grams)',
+            'deskripsi'     => 'Delight in the fragrant.',
             'waktu_produksi'=> 120,
         ]);
 

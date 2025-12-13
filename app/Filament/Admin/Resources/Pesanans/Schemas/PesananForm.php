@@ -4,9 +4,9 @@ namespace App\Filament\Admin\Resources\Pesanans\Schemas;
 
 use App\Models\Pesanan;
 use App\Support\StatusStyle;
+use Illuminate\Validation\Rule;
 use Filament\Schemas\Schema;
 use Filament\Forms;
-use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -15,8 +15,13 @@ class PesananForm
 {
     public static function configure(Schema $schema): Schema
     {
-        $hiddenStatuses = ['produksi', 'dikirim'];
-        $hiddenStatusMap = array_flip($hiddenStatuses);
+        // Admin hanya mengelola pembayaran & pengiriman, tidak boleh menyelesaikan atau membatalkan
+        $allowedAdminStatuses = ['pending', 'perlu_perbaikan', 'paid', 'dikirim'];
+        $allowedStatusMap = array_flip($allowedAdminStatuses);
+
+        $statusOptions = array_intersect_key(StatusStyle::pesananOptions(), $allowedStatusMap);
+        $statusIcons = array_intersect_key(StatusStyle::pesananIcons(), $allowedStatusMap);
+        $statusColors = array_intersect_key(StatusStyle::pesananColors(), $allowedStatusMap);
 
         return $schema
             ->components([
@@ -44,16 +49,28 @@ class PesananForm
 
                         Forms\Components\ToggleButtons::make('status')
                             ->label('Status')
-                            ->options(array_diff_key(StatusStyle::pesananOptions(), $hiddenStatusMap))
-                            ->icons(array_diff_key(StatusStyle::pesananIcons(), $hiddenStatusMap))
-                            ->colors(array_diff_key(StatusStyle::pesananColors(), $hiddenStatusMap))
+                            ->options($statusOptions)
+                            ->icons($statusIcons)
+                            ->colors($statusColors)
+                            ->afterStateHydrated(function ($component, $state, ?Pesanan $record) use ($statusOptions) {
+                                $currentStatus = $record?->status ?? $state;
+                                $component->state(array_key_exists($currentStatus, $statusOptions) ? $currentStatus : null);
+                            })
+                            ->dehydrateStateUsing(fn ($state, ?Pesanan $record) => $state ?? ($record?->status ?? null))
+                            ->required(function (?Pesanan $record) use ($statusOptions) {
+                                if (! $record) {
+                                    return true;
+                                }
+
+                                return array_key_exists($record->status, $statusOptions);
+                            })
+                            ->rule(fn () => Rule::in(Pesanan::STATUSES))
                             ->columnSpanFull()
                             ->inline()
                             ->live()
                             ->afterStateUpdated(function (Set $set, ?string $state): void {
                                 $set('status_saat_ini', StatusStyle::pesanan($state)['label'] ?? '-');
-                            })
-                            ->required(),
+                            }),
 
                         Forms\Components\TextInput::make('no_resi')
                             ->label('Nomor Resi')

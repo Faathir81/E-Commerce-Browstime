@@ -24,7 +24,7 @@
         </div>
 
         <div class="rounded-xl border border-[#f1e8df] bg-[#fffdfb] p-4 space-y-1">
-            <p class="text-xs uppercase tracking-wide text-[#9b7a64]">Payment</p>
+            <p class="text-xs uppercase tracking-wide text-[#9b7a64]">Payment Method</p>
             <p class="text-sm font-semibold capitalize">{{ $selectedMethod['nama'] ?? $paymentMethod ?? '-' }}</p>
             @if ($paymentMethod === 'transfer' && $akun_bank_id)
                 <p class="text-[#6f4c3b]">{{ $selectedBank['nama_bank'] ?? '' }} - {{ $selectedBank['nomor_rekening'] ?? '' }}</p>

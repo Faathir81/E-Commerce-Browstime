@@ -107,42 +107,6 @@ class ViewProduksi extends ViewRecord
 
                     $this->refreshRecordState(forceRedirect: true);
                 }),
-
-            Action::make('siap_dikirim')
-                ->label('Tandai Siap Dikirim')
-                ->color('success')
-                ->icon('heroicon-o-truck')
-                ->requiresConfirmation()
-                ->visible(fn () => $this->record->status === 'produksi')
-                ->action(function () {
-                    $pesanan = $this->record->fresh();
-
-                    if ($pesanan?->status !== 'produksi') {
-                        return $this->notifyStatusInvalid('Aksi ini hanya dapat dijalankan saat pesanan berstatus Produksi.');
-                    }
-
-                    try {
-                        DB::transaction(function () use ($pesanan) {
-                            $lockedPesanan = Pesanan::lockForUpdate()->find($pesanan->id);
-
-                            if (!$lockedPesanan || $lockedPesanan->status !== 'produksi') {
-                                throw new RuntimeException('Aksi tidak valid: status pesanan sudah berubah.');
-                            }
-
-                            $lockedPesanan->update(['status' => 'dikirim']);
-                        });
-                    } catch (RuntimeException $e) {
-                        $this->notifyStatusInvalid($e->getMessage());
-                        return;
-                    } catch (Throwable $e) {
-                        $this->notifyTransactionError($e->getMessage());
-                        return;
-                    }
-
-                    $this->notifySuccess('Pesanan ditandai siap dikirim');
-
-                    $this->refreshRecordState(forceRedirect: true);
-                }),
         ];
     }
 
