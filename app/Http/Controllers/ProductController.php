@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produk;
+use App\ViewModels\ProductDetailViewModel;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -21,7 +22,7 @@ class ProductController extends Controller
 
         return view('products.show', [
             'product' => $product,
-            'availableUnits' => $availableUnits,
+            'productDetail' => ProductDetailViewModel::fromProduct($product, $availableUnits),
         ]);
     }
 

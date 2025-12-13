@@ -36,7 +36,9 @@ return [
     ],
 
     'rajaongkir' => [
-        'key' => env('RAJAONGKIR_KEY'),
-        'base_url' => env('RAJAONGKIR_BASE_URL'),
+        'key' => env('RAJAONGKIR_API_KEY', env('RAJAONGKIR_KEY')),
+        'base_url' => env('RAJAONGKIR_BASE_URL', 'https://rajaongkir.komerce.id/api/v1'),
+        'origin_subdistrict_id' => (int) env('RAJAONGKIR_ORIGIN_SUBDISTRICT_ID', 763),
+        'courier' => env('RAJAONGKIR_COURIER', 'jne'),
     ],
 ];

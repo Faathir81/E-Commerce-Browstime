@@ -35,6 +35,11 @@ class ProduksTable
                     ->label('Harga')
                     ->money('IDR', true),
 
+                TextColumn::make('berat')
+                    ->label('Berat (gram)')
+                    ->suffix(' gr')
+                    ->sortable(),
+
                 TextColumn::make('waktu_produksi')
                     ->label('Waktu (menit)')
                     ->sortable(),

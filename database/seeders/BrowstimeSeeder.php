@@ -19,9 +19,6 @@ use App\Models\BahanBaku;
 use App\Models\Produk;
 use App\Models\ResepBom;
 use App\Models\DetailResep;
-use App\Models\Pelanggan;
-use App\Models\AlamatPengiriman;
-use App\Models\WilayahPengiriman;
 
 class BrowstimeSeeder extends Seeder
 {
@@ -216,103 +213,113 @@ class BrowstimeSeeder extends Seeder
          * 9. PRODUK (COOKIES + BROWNIES)
          * ============================*/
 
-        // 1. Classic Dark Chocolate – Pouch
+        // 1. Classic Dark Chocolate – Pouch (90g)
         $classicPouch = Produk::create([
-            'nama'          => 'Classic Dark Chocolate – Pouch',
-            'slug'          => 'classic-dark-chocolate-pouch',
+            'nama'          => 'Classic Dark Chocolate – Pouch (90 grams)',
+            'slug'          => 'classic-dark-chocolate-pouch-90-grams',
             'kategori_id'   => $katCookies->id,
             'harga'         => 15000,
-            'deskripsi'     => 'Enjoy the rich, authentic taste of our Classic Dark Chocolate cookies, now packed in a convenient pouch — perfect for your daily snacking adventure! (90 grams) – 10 pcs',
+            'berat'         => 90,
+            'deskripsi'     => 'Enjoy the rich, authentic taste. | 10 pcs',
             'waktu_produksi'=> 120,
         ]);
 
-        // 2. Classic Dark Chocolate – Jar
+        // 2. Classic Dark Chocolate – Jar (180g)
         $classicJar = Produk::create([
-            'nama'          => 'Classic Dark Chocolate – Jar',
-            'slug'          => 'classic-dark-chocolate-jar',
+            'nama'          => 'Classic Dark Chocolate – Jar (180 grams)',
+            'slug'          => 'classic-dark-chocolate-jar-180-grams',
             'kategori_id'   => $katCookies->id,
             'harga'         => 35000,
-            'deskripsi'     => 'Dive into the rich, authentic flavor of our Classic Dark Chocolate cookies, neatly stored in an elegant jar — ideal for sharing or savoring at home! (180 grams) – 18–20 pcs',
+            'berat'         => 180,
+            'deskripsi'     => 'Dive into the rich. | 18–20 pcs',
             'waktu_produksi'=> 120,
         ]);
 
-        // 3. Dark Chocolate Golden Raisin – Pouch
+        // 3. Dark Chocolate Golden Raisin – Pouch (90g)
         $raisinPouch = Produk::create([
-            'nama'          => 'Dark Chocolate Golden Raisin – Pouch',
-            'slug'          => 'dark-chocolate-golden-raisin-pouch',
+            'nama'          => 'Dark Chocolate Golden Raisin – Pouch (90 grams)',
+            'slug'          => 'dark-chocolate-golden-raisin-pouch-90-grams',
             'kategori_id'   => $katCookies->id,
             'harga'         => 15000,
-            'deskripsi'     => 'Experience the natural sweetness and chewy texture of Dark Chocolate Golden Raisin cookies, freshly sealed in a handy pouch — always ready for your sweet cravings! (90 grams) – 10 pcs',
+            'berat'         => 90,
+            'deskripsi'     => 'Experience the natural sweetness. | 10 pcs',
             'waktu_produksi'=> 120,
         ]);
 
-        // 4. Dark Chocolate Golden Raisin – Jar
+        // 4. Dark Chocolate Golden Raisin – Jar (180g)
         $raisinJar = Produk::create([
-            'nama'          => 'Dark Chocolate Golden Raisin – Jar',
-            'slug'          => 'dark-chocolate-golden-raisin-jar',
+            'nama'          => 'Dark Chocolate Golden Raisin – Jar (180 grams)',
+            'slug'          => 'dark-chocolate-golden-raisin-jar-180-grams',
             'kategori_id'   => $katCookies->id,
             'harga'         => 35000,
-            'deskripsi'     => 'A delicious blend of rich dark chocolate and sweet raisins, perfectly stored in an elegant jar — ideal for sharing and enjoying at home. (180 grams) – 18–20 pcs',
+            'berat'         => 180,
+            'deskripsi'     => 'A delicious blend. | 18–20 pcs',
             'waktu_produksi'=> 120,
         ]);
 
-        // 5. Matcha Green Tea – Pouch
+        // 5. Matcha Green Tea – Pouch (90g)
         $matchaPouch = Produk::create([
-            'nama'          => 'Matcha Green Tea – Pouch',
-            'slug'          => 'matcha-green-tea-pouch',
+            'nama'          => 'Matcha Green Tea – Pouch (90 grams)',
+            'slug'          => 'matcha-green-tea-pouch-90-grams',
             'kategori_id'   => $katCookies->id,
             'harga'         => 15000,
-            'deskripsi'     => 'Experience the calming, earthy flavor of premium Matcha Green Tea cookies, packed in a convenient pouch — a perfect treat for moments when you crave something smooth and refreshing! (90 grams) – 10 pcs',
+            'berat'         => 90,
+            'deskripsi'     => 'Experience the calming. | 10 pcs',
             'waktu_produksi'=> 120,
         ]);
 
-        // 6. Matcha Green Tea – Jar
+        // 6. Matcha Green Tea – Jar (180g)
         $matchaJar = Produk::create([
-            'nama'          => 'Matcha Green Tea – Jar',
-            'slug'          => 'matcha-green-tea-jar',
+            'nama'          => 'Matcha Green Tea – Jar (180 grams)',
+            'slug'          => 'matcha-green-tea-jar-180-grams',
             'kategori_id'   => $katCookies->id,
             'harga'         => 35000,
-            'deskripsi'     => 'Savor the rich aroma and delicate bitterness of authentic matcha blended into our signature cookies, beautifully stored in an elegant jar — perfect for sharing with loved ones at home! (180 grams) – 18–20 pcs',
+            'berat'         => 180,
+            'deskripsi'     => 'Savor the rich aroma. | 18–20 pcs',
             'waktu_produksi'=> 120,
         ]);
 
-        // 7. Warm Ginger Spice – Pouch
+        // 7. Warm Ginger Spice – Pouch (90g)
         $gingerPouch = Produk::create([
-            'nama'          => 'Warm Ginger Spice – Pouch',
-            'slug'          => 'warm-ginger-spice-pouch',
+            'nama'          => 'Warm Ginger Spice – Pouch (90 grams)',
+            'slug'          => 'warm-ginger-spice-pouch-90-grams',
             'kategori_id'   => $katCookies->id,
             'harga'         => 15000,
-            'deskripsi'     => 'Enjoy the warm, comforting kick of ginger infused into our crispy cookies, freshly packed in a handy pouch — ideal for cozy snacking anytime you need a flavorful boost! (90 grams) – 10 pcs',
+            'berat'         => 90,
+            'deskripsi'     => 'Enjoy the warm. | 10 pcs',
             'waktu_produksi'=> 120,
         ]);
 
-        // 8. Warm Ginger Spice – Jar
+        // 8. Warm Ginger Spice – Jar (180g)
         $gingerJar = Produk::create([
-            'nama'          => 'Warm Ginger Spice – Jar',
-            'slug'          => 'warm-ginger-spice-jar',
+            'nama'          => 'Warm Ginger Spice – Jar (180 grams)',
+            'slug'          => 'warm-ginger-spice-jar-180-grams',
             'kategori_id'   => $katCookies->id,
             'harga'         => 35000,
-            'deskripsi'     => 'Delight in the harmonious blend of subtle heat and sweetness from our Ginger Spice cookies, elegantly stored in a reusable jar — perfect for sharing during family moments or relaxing at home. (180 grams) – 18–20 pcs',
+            'berat'         => 180,
+            'deskripsi'     => 'Delight in the harmonious blend. | 18–20 pcs',
             'waktu_produksi'=> 120,
         ]);
 
-        // 9. Brownies Crispy Chocolate – Ziplock
+        // 9. Brownies Crispy Chocolate – Ziplock (50g)
         $browniesChocoPouch = Produk::create([
-            'nama'          => 'Brownies Crispy Chocolate – Ziplock',
-            'slug'          => 'brownies-crispy-chocolate-ziplock',
+            'nama'          => 'Brownies Crispy Chocolate – Ziplock (50 grams)',
+            'slug'          => 'brownies-crispy-chocolate-ziplock-50-grams',
             'kategori_id'   => $katBrownies->id,
             'harga'         => 15000,
-            'deskripsi'     => 'Enjoy the irresistible crunch of our Brownies Crispy Chocolate — thin, crackly, and bursting with rich chocolate flavor! Packed in a practical ziplock pouch, perfect for snacking anytime. (50 grams)',
-            'waktu_produksi'=> 120, // sesuai input owner
+            'berat'         => 50,
+            'deskripsi'     => 'Enjoy the irresistible crunch.',
+            'waktu_produksi'=> 120,
         ]);
 
-        // 10. Brownies Crispy Matcha – Ziplock
+        // 10. Brownies Crispy Matcha – Ziplock (50g)
         $browniesMatchaPouch = Produk::create([
-            'nama'          => 'Brownies Crispy Matcha – Ziplock',
-            'slug'          => 'brownies-crispy-matcha-ziplock',
+            'nama'          => 'Brownies Crispy Matcha – Ziplock (50 grams)',
+            'slug'          => 'brownies-crispy-matcha-ziplock-50-grams',
             'kategori_id'   => $katBrownies->id,
             'harga'         => 15000,
-            'deskripsi'     => 'Delight in the fragrant, earthy taste of our Brownies Crispy Matcha — thin, crispy brownies infused with premium matcha. Packed in a handy ziplock pouch for your daily matcha moments. (50 grams)',
+            'berat'         => 50,
+            'deskripsi'     => 'Delight in the fragrant.',
             'waktu_produksi'=> 120,
         ]);
 
@@ -1020,54 +1027,6 @@ class BrowstimeSeeder extends Seeder
                 'satuan_id' => $gr->id,
                 'jumlah'    => 1,
             ],
-        ]);
-
-        /* ============================
-         * 11. PELANGGAN (GUEST + LOGIN)
-         * ============================*/
-        $guest = Pelanggan::create([
-            'nama' => 'Pelanggan Guest',
-            'email' => 'guest@demo.com',
-            'no_hp' => '08123456789',
-        ]);
-
-        $pelanggan1 = Pelanggan::create([
-            'user_id' => $pelangganUser->id,
-            'nama' => 'Pelanggan Login',
-            'email' => 'pelanggan1@demo.com',
-            'no_hp' => '08123456788',
-        ]);
-
-        /* ============================
-         * 12. WILAYAH PENGIRIMAN
-         * ============================*/
-        $wilayah = WilayahPengiriman::create([
-            'nama' => 'Depok - Beji',
-            'provinsi_id' => 1,
-            'kota_id' => 1,
-            'kecamatan_id' => 1,
-            'aktif' => 1,
-        ]);
-
-        /* ============================
-         * 13. ALAMAT PENGIRIMAN
-         * ============================*/
-        AlamatPengiriman::create([
-            'pelanggan_id' => $guest->id,
-            'nama_penerima' => $guest->nama,
-            'no_hp' => $guest->no_hp,
-            'alamat_lengkap' => 'Jl. Mawar No. 12',
-            'kode_pos' => '16425',
-            'wilayah_pengiriman_id' => $wilayah->id,
-        ]);
-
-        AlamatPengiriman::create([
-            'pelanggan_id' => $pelanggan1->id,
-            'nama_penerima' => 'Pelanggan Login',
-            'no_hp' => '08123456788',
-            'alamat_lengkap' => 'Jl. Punklorde No. 1',
-            'kode_pos' => '16425',
-            'wilayah_pengiriman_id' => $wilayah->id,
         ]);
     }
 }

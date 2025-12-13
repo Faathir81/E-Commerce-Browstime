@@ -94,22 +94,48 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // CART PAGE QTY & REMOVE
-const updateCartSummary = (subtotal, delivery, total) => {
-    const format = (num) =>
-        'Rp ' +
-        Number(num || 0)
-            .toLocaleString('id-ID');
+const formatRp = (num) =>
+    'Rp ' +
+    Number(num || 0)
+        .toLocaleString('id-ID');
+
+const updateCartSummary = (subtotal) => {
     const subEl = document.querySelector('[data-cart-subtotal]');
     const delEl = document.querySelector('[data-cart-delivery]');
     const totEl = document.querySelector('[data-cart-total]');
-    if (subEl) subEl.textContent = format(subtotal);
-    if (delEl) delEl.textContent = format(delivery);
-    if (totEl) totEl.textContent = format(total);
+    if (subEl) subEl.textContent = formatRp(subtotal);
+    if (delEl) delEl.textContent = 'Calculated at checkout';
+    if (totEl) totEl.textContent = formatRp(subtotal);
+};
+
+const setCartState = (totalQuantity) => {
+    const emptyState = document.querySelector('[data-empty-state]');
+    const cartItemsContainer = document.querySelector('[data-cart-items]');
+    const proceedBtn = document.querySelector('[data-proceed-btn]');
+
+    const isEmpty = Number(totalQuantity || 0) <= 0;
+
+    if (emptyState) emptyState.classList.toggle('hidden', !isEmpty);
+    if (cartItemsContainer) cartItemsContainer.classList.toggle('hidden', isEmpty);
+
+    if (proceedBtn) {
+        if (isEmpty) {
+            proceedBtn.classList.add('pointer-events-none', 'opacity-60');
+            proceedBtn.setAttribute('aria-disabled', 'true');
+        } else {
+            proceedBtn.classList.remove('pointer-events-none', 'opacity-60');
+            proceedBtn.setAttribute('aria-disabled', 'false');
+        }
+    }
 };
 
 const initCartPage = () => {
     const qtyButtons = document.querySelectorAll('[data-qty-btn]');
     const removeButtons = document.querySelectorAll('[data-remove-btn]');
+    const meta = document.querySelector('[data-cart-meta]');
+    if (meta?.dataset.totalQuantity !== undefined) {
+        setCartState(parseInt(meta.dataset.totalQuantity, 10));
+    }
 
     qtyButtons.forEach((btn) => {
         btn.addEventListener('click', () => {
@@ -139,7 +165,8 @@ const initCartPage = () => {
                     const total = data?.totalQuantity ?? 0;
                     notifyLivewire(total);
                     updateCartBadge(total);
-                    updateCartSummary(data?.subtotal, data?.deliveryFee, data?.total);
+                    updateCartSummary(data?.subtotal);
+                    setCartState(total);
                 })
                 .catch((err) => console.error('Update cart failed', err));
         });
@@ -165,7 +192,8 @@ const initCartPage = () => {
                     const total = data?.totalQuantity ?? 0;
                     notifyLivewire(total);
                     updateCartBadge(total);
-                    updateCartSummary(data?.subtotal, data?.deliveryFee, data?.total);
+                    updateCartSummary(data?.subtotal);
+                    setCartState(total);
                 })
                 .catch((err) => console.error('Remove cart item failed', err));
         });

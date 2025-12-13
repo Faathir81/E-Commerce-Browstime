@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="bg-[#FFF9F4] min-h-screen">
-    <div class="w-full bg-white border-b border-[rgb(241,230,220)]">
+    <div class="w-full bg-white border-b border-[rgb(241,230,220)] sticky top-0 z-30">
         <div class="mx-auto max-w-screen-2xl px-6 sm:px-8 lg:px-14 h-16 flex items-center gap-3">
             <a href="{{ route('product.all') }}"
                class="inline-flex items-center justify-center gap-2 text-sm font-medium text-[#3b241a] h-10 px-3 rounded-full transition hover:bg-[#d3b58f] hover:text-[#3b241a]">
@@ -17,24 +17,24 @@
         </div>
     </div>
 
-    <div class="mx-auto max-w-screen-2xl px-6 sm:px-8 lg:px-14 py-6">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-8 lg:px-14 py-6">
         <div class="grid grid-cols-1 lg:grid-cols-[1.1fr,0.9fr] gap-6 items-start">
             {{-- LEFT: CART ITEMS --}}
-            <div class="space-y-4">
-                @forelse ($cartItems as $item)
-                    <div class="bg-white border border-[#f1e8df] rounded-xl shadow-sm px-4 py-3 flex gap-4 items-center" data-cart-item>
-                        <div class="h-20 w-20 rounded-lg overflow-hidden bg-[#f9f2eb] border border-[#f1e8df]">
+            <div class="space-y-4" data-cart-items>
+                @foreach ($cartItems as $item)
+                    <div class="bg-white border border-[#f1e8df] rounded-xl shadow-sm px-4 py-3 flex gap-3 sm:gap-4 items-center" data-cart-item>
+                        <div class="h-16 w-16 sm:h-20 sm:w-20 rounded-lg overflow-hidden bg-[#f9f2eb] border border-[#f1e8df] flex-shrink-0">
                             <img src="{{ $item->image_url ?? 'https://via.placeholder.com/120x120' }}"
                                  alt="{{ $item->name }}"
                                  class="h-full w-full object-cover">
                         </div>
-                        <div class="flex-1">
-                            <p class="text-sm font-semibold text-[#3b241a]">{{ $item->name }}</p>
-                            <p class="text-sm text-[#6f4c3b]">Rp {{ number_format($item->price, 0, ',', '.') }}</p>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-semibold text-[#3b241a] leading-snug line-clamp-2">{{ $item->name }}</p>
+                            <p class="text-sm text-[#6f4c3b] mt-1">Rp {{ number_format($item->price, 0, ',', '.') }}</p>
                         </div>
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2 sm:gap-3 text-xs">
                         <button type="button"
-                                class="h-9 w-9 flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] hover:bg-[#f5ece3] transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                class="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] hover:bg-[#f5ece3] transition disabled:opacity-50 disabled:cursor-not-allowed"
                                 data-qty-btn
                                 data-id="{{ $item->id }}"
                                 data-action="decrease"
@@ -44,9 +44,9 @@
                                     <path d="M3.3335 8H12.6668" stroke="#3B241A" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
-                            <span class="w-8 text-center text-sm font-medium text-[#3b241a]" data-qty-display data-id="{{ $item->id }}">{{ $item->quantity }}</span>
+                            <span class="w-7 sm:w-8 text-center text-sm font-medium text-[#3b241a]" data-qty-display data-id="{{ $item->id }}">{{ $item->quantity }}</span>
                             <button type="button"
-                                    class="h-9 w-9 flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] hover:bg-[#f5ece3] transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                    class="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] hover:bg-[#f5ece3] transition disabled:opacity-50 disabled:cursor-not-allowed"
                                     data-qty-btn
                                     data-id="{{ $item->id }}"
                                     data-action="increase"
@@ -59,29 +59,28 @@
                             </button>
                         </div>
                         <button type="button"
-                                class="text-[#b3261e] hover:text-[#8f1f18] transition"
+                                class="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center rounded-full text-[#b3261e] hover:text-white hover:bg-[#d4183d] transition"
                                 data-remove-btn
                                 data-id="{{ $item->id }}"
                                 data-remove-url="{{ url('/cart/remove/' . $item->id) }}">
                             <span class="sr-only">Remove</span>
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6.6665 7.33337V11.3334" stroke="#D4183D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M9.3335 7.33337V11.3334" stroke="#D4183D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M12.6668 4V13.3333C12.6668 13.687 12.5264 14.0261 12.2763 14.2761C12.0263 14.5262 11.6871 14.6667 11.3335 14.6667H4.66683C4.31321 14.6667 3.97407 14.5262 3.72402 14.2761C3.47397 14.0261 3.3335 13.687 3.3335 13.3333V4" stroke="#D4183D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M2 4H14" stroke="#D4183D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M5.3335 4.00004V2.66671C5.3335 2.31309 5.47397 1.97395 5.72402 1.7239C5.97407 1.47385 6.31321 1.33337 6.66683 1.33337H9.3335C9.68712 1.33337 10.0263 1.47385 10.2763 1.7239C10.5264 1.97395 10.6668 2.31309 10.6668 2.66671V4.00004" stroke="#D4183D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M6.6665 7.33337V11.3334" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9.3335 7.33337V11.3334" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12.6668 4V13.3333C12.6668 13.687 12.5264 14.0261 12.2763 14.2761C12.0263 14.5262 11.6871 14.6667 11.3335 14.6667H4.66683C4.31321 14.6667 3.97407 14.5262 3.72402 14.2761C3.47397 14.0261 3.3335 13.687 3.3335 13.3333V4" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 4H14" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M5.3335 4.00004V2.66671C5.3335 2.31309 5.47397 1.97395 5.72402 1.7239C5.97407 1.47385 6.31321 1.33337 6.66683 1.33337H9.3335C9.68712 1.33337 10.0263 1.47385 10.2763 1.7239C10.5264 1.97395 10.6668 2.31309 10.6668 2.66671V4.00004" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </button>
                     </div>
-                @empty
-                    <div class="bg-white border border-[#f1e8df] rounded-xl shadow-sm px-4 py-6 text-center text-sm text-[#6f4c3b]">
-                        Your cart is empty.
-                    </div>
-                @endforelse
+                @endforeach
+            </div>
+            <div class="bg-white border border-[#f1e8df] rounded-xl shadow-sm px-4 py-6 text-center text-sm text-[#6f4c3b] {{ count($cartItems) > 0 ? 'hidden' : '' }}" data-empty-state>
+                Your cart is empty.
             </div>
 
             {{-- RIGHT: ORDER SUMMARY --}}
-            <div class="bg-white border border-[#f1e8df] rounded-2xl shadow-sm p-5 lg:p-6 space-y-4">
+            <div class="bg-white border border-[#f1e8df] rounded-2xl shadow-sm p-5 lg:p-6 space-y-4 sticky top-20">
                 <h2 class="text-sm font-semibold text-[#3b241a]">Order Summary</h2>
                 <div class="space-y-2 text-sm text-[#6f4c3b]">
                     <div class="flex items-center justify-between">
@@ -90,17 +89,21 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <span>Delivery Fee</span>
-                        <span class="text-[#3b241a]" data-cart-delivery>Rp {{ number_format($deliveryFee ?? 0, 0, ',', '.') }}</span>
+                        <span class="text-[#3b241a]" data-cart-delivery>{{ $deliveryFeeLabel ?? 'Calculated at checkout' }}</span>
                     </div>
                 </div>
                 <div class="border-t border-[#f1e8df] pt-3">
                     <div class="flex items-center justify-between text-base font-semibold text-[#3b241a]">
                         <span>Total</span>
-                        <span data-cart-total>Rp {{ number_format($total ?? 0, 0, ',', '.') }}</span>
+                        <span data-cart-total>Rp {{ number_format($subtotal ?? 0, 0, ',', '.') }}</span>
                     </div>
                 </div>
                 <div class="space-y-3">
-                    <a href="{{ url('/checkout') }}" class="block w-full text-center rounded-full bg-[#7a4b24] text-white py-3 text-sm font-semibold hover:bg-[#693f1d] transition">
+                    @php $totalQty = array_sum(session('cart', [])); @endphp
+                    <a href="{{ url('/checkout') }}"
+                       data-proceed-btn
+                       class="block w-full text-center rounded-full bg-[#7a4b24] text-white py-3 text-sm font-semibold hover:bg-[#693f1d] transition {{ $totalQty > 0 ? '' : 'pointer-events-none opacity-60' }}"
+                       aria-disabled="{{ $totalQty > 0 ? 'false' : 'true' }}">
                         Proceed to Checkout
                     </a>
                     <a href="{{ route('product.all') }}" class="block w-full text-center rounded-full border border-[#e4d6c6] text-[#3b241a] py-3 text-sm font-medium hover:bg-[#f5ece3] transition">
@@ -110,5 +113,6 @@
             </div>
         </div>
     </div>
+    <div data-cart-meta data-total-quantity="{{ array_sum(session('cart', [])) }}"></div>
 </div>
 @endsection

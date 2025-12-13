@@ -28,8 +28,6 @@
                 <h3 class="text-[#3b241a] font-semibold mb-3">Support</h3>
                 <ul class="space-y-2 text-sm text-[#7c6a5a]">
                     <li><a href="#" class="hover:text-[#3b241a]">Contact Us</a></li>
-                    <li><a href="#" class="hover:text-[#3b241a]">Delivery Info</a></li>
-                    <li><a href="#" class="hover:text-[#3b241a]">Returns</a></li>
                 </ul>
             </div>
 
@@ -46,7 +44,7 @@
         {{-- COPYRIGHT --}}
         <div class="mt-10 pt-6 border-t border-[#e8ded3] text-center">
             <p class="text-xs text-[#7c6a5a]">
-                © 2025 BROWSTIME. All rights reserved.
+                ЖИ 2025 BROWSTIME. All rights reserved.
             </p>
         </div>
 

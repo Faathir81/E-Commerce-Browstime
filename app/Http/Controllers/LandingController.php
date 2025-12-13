@@ -3,17 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produk;
+use App\ViewModels\ProductCardViewModel;
+use Illuminate\Support\Facades\Storage;
 
 class LandingController extends Controller
 {
     public function index()
     {
-        $bestSellers = Produk::active()
+        $shopDisplay = Produk::active()
             ->with(['resep.detail.bahan'])
-            ->orderBy('created_at', 'desc')
-            ->take(5)
+            ->latest()
+            ->limit(5)
             ->get();
 
-        return view('landing.index', compact('bestSellers'));
+        $shopDisplay = $shopDisplay->map(function (Produk $product) {
+            return ProductCardViewModel::fromProduct($product);
+        });
+
+        return view('landing.index', [
+            'shopDisplay' => $shopDisplay,
+        ]);
     }
 }

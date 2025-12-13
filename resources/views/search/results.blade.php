@@ -42,52 +42,7 @@
     @else
         <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             @foreach ($results as $product)
-                @php
-                    $productUrl = route('product.show', $product->slug);
-                    $inStock = $product->hasSufficientStock();
-                @endphp
-                <div class="group relative w-full bg-white shadow-md rounded-2xl overflow-hidden border border-[#f1e8df] transition-shadow duration-200 hover:shadow-lg flex flex-col cursor-pointer h-full"
-                     data-product-url="{{ $productUrl }}">
-                    <a href="{{ $productUrl }}" class="block pointer-events-none">
-                        <div class="h-56 overflow-hidden">
-                            <img src="{{ $product->gambar ? asset('storage/' . $product->gambar) : 'https://via.placeholder.com/400x300' }}"
-                                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                 alt="{{ $product->nama }}">
-                        </div>
-                    </a>
-
-                    <div class="p-4 flex-1 flex flex-col gap-2">
-                        <p class="text-xs flex items-center gap-1 {{ $inStock ? 'text-[#7d6b5c]' : 'text-[#8b5a2b]' }}">
-                            <span class="{{ $inStock ? 'text-green-600' : 'text-red-500' }}">&bull;</span>
-                            {{ $inStock ? 'In Stock' : 'Out Stock' }}
-                        </p>
-
-                        <a href="{{ $productUrl }}" class="block mt-1 pointer-events-none">
-                            <h3 class="font-semibold text-[#3b241a] truncate">
-                                {{ $product->nama }}
-                            </h3>
-                        </a>
-
-                        <p class="text-xs text-[#6f4c3b] mt-1">
-                            {{ optional($product->kategori)->nama ?? 'Produk' }}
-                        </p>
-                    </div>
-
-                    <div class="px-4 pb-4 pt-3 mt-auto flex flex-col gap-3">
-                        <p class="text-sm text-[#3b241a]">
-                            Rp {{ number_format($product->harga, 0, ',', '.') }}
-                        </p>
-
-                        <button type="button"
-                                data-add-btn
-                                data-product-id="{{ $product->id }}"
-                                class="w-full flex items-center justify-center gap-2 text-white text-sm py-2 rounded-xl transition {{ $inStock ? 'bg-[#3b241a] hover:bg-[#2c1c14]' : 'bg-gray-400 cursor-not-allowed' }}"
-                                {{ $inStock ? '' : 'disabled' }}>
-                            <x-heroicon-o-shopping-cart class="w-4 h-4" />
-                            Add
-                        </button>
-                    </div>
-                </div>
+                <x-product.card :product="$product" />
             @endforeach
         </div>
 
@@ -98,17 +53,3 @@
 
 </div>
 @endsection
-
-@push('scripts')
-<script>
-document.addEventListener('click', (e) => {
-    const addBtn = e.target.closest('[data-add-btn]');
-    if (addBtn) return;
-    const card = e.target.closest('[data-product-url]');
-    if (!card) return;
-    const url = card.getAttribute('data-product-url');
-    if (url) window.location = url;
-});
-</script>
-@endpush
-
