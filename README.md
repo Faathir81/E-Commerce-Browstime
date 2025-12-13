@@ -229,9 +229,9 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/frontend-tracking`
 
--   [ ] Tracking via kode booking
--   [ ] Status timeline
--   [ ] Detail pesanan
+-   [X] Tracking via kode booking
+-   [X] Status timeline
+-   [X] Detail pesanan
 
 ---
 
