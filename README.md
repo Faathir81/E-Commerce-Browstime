@@ -250,8 +250,8 @@ Branch: feat/rajaongkir-wilayah
 **Branch:** `feat/frontend-review`
 
 -   [X] Konfirmasi terima barang
--   [ ] Rating & komentar
--   [ ] Validasi dari detail pesanan
+-   [X] Rating & komentar
+-   [X] Validasi dari detail pesanan
 
 ---
 
