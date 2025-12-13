@@ -41,6 +41,11 @@ class Pesanan extends Model
         // atau SupportedArea::class kalau nama tabelnya itu
     }
 
+    public function kecamatan(): BelongsTo
+    {
+        return $this->belongsTo(Kecamatan::class);
+    }
+
     // detail item
     public function detailPesanans(): HasMany
     {

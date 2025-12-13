@@ -103,6 +103,8 @@ class SearchBar extends Component
 
     public function render()
     {
-        return view('livewire.search-bar');
+        return view('livewire.search-bar', [
+            'results' => $this->results,
+        ]);
     }
 }

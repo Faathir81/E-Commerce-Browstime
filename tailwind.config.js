@@ -18,4 +18,22 @@ export default {
     },
 
     plugins: [forms],
+
+    safelist: [
+        // Product card add-to-cart button styles coming from view models (not visible to the scanner)
+        'w-full',
+        'flex',
+        'items-center',
+        'justify-center',
+        'gap-2',
+        'text-white',
+        'text-sm',
+        'py-2',
+        'rounded-xl',
+        'transition',
+        'bg-[#3b241a]',
+        'hover:bg-[#2c1c14]',
+        'bg-gray-400',
+        'cursor-not-allowed',
+    ],
 };

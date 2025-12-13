@@ -18,7 +18,7 @@ class OrderSuccessController extends Controller
             'detailPesanans.produk',
             'wilayahPengiriman.provinsi',
             'wilayahPengiriman.kota',
-            'wilayahPengiriman.kecamatan',
+            'kecamatan',
         ])->where('kode', $kode)->first();
 
         if (! $pesanan) {
@@ -49,6 +49,9 @@ class OrderSuccessController extends Controller
             ?? 'customer';
         $confirmationEmail = $authUser?->email ?? ($pesanan?->guest_email ?? '-');
         $orderCode = $pesanan?->kode ?? $kode ?? '-';
+
+        $canConfirmCompletion = $pesanan?->status === \App\Models\Pesanan::STATUS_DIKIRIM;
+        $isCompleted = $pesanan?->status === \App\Models\Pesanan::STATUS_SELESAI;
 
         $orderSummary = [
             'items' => $orderItems,
@@ -110,6 +113,8 @@ class OrderSuccessController extends Controller
             'deliveryInfo' => $deliveryInfo,
             'confirmationEmail' => $confirmationEmail,
             'orderCode' => $orderCode,
+            'canConfirmCompletion' => $canConfirmCompletion,
+            'isCompleted' => $isCompleted,
         ]);
     }
 }

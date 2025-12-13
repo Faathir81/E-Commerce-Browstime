@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('wilayah_pengiriman', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama');
-            $table->unsignedBigInteger('provinsi_id');
-            $table->unsignedBigInteger('kota_id');
-            $table->unsignedBigInteger('kecamatan_id'); // ID RajaOngkir
-            $table->boolean('aktif')->default(true);
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('wilayah_pengiriman')) {
+            Schema::create('wilayah_pengiriman', function (Blueprint $table) {
+                $table->id();
+                $table->string('nama');
+                $table->unsignedBigInteger('provinsi_id');
+                $table->unsignedBigInteger('kota_id');
+                $table->boolean('aktif')->default(true);
+                $table->timestamps();
+            });
+        }
     }
 
     /**

@@ -218,10 +218,10 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/frontend-guest-checkout`
 
--   [ ] Form checkout tanpa login
--   [ ] Assign guest sebagai “pelanggan guest”
+-   [X] Form checkout tanpa login
+-   [X] Assign guest sebagai “pelanggan guest”
 -   [ ] Kirim email tracking
--   [ ] Instruksi pembayaran
+-   [X] Instruksi pembayaran
 
 ---
 

@@ -10,7 +10,7 @@
     @livewireStyles
     @stack('styles')
 </head>
-<body class="bg-[#FFF9F4] text-[#2b1a14] antialiased">
+<body class="min-h-screen flex flex-col bg-[#FFF9F4] text-[#2b1a14] antialiased">
 
     {{-- NAVBAR (hidden on cart page) --}}
     @unless (request()->routeIs('cart.index'))
@@ -18,7 +18,7 @@
     @endunless
 
     {{-- PAGE CONTENT --}}
-    <main>
+    <main class="flex-1">
         {{ $slot ?? '' }}
         @yield('content')
     </main>

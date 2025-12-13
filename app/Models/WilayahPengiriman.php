@@ -12,7 +12,6 @@ class WilayahPengiriman extends Model
         'nama',
         'provinsi_id',
         'kota_id',
-        'kecamatan_id',
         'aktif',
     ];
 
@@ -28,10 +27,5 @@ class WilayahPengiriman extends Model
     public function provinsi()
     {
         return $this->belongsTo(Provinsi::class);
-    }
-
-    public function kecamatan()
-    {
-        return $this->belongsTo(Kecamatan::class);
     }
 }

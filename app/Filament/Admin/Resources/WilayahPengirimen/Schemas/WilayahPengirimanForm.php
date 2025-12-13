@@ -55,9 +55,6 @@ class WilayahPengirimanForm
 
             Hidden::make('provinsi_id'),
 
-            Hidden::make('kecamatan_id')
-                ->default(0),
-
             TextInput::make('provinsi_label')
                 ->label('Provinsi')
                 ->disabled()
