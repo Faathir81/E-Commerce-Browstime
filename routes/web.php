@@ -10,12 +10,14 @@ use App\Http\Controllers\OrderSuccessController;
 use App\Http\Controllers\OrderCompletionController;
 use App\Livewire\Payment\UploadProof;
 use App\Livewire\Checkout\CheckoutWizard;
+use App\Http\Controllers\UlasanController;
 
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::get('/checkout', CheckoutWizard::class)->name('checkout');
 Route::get('/order-success/{kode}', OrderSuccessController::class)->name('order.success');
 Route::get('/orders/{order}/upload-proof', UploadProof::class)->name('order.upload-proof');
+Route::post('/ulasans', [UlasanController::class, 'store'])->name('ulasans.store');
 
 Route::get('/products', function () {
     return 'all products here'; // nanti diganti view asli
