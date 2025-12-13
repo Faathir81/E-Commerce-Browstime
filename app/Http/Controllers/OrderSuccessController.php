@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pesanan;
 use App\Support\OrderSuccessHelper;
+use App\Support\ReviewGuard;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -16,6 +17,7 @@ class OrderSuccessController extends Controller
             'pembayaran.qrisSetting',
             'pembayaran.akunBank',
             'detailPesanans.produk',
+            'detailPesanans.ulasan',
             'wilayahPengiriman.provinsi',
             'wilayahPengiriman.kota',
             'kecamatan',
@@ -25,6 +27,7 @@ class OrderSuccessController extends Controller
             abort(404);
         }
 
+        $authUser = Auth::user();
         $pembayaran = $pesanan?->pembayaran;
         $pelanggan = $pesanan?->resolvedPelanggan();
         $alamatPengiriman = $pelanggan?->alamatPengiriman()->latest()->first();
@@ -33,16 +36,32 @@ class OrderSuccessController extends Controller
         $paymentBadge = OrderSuccessHelper::mapPaymentBadge($pembayaran?->status);
         $deliverySteps = OrderSuccessHelper::mapOrderSteps($pesanan?->status);
 
+        $guestEmailForReview = request()->input('guest_email');
+        $reviewPermissions = ($pesanan?->detailPesanans ?? collect())
+            ->mapWithKeys(function ($detail) use ($authUser, $guestEmailForReview) {
+                return [
+                    $detail->id => [
+                        'can_review' => ReviewGuard::canReviewDetail($detail, $authUser, $guestEmailForReview),
+                        'has_review' => $detail->hasUlasan(),
+                    ],
+                ];
+            })
+            ->toArray();
+
         $firstItem = $pesanan?->detailPesanans->first();
-        $orderItems = ($pesanan?->detailPesanans ?? collect())->map(function ($detail) {
+        $orderItems = ($pesanan?->detailPesanans ?? collect())->map(function ($detail) use ($reviewPermissions) {
+            $permissions = $reviewPermissions[$detail->id] ?? ['can_review' => false, 'has_review' => false];
+
             return [
+                'detail_id' => $detail->id,
                 'product_name' => $detail->produk->nama ?? 'Produk',
                 'qty' => $detail->qty,
                 'subtotal_display' => number_format($detail->subtotal ?? 0, 0, ',', '.'),
+                'can_review' => $permissions['can_review'],
+                'has_review' => $permissions['has_review'],
             ];
         });
 
-        $authUser = Auth::user();
         $isOwnerViewing = $authUser && $pesanan?->user_id && $authUser->id === $pesanan->user_id;
 
         $customerName = $pelanggan?->nama
@@ -120,6 +139,8 @@ class OrderSuccessController extends Controller
             'orderCode' => $orderCode,
             'canConfirmCompletion' => $canConfirmCompletion,
             'isCompleted' => $isCompleted,
+            'reviewPermissions' => $reviewPermissions,
+            'guestEmailForReview' => $guestEmailForReview,
         ]);
     }
 }

@@ -11,3 +11,27 @@
 .no-spinner {
     -moz-appearance: textfield;
 }
+
+/* Review accordion */
+.review-accordion summary {
+    list-style: none;
+}
+.review-accordion summary::-webkit-details-marker {
+    display: none;
+}
+.review-accordion .accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.25s ease;
+    opacity: 0;
+}
+.review-accordion[open] .accordion-content {
+    max-height: 2400px;
+    opacity: 1;
+}
+.review-accordion .chevron {
+    transition: transform 0.25s ease;
+}
+.review-accordion[open] .chevron {
+    transform: rotate(180deg);
+}

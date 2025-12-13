@@ -20,11 +20,11 @@
                 <div class="rounded-xl bg-[#e8f7e5] text-[#2f7a3d] px-4 py-3 text-sm">
                     {{ session('status') }}
                 </div>
-            @endif
-            @if(session('error'))
-                <div class="rounded-xl bg-[#fcecec] text-[#9f2c2c] px-4 py-3 text-sm">
-                    {{ session('error') }}
-                </div>
+@endif
+@if(session('error'))
+    <div class="rounded-xl bg-[#fcecec] text-[#9f2c2c] px-4 py-3 text-sm">
+        {{ session('error') }}
+    </div>
             @endif
         </div>
 
@@ -254,6 +254,14 @@
                 </div>
             </div>
         </div>
+
+        <x-review-section
+            :pesanan="$pesanan"
+            :order-code="$orderCode"
+            :review-permissions="$reviewPermissions"
+            :guest-email-for-review="$guestEmailForReview"
+            :is-completed="$isCompleted"
+        />
     </div>
 </div>
 @endsection

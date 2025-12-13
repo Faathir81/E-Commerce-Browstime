@@ -249,7 +249,7 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/frontend-review`
 
--   [ ] Konfirmasi terima barang
+-   [X] Konfirmasi terima barang
 -   [ ] Rating & komentar
 -   [ ] Validasi dari detail pesanan
 
