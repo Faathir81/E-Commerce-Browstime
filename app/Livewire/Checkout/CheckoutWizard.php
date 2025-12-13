@@ -15,6 +15,7 @@ use App\Models\Provinsi;
 use App\Models\Kota;
 use App\Models\Kecamatan;
 use App\Models\WilayahPengiriman;
+use App\Support\OrderNotifier;
 use App\Services\RajaOngkirService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -320,6 +321,8 @@ class CheckoutWizard extends Component
 
             return $pesanan;
         });
+
+        OrderNotifier::sendOrderCreated($pesanan);
 
         // TODO: Persist catatan once order notes column available.
         session()->forget('cart');

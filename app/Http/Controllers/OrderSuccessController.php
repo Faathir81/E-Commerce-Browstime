@@ -43,11 +43,16 @@ class OrderSuccessController extends Controller
         });
 
         $authUser = Auth::user();
-        $customerName = $authUser?->name
-            ?? $pelanggan?->nama
+        $isOwnerViewing = $authUser && $pesanan?->user_id && $authUser->id === $pesanan->user_id;
+
+        $customerName = $pelanggan?->nama
             ?? $pesanan?->nama_penerima
+            ?? ($isOwnerViewing ? ($authUser?->name ?? null) : null)
             ?? 'customer';
-        $confirmationEmail = $authUser?->email ?? ($pesanan?->guest_email ?? '-');
+
+        $confirmationEmail = $isOwnerViewing
+            ? ($authUser?->email ?? ($pesanan?->guest_email ?? '-'))
+            : ($pesanan?->guest_email ?? ($authUser?->email ?? '-'));
         $orderCode = $pesanan?->kode ?? $kode ?? '-';
 
         $canConfirmCompletion = $pesanan?->status === \App\Models\Pesanan::STATUS_DIKIRIM;

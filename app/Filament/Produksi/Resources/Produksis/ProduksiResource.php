@@ -2,7 +2,7 @@
 
 namespace App\Filament\Produksi\Resources\Produksis;
 
-use App\Filament\Produksi\Resources\Produksis\Pages\ListProduksi;
+use App\Filament\Produksi\Resources\Produksis\Pages\ListProduksis;
 use App\Filament\Produksi\Resources\Produksis\Pages\ViewProduksi;
 use App\Filament\Produksi\Resources\Produksis\Tables\ProduksisTable;
 use App\Filament\Produksi\Resources\Produksis\Schemas\ProduksiInfolist;
@@ -59,7 +59,7 @@ class ProduksiResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListProduksi::route('/'),
+            'index' => ListProduksis::route('/'),
             'view'  => ViewProduksi::route('/{record}'),
         ];
     }
