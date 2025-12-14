@@ -66,7 +66,7 @@
             </div>
 
             <div class="mt-6 flex justify-end">
-                <x-secondary-button class="rounded-full px-4 py-2 text-sm" x-on:click="$dispatch('close')">
+                <x-secondary-button class="rounded-full px-4 py-2 text-sm border border-[#e4d6c6] text-[#3b241a] bg-white hover:bg-[#f5ece3] focus:outline-none focus:ring-2 focus:ring-[#d7b08a] focus:ring-offset-2" x-on:click="$dispatch('close')">
                     {{ __('Cancel') }}
                 </x-secondary-button>
 
