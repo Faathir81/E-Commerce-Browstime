@@ -35,5 +35,15 @@ export default {
         'hover:bg-[#2c1c14]',
         'bg-gray-400',
         'cursor-not-allowed',
+        // Product card stock badge styles coming from view models
+        'text-[#7d6b5c]',
+        'text-[#8b5a2b]',
+        'inline-block',
+        'w-2.5',
+        'h-2.5',
+        'rounded-full',
+        'bg-green-600',
+        'bg-red-500',
+        'flex-shrink-0',
     ],
 };

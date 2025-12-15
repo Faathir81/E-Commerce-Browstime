@@ -73,7 +73,6 @@ class PengaturanQris extends Page implements HasForms
                         ->footer([
                             Action::make('simpan')
                                 ->label('Simpan')
-                                ->color('warning')
                                 ->action('simpan'),
                         ]),
                 ])
