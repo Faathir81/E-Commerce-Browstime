@@ -12,7 +12,6 @@ class Navbar extends Component
 
     public function mount(): void
     {
-        $this->backUrl = route('landing');
         $this->hydrateState();
     }
 
@@ -27,6 +26,7 @@ class Navbar extends Component
     {
         $this->hideSearchOnMobile = $this->shouldHideSearchOnMobile();
         $this->showBackButton = $this->shouldShowBackButton();
+        $this->backUrl = $this->resolveBackUrl();
     }
 
     protected function shouldHideSearchOnMobile(): bool
@@ -39,6 +39,18 @@ class Navbar extends Component
 
     protected function shouldShowBackButton(): bool
     {
-        return request()->routeIs('search') || request()->routeIs('product.show');
+        return request()->routeIs('search')
+            || request()->routeIs('product.show')
+            || request()->routeIs('profile.*');
+    }
+
+    protected function resolveBackUrl(): string
+    {
+        if ($this->shouldShowBackButton()) {
+            $previous = url()->previous();
+            return $previous ?: route('landing');
+        }
+
+        return route('landing');
     }
 }

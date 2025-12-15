@@ -5,7 +5,7 @@
         {{-- HEADER --}}
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
             <div class="space-y-1">
-                <h2 class="text-xl font-semibold text-[#3b241a]">Etalase Toko</h2>
+                <h2 class="text-xl font-semibold text-[#3b241a]">Our Products</h2>
                 <p class="text-sm text-[#7c6a5a]">Customer favorites you'll absolutely love</p>
             </div>
 

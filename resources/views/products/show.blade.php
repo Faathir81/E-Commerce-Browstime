@@ -38,7 +38,7 @@
                             </svg>
                         </span>
                         <div class="leading-tight">
-                            <p class="text-xs text-[#6f4c3b]">Delivery Time</p>
+                            <p class="text-xs text-[#6f4c3b]">Production Time</p>
                             <p class="font-semibold">{{ $productDetail->delivery_time }}</p>
                         </div>
                     </div>
