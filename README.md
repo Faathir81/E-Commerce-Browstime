@@ -155,20 +155,20 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/dashboard-admin`
 
--   [X] Penjualan harian
--   [X] Stok rendah
--   [X] Total pesanan
--   [X] Grafik performa
+-   [x] Penjualan harian
+-   [x] Stok rendah
+-   [x] Total pesanan
+-   [x] Grafik performa
 
 ### **9.2 Laporan**
 
 **Branch:** `feat/laporan`
 
--   [X] Laporan penjualan
--   [X] Laporan stok
--   [X] Laporan keuangan
--   [X] Filter tanggal
--   [X] Export Excel
+-   [x] Laporan penjualan
+-   [x] Laporan stok
+-   [x] Laporan keuangan
+-   [x] Filter tanggal
+-   [x] Export Excel
 
 ---
 
@@ -183,10 +183,10 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/frontend-katalog`
 
--   [X] Tampilkan produk
--   [X] Search
--   [X] Filter kategori
--   [X] Detail produk
+-   [x] Tampilkan produk
+-   [x] Search
+-   [x] Filter kategori
+-   [x] Detail produk
 
 ---
 
@@ -194,10 +194,10 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/frontend-cart`
 
--   [X] Tambah ke keranjang
--   [X] Update qty
--   [X] Hapus item
--   [X] Hitung subtotal
+-   [x] Tambah ke keranjang
+-   [x] Update qty
+-   [x] Hapus item
+-   [x] Hitung subtotal
 
 ---
 
@@ -205,12 +205,12 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/frontend-checkout`
 
--   [X] Form alamat (provinsi → kota → kecamatan)
--   [X] Hitung ongkir → API RajaOngkir /cost
--   [X] Tampilkan ETA pengiriman
--   [X] Pilih metode pembayaran
--   [X] Hitung total
--   [X] Buat pesanan + simpan ongkir final
+-   [x] Form alamat (provinsi → kota → kecamatan)
+-   [x] Hitung ongkir → API RajaOngkir /cost
+-   [x] Tampilkan ETA pengiriman
+-   [x] Pilih metode pembayaran
+-   [x] Hitung total
+-   [x] Buat pesanan + simpan ongkir final
 
 ---
 
@@ -218,10 +218,10 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/frontend-guest-checkout`
 
--   [X] Form checkout tanpa login
--   [X] Assign guest sebagai “pelanggan guest”
--   [X] Kirim email tracking
--   [X] Instruksi pembayaran
+-   [x] Form checkout tanpa login
+-   [x] Assign guest sebagai “pelanggan guest”
+-   [x] Kirim email tracking
+-   [x] Instruksi pembayaran
 
 ---
 
@@ -229,9 +229,9 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/frontend-tracking`
 
--   [X] Tracking via kode booking
--   [X] Status timeline
--   [X] Detail pesanan
+-   [x] Tracking via kode booking
+-   [x] Status timeline
+-   [x] Detail pesanan
 
 ---
 
@@ -239,9 +239,9 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/frontend-upload-bukti`
 
--   [X] Upload bukti bayar
--   [X] Update status menunggu verifikasi
--   [X] Notifikasi email opsional
+-   [x] Upload bukti bayar
+-   [x] Update status menunggu verifikasi
+-   [x] Notifikasi email opsional
 
 ---
 
@@ -249,9 +249,9 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/frontend-review`
 
--   [X] Konfirmasi terima barang
--   [X] Rating & komentar
--   [X] Validasi dari detail pesanan
+-   [x] Konfirmasi terima barang
+-   [x] Rating & komentar
+-   [x] Validasi dari detail pesanan
 
 ---
 
@@ -265,10 +265,10 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/midtrans-core`
 
--   [ ] Install Midtrans PHP SDK
--   [ ] Generate Snap/redirect URL
--   [ ] Redirect customer ke Midtrans
--   [ ] Save transaction_id + order_id
+-   [x] Install Midtrans PHP SDK
+-   [x] Generate Snap/redirect URL
+-   [x] Redirect customer ke Midtrans
+-   [x] Save transaction_id + order_id
 
 ---
 
@@ -336,13 +336,13 @@ Branch: feat/rajaongkir-wilayah
 
 Gunakan checklist ini untuk track progress harian.
 
--   [X] Master Data Selesai
--   [X] BOM Selesai
--   [X] Mutasi Stok Selesai
--   [X] Pesanan Admin Selesai
--   [X] Produksi Selesai
--   [X] Dashboard Selesai
--   [X] Laporan Selesai
+-   [x] Master Data Selesai
+-   [x] BOM Selesai
+-   [x] Mutasi Stok Selesai
+-   [x] Pesanan Admin Selesai
+-   [x] Produksi Selesai
+-   [x] Dashboard Selesai
+-   [x] Laporan Selesai
 -   [ ] Katalog Customer Selesai
 -   [ ] Keranjang Selesai
 -   [ ] Checkout Customer Selesai
