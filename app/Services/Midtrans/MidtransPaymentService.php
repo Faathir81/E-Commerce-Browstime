@@ -23,6 +23,12 @@ class MidtransPaymentService
         $itemDetails = $this->buildItemDetails($pesanan);
         $grossAmount = $this->calculateGrossAmount($itemDetails);
 
+        $callbacks = [
+            'finish' => route('payments.midtrans.finish', ['kode' => $pesanan->kode]),
+            'unfinish' => route('payments.midtrans.finish', ['kode' => $pesanan->kode]),
+            'error' => route('payments.midtrans.finish', ['kode' => $pesanan->kode]),
+        ];
+
         $payload = [
             'transaction_details' => [
                 'order_id' => $pesanan->kode,
@@ -30,6 +36,7 @@ class MidtransPaymentService
             ],
             'item_details' => $itemDetails,
             'customer_details' => $this->buildCustomerDetails($pesanan),
+            'callbacks' => $callbacks,
         ];
 
         $this->configService->configure();

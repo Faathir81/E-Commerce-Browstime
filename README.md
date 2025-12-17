@@ -276,10 +276,10 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/midtrans-webhook`
 
--   [ ] Endpoint webhook
--   [ ] Validasi signature_key
--   [ ] Update status pesanan (paid/deny/expire)
--   [ ] Log error webhook
+-   [x] Endpoint webhook
+-   [x] Validasi signature_key
+-   [x] Update status pesanan (paid/deny/expire)
+-   [x] Log error webhook
 
 ---
 
