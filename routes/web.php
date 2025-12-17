@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\MidtransPaymentController;
 use App\Http\Controllers\OrderSuccessController;
 use App\Http\Controllers\OrderCompletionController;
 use App\Livewire\Payment\UploadProof;
@@ -30,6 +31,7 @@ Route::get('/products/{slug}', [ProductController::class, 'show'])->name('produc
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/payments/midtrans/{kode}', [MidtransPaymentController::class, 'store'])->name('payments.midtrans');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
