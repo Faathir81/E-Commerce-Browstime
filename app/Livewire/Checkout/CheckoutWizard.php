@@ -17,9 +17,12 @@ use App\Models\Kecamatan;
 use App\Models\WilayahPengiriman;
 use App\Support\OrderNotifier;
 use App\Services\RajaOngkirService;
+use App\Services\Midtrans\MidtransPaymentService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
@@ -296,7 +299,7 @@ class CheckoutWizard extends Component
 
             $metode = $this->paymentMethod ?? 'transfer';
             $midtransOrderId = $metode === 'midtrans'
-                ? $this->generateMidtransOrderId($pesanan->kode)
+                ? $pesanan->kode
                 : null;
 
             Pembayaran::create([
@@ -323,6 +326,51 @@ class CheckoutWizard extends Component
         });
 
         OrderNotifier::sendOrderCreated($pesanan);
+
+        $pembayaran = $pesanan->pembayaran()->first();
+        $isMidtrans = $pembayaran && $pembayaran->metode === 'midtrans';
+
+        if ($isMidtrans) {
+            try {
+                $midtrans = app(MidtransPaymentService::class)->createTransaction($pesanan);
+                $response = $midtrans['response'] ?? [];
+                $redirectUrl = $response['redirect_url'] ?? null;
+
+                $update = [
+                    'midtrans_order_id' => $pesanan->kode,
+                    'midtrans_transaction_id' => $response['transaction_id'] ?? null,
+                    'jumlah' => $midtrans['gross_amount'] ?? $pembayaran->jumlah,
+                ];
+
+                if (Schema::hasColumn('pembayarans', 'snap_token')) {
+                    $update['snap_token'] = $response['token'] ?? null;
+                }
+
+                if (Schema::hasColumn('pembayarans', 'snap_redirect_url')) {
+                    $update['snap_redirect_url'] = $redirectUrl;
+                }
+
+                $pembayaran->update($update);
+
+                // Clear cart before leaving site
+                session()->forget('cart');
+                $this->dispatch('cartUpdated', 0);
+
+                if ($redirectUrl) {
+                    return redirect()->away($redirectUrl);
+                }
+
+                Log::warning('Midtrans redirect URL missing after transaction creation', [
+                    'pesanan_id' => $pesanan->id,
+                    'midtrans_response' => $response,
+                ]);
+            } catch (\Throwable $th) {
+                Log::error('Midtrans transaction creation failed', [
+                    'pesanan_id' => $pesanan->id,
+                    'error' => $th->getMessage(),
+                ]);
+            }
+        }
 
         // TODO: Persist catatan once order notes column available.
         session()->forget('cart');

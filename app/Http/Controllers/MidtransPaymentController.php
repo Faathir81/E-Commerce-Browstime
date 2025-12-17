@@ -7,6 +7,7 @@ use App\Models\Pesanan;
 use App\Services\Midtrans\MidtransPaymentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Log;
 
 class MidtransPaymentController extends Controller
 {
@@ -69,5 +70,24 @@ class MidtransPaymentController extends Controller
         }
 
         return redirect()->away($redirectUrl);
+    }
+
+    public function finish(string $kode): RedirectResponse
+    {
+        $pesanan = Pesanan::where('kode', $kode)->first();
+
+        if (! $pesanan) {
+            return redirect()->route('landing')
+                ->with('error', 'Pesanan tidak ditemukan.');
+        }
+
+        // Status akhir tetap menunggu webhook; hanya arahkan user kembali ke order detail/success.
+        Log::info('Midtrans finish callback received', [
+            'kode' => $kode,
+            'query' => request()->query(),
+        ]);
+
+        return redirect()->route('order.success', ['kode' => $kode])
+            ->with('info', 'Pembayaran sedang diproses. Silakan cek status pesanan Anda.');
     }
 }
