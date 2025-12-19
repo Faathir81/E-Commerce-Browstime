@@ -30,7 +30,7 @@ class ProduksiPanelProvider extends PanelProvider
         return $panel
             ->id('produksi')
             ->path('produksi')
-            ->login()
+            ->login(null)
             ->authGuard('web')
             ->homeUrl('/produksi')
             ->colors([

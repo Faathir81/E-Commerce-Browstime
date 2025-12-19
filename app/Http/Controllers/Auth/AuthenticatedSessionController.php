@@ -28,7 +28,16 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('landing', absolute: false));
+        $user = $request->user();
+
+        $redirectRoute = match (true) {
+            $user?->hasRole('admin') => route('filament.admin.pages.dashboard'),
+            $user?->hasRole('produksi') => route('filament.produksi.pages.dashboard'),
+            $user?->hasRole('keuangan') => route('filament.keuangan.pages.dashboard'),
+            default => route('landing', absolute: false),
+        };
+
+        return redirect()->intended($redirectRoute);
     }
 
     /**

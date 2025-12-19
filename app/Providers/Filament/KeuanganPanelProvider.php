@@ -26,7 +26,7 @@ class KeuanganPanelProvider extends PanelProvider
         return $panel
             ->id('keuangan')
             ->path('keuangan')
-            ->login()
+            ->login(null)
             ->authGuard('web')
             ->homeUrl('/keuangan')
             ->colors([
