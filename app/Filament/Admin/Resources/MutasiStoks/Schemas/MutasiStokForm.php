@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\MutasiStoks\Schemas;
 
+use App\Models\MutasiStok;
 use App\Support\StatusStyle;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -24,6 +25,7 @@ class MutasiStokForm
                     ->label('Bahan Baku')
                     ->required()
                     ->live()
+                    ->disabled(fn ($record) => (bool) $record)
                     ->afterStateUpdated(function ($state, $get, $set) {
 
                         $bahan = \App\Models\BahanBaku::find($state);
@@ -58,6 +60,7 @@ class MutasiStokForm
                     ->options(StatusStyle::mutasiStokOptions())
                     ->required()
                     ->live()
+                    ->disabled(fn ($record) => (bool) $record)
                     ->afterStateUpdated(function ($state, $get, $set) {
 
                         $qty      = (float) ($get('qty') ?? 0);
@@ -85,10 +88,12 @@ class MutasiStokForm
                     ->label('Jumlah')
                     ->numeric()
                     ->live()
+                    ->formatStateUsing(fn ($state) => self::formatNumber($state))
                     ->suffix(fn (Get $get) =>
                         optional(\App\Models\BahanBaku::find($get('bahan_id')))
                             ->satuan?->nama ?? ''
                     )
+                    ->disabled(fn ($record) => (bool) $record)
                     ->afterStateUpdated(function ($state, $get, $set) {
 
                         $jenis    = $get('jenis_mutasi');
@@ -120,7 +125,11 @@ class MutasiStokForm
                     ->suffix(fn (Get $get) =>
                         optional(\App\Models\BahanBaku::find($get('bahan_id')))
                             ->satuan?->nama ?? ''
-                    ),
+                    )
+                    ->formatStateUsing(fn ($state) => self::formatNumber($state))
+                    ->afterStateHydrated(function ($component, $state, ?MutasiStok $record): void {
+                        $component->state(self::formatNumber($record?->stok_awal ?? $state));
+                    }),
 
 
                 // ===========================
@@ -135,7 +144,11 @@ class MutasiStokForm
                     ->suffix(fn (Get $get) =>
                         optional(\App\Models\BahanBaku::find($get('bahan_id')))
                             ->satuan?->nama ?? ''
-                    ),
+                    )
+                    ->formatStateUsing(fn ($state) => self::formatNumber($state))
+                    ->afterStateHydrated(function ($component, $state, ?MutasiStok $record): void {
+                        $component->state(self::formatNumber($record?->stok_awal ?? $state));
+                    }),
 
 
                 // ===========================
@@ -147,16 +160,34 @@ class MutasiStokForm
                     ->suffix(fn (Get $get) =>
                         optional(\App\Models\BahanBaku::find($get('bahan_id')))
                             ->satuan?->nama ?? ''
-                    ),
+                    )
+                    ->formatStateUsing(fn ($state) => self::formatNumber($state))
+                    ->afterStateHydrated(function ($component, $state, ?MutasiStok $record): void {
+                        $component->state(self::formatNumber($record?->stok_akhir ?? $state));
+                    }),
 
 
                 Textarea::make('catatan')
                     ->label('Catatan')
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->disabled(fn ($record) => (bool) $record),
 
                 Select::make('user_id')
                     ->relationship('user', 'name')
-                    ->label('User'),
+                    ->label('User')
+                    ->disabled(fn ($record) => (bool) $record),
             ]);
+    }
+
+    protected static function formatNumber($value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $formatted = number_format((float) $value, 2, '.', '');
+        $trimmed = rtrim(rtrim($formatted, '0'), '.');
+
+        return $trimmed === '' ? '0' : $trimmed;
     }
 }
