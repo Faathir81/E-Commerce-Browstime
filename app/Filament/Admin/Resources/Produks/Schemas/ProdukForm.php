@@ -27,37 +27,33 @@ class ProdukForm
                         ->afterStateUpdated(function (?string $state, callable $set) {
                             if (blank($state)) return;
                             $set('slug', Str::slug($state));
-                        }),
-                        
+                        })
+                        ->columnSpan(6),
+
                     TextInput::make('slug')
                         ->label('Slug')
                         ->required()
                         ->disabled()
-                        ->dehydrated(true),
+                        ->dehydrated(true)
+                        ->columnSpan(6),
 
                     Select::make('kategori_id')
                         ->label('Kategori')
                         ->relationship('kategori', 'nama')
-                        ->required(),
+                        ->required()
+                        ->columnSpan(6),
 
                     TextInput::make('harga')
                         ->label('Harga')
                         ->numeric()
-                        ->required(),
+                        ->required()
+                        ->columnSpan(6),
 
-                    Textarea::make('deskripsi')
-                        ->label('Deskripsi')
-                        ->columnSpanFull(),
-
-                ])
-                ->columns(2),
-
-            Section::make('Produksi & Gambar')
-                ->schema([
                     TextInput::make('waktu_produksi')
                         ->label('Waktu Produksi (menit)')
                         ->numeric()
-                        ->required(),
+                        ->required()
+                        ->columnSpan(4),
 
                     TextInput::make('berat')
                         ->label('Berat (gram)')
@@ -65,7 +61,8 @@ class ProdukForm
                         ->minValue(1)
                         ->suffix('gr')
                         ->helperText('Masukkan berat bersih dalam gram')
-                        ->required(),
+                        ->required()
+                        ->columnSpan(4),
 
                     FileUpload::make('gambar')
                         ->label('Gambar Produk')
@@ -73,13 +70,20 @@ class ProdukForm
                         ->disk('public')
                         ->directory('produk')
                         ->visibility('public')
-                        ->required(),
+                        ->required()
+                        ->columnSpan(4),
 
                     Toggle::make('is_active')
                         ->label('Aktif di Katalog')
-                        ->default(true),
+                        ->default(true)
+                        ->columnSpan(4),
+
+                    Textarea::make('deskripsi')
+                        ->label('Deskripsi')
+                        ->columnSpanFull(),
+
                 ])
-                ->columns(3),
+                ->columnSpanFull(),
 
         ]);
     }
