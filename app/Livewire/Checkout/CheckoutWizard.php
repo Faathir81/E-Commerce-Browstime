@@ -917,6 +917,21 @@ class CheckoutWizard extends Component
         return collect($this->shippingZones)->firstWhere('id', $this->wilayah_pengiriman_id) ?: null;
     }
 
+    public function getSelectedProvinceNameProperty(): ?string
+    {
+        return $this->resolveLocationName($this->provinsis, $this->provinsi_id);
+    }
+
+    public function getSelectedCityNameProperty(): ?string
+    {
+        return $this->resolveLocationName($this->kotas, $this->kota_id);
+    }
+
+    public function getSelectedDistrictNameProperty(): ?string
+    {
+        return $this->resolveLocationName($this->kecamatans, $this->kecamatan_id);
+    }
+
     public function getSelectedZoneNameProperty(): string
     {
         return $this->selectedZone['nama'] ?? 'Not selected';
@@ -1025,6 +1040,9 @@ class CheckoutWizard extends Component
                 'alamat_lengkap' => $this->alamat_lengkap,
                 'catatan' => $this->catatan,
                 'selectedZone' => $this->selectedZone,
+                'selectedProvinceName' => $this->selectedProvinceName,
+                'selectedCityName' => $this->selectedCityName,
+                'selectedDistrictName' => $this->selectedDistrictName,
                 'selectedMethod' => $this->selectedMethod,
                 'selectedBank' => $this->selectedBank,
                 'formattedSubtotalLabel' => $this->formattedSubtotalLabel,
@@ -1035,5 +1053,16 @@ class CheckoutWizard extends Component
                 'kode_pos' => $this->kode_pos,
             ],
         };
+    }
+
+    protected function resolveLocationName(array $locations, ?int $locationId): ?string
+    {
+        if (! $locationId) {
+            return null;
+        }
+
+        $location = collect($locations)->firstWhere('id', $locationId);
+
+        return $location['nama'] ?? null;
     }
 }

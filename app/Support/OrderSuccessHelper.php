@@ -21,7 +21,7 @@ class OrderSuccessHelper
             $pesanan?->kecamatan->nama ?? null,
             $wilayah?->kota->nama ?? null,
             $wilayah?->provinsi->nama ?? null,
-            $alamatPengiriman?->kode_pos ? 'Kode Pos ' . $alamatPengiriman->kode_pos : null,
+            $alamatPengiriman?->kode_pos ? 'Postal Code ' . $alamatPengiriman->kode_pos : null,
         ])->filter()->implode(', '));
     }
 

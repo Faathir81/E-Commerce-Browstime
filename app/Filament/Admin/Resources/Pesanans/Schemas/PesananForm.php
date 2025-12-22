@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Resources\Pesanans\Schemas;
 
 use App\Models\Pesanan;
+use App\Support\OrderSuccessHelper;
 use App\Support\StatusStyle;
 use Illuminate\Validation\Rule;
 use Filament\Schemas\Schema;
@@ -10,6 +11,7 @@ use Filament\Forms;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
 
 class PesananForm
 {
@@ -90,8 +92,33 @@ class PesananForm
                                 $component->state(StatusStyle::pesanan($record?->status ?? $state)['label'] ?? '-');
                             })
                             ->columnSpan(1),
+
+                        Section::make('Alamat Pengiriman')
+                            ->columnSpanFull()
+                            ->schema([
+                        Textarea::make('alamat_pengiriman')
+                            ->hiddenLabel()
+                                    ->rows(3)
+                                    ->disabled()
+                                    ->dehydrated(false)
+                                    ->afterStateHydrated(function (Textarea $component, $state, ?Pesanan $record): void {
+                                        if (! $record) {
+                                            $component->state('-');
+                                            return;
+                                        }
+
+                                        $pelanggan = $record->resolvedPelanggan();
+                                        $alamatPengiriman = $pelanggan?->alamatPengiriman()->latest()->first();
+
+                                        $component->state(
+                                            OrderSuccessHelper::formatFullAddress($record, $pelanggan, $alamatPengiriman) ?: '-'
+                                        );
+                                    }),
+                            ]),
                     ])
                     ->columns(3),
+
+
             ]);
     }
 }

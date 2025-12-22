@@ -18,8 +18,19 @@
 
         <div class="rounded-xl border border-[#f1e8df] bg-[#fffdfb] p-4 space-y-1">
             <p class="text-xs uppercase tracking-wide text-[#9b7a64]">Shipping</p>
-            <p class="text-sm font-semibold">{{ $selectedZone['nama'] ?? 'Not selected' }}</p>
+            <p class="text-sm font-semibold">{{ $selectedCityName ?? $selectedZone['nama'] ?? 'Not selected' }}</p>
             <p class="text-[#6f4c3b] leading-snug whitespace-pre-line">{{ $alamat_lengkap }}</p>
+            @php
+                $shippingLocations = collect([$selectedDistrictName, $selectedCityName, $selectedProvinceName])
+                    ->filter()
+                    ->implode(', ');
+            @endphp
+            @if ($shippingLocations)
+                <p class="text-[#6f4c3b]">{{ $shippingLocations }}</p>
+            @endif
+            @if ($kode_pos)
+                <p class="text-[#6f4c3b]">Kode Pos {{ $kode_pos }}</p>
+            @endif
             <p class="text-[#6f4c3b]">ETA (courier): {{ $formattedEtd }}</p>
         </div>
 
