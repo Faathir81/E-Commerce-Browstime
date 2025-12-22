@@ -23,7 +23,7 @@ class GrafikPenjualan extends ChartWidget
         $rawData = Pesanan::query()
             ->whereIn('pesanans.status', ['paid', 'produksi', 'dikirim', 'selesai'])
             ->whereBetween('pesanans.created_at', [$startDate, $endDate->copy()->endOfDay()])
-            ->selectRaw('DATE(pesanans.created_at) as tanggal, SUM(pesanans.total) as omzet')
+            ->selectRaw('DATE(pesanans.created_at) as tanggal, SUM(pesanans.subtotal) as omzet')
             ->groupBy('tanggal')
             ->orderBy('tanggal')
             ->pluck('omzet', 'tanggal');

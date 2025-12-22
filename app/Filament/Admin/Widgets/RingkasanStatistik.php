@@ -31,7 +31,7 @@ class RingkasanStatistik extends StatsOverviewWidget
             ->whereIn('pesanans.status', ['paid', 'produksi', 'dikirim', 'selesai'])
             ->whereBetween('pesanans.created_at', [$todayStart, $todayEnd]);
 
-        $totalHariIni = (clone $omzetQuery)->sum('pesanans.total');
+        $totalHariIni = (clone $omzetQuery)->sum('pesanans.subtotal');
 
         $jumlahPesanan = (clone $omzetQuery)->count();
 
@@ -40,7 +40,7 @@ class RingkasanStatistik extends StatsOverviewWidget
             return (int) Pesanan::query()
                 ->whereIn('pesanans.status', ['paid', 'produksi', 'dikirim', 'selesai'])
                 ->whereBetween('pesanans.created_at', [$date->copy()->startOfDay(), $date->copy()->endOfDay()])
-                ->sum('pesanans.total');
+                ->sum('pesanans.subtotal');
         })->all();
 
         $pesananTrend = $days->map(function (Carbon $date) {

@@ -17,7 +17,7 @@ class PenjualanHarianOverview extends StatsOverviewWidget
         $totalHariIni = Pesanan::query()
             ->whereIn('pesanans.status', ['paid', 'produksi', 'dikirim', 'selesai'])
             ->whereBetween('pesanans.created_at', [$todayStart, $todayEnd])
-            ->sum('pesanans.total');
+            ->sum('pesanans.subtotal');
 
         return [
             Stat::make('Penjualan Hari Ini', 'Rp ' . number_format($totalHariIni, 0, ',', '.'))

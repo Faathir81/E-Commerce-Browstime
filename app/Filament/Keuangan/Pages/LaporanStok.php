@@ -117,14 +117,15 @@ class LaporanStok extends Page implements HasForms
                         TextEntry::make('stok_masuk')
                             ->label('Total Stok Masuk')
                             ->state(fn () => $this->summary['stok_masuk'] ?? 0)
-                            ->formatStateUsing(fn ($state) => number_format($state, 2, ',', '.')),
+                            ->formatStateUsing(fn ($state) => $this->formatQuantity($state)),
                         TextEntry::make('pemakaian_produksi')
                             ->label('Pemakaian Produksi')
                             ->state(fn () => $this->summary['pemakaian_produksi'] ?? 0)
-                            ->formatStateUsing(fn ($state) => number_format($state, 2, ',', '.')),
+                            ->formatStateUsing(fn ($state) => $this->formatQuantity($state)),
                         TextEntry::make('total_mutasi')
                             ->label('Total Mutasi')
-                            ->state(fn () => $this->summary['total_mutasi'] ?? 0),
+                            ->state(fn () => $this->summary['total_mutasi'] ?? 0)
+                            ->formatStateUsing(fn ($state) => $this->formatQuantity($state)),
                     ]),
                 ])
                 ->columnSpanFull(),
@@ -137,6 +138,7 @@ class LaporanStok extends Page implements HasForms
                         ->table([
                             TableColumn::make('Tanggal'),
                             TableColumn::make('Bahan Baku'),
+                            TableColumn::make('Satuan'),
                             TableColumn::make('Jenis Mutasi'),
                             TableColumn::make('Qty'),
                             TableColumn::make('Stok Awal'),
@@ -148,19 +150,21 @@ class LaporanStok extends Page implements HasForms
                             TextEntry::make('created_at')
                                 ->state(fn ($record) => Carbon::parse($record->created_at)->format('d/m/Y H:i')),
                             TextEntry::make('nama_bahan'),
+                            TextEntry::make('nama_satuan')
+                                ->state(fn ($record) => $record->nama_satuan ?? '-'),
                             TextEntry::make('jenis_mutasi')
                                 ->badge()
                                 ->color('gray')
                                 ->formatStateUsing(fn ($state) => StatusStyle::mutasiStokLabel($state)),
                             TextEntry::make('qty')
                                 ->state(fn ($record) => $record->qty ?? 0)
-                                ->formatStateUsing(fn ($state) => number_format($state, 2, ',', '.')),
+                                ->formatStateUsing(fn ($state) => $this->formatQuantity($state)),
                             TextEntry::make('stok_awal')
                                 ->state(fn ($record) => $record->stok_awal ?? 0)
-                                ->formatStateUsing(fn ($state) => number_format($state, 2, ',', '.')),
+                                ->formatStateUsing(fn ($state) => $this->formatQuantity($state)),
                             TextEntry::make('stok_akhir')
                                 ->state(fn ($record) => $record->stok_akhir ?? 0)
-                                ->formatStateUsing(fn ($state) => number_format($state, 2, ',', '.')),
+                                ->formatStateUsing(fn ($state) => $this->formatQuantity($state)),
                             TextEntry::make('nama_user')
                                 ->state(fn ($record) => $record->nama_user ?? '-'),
                             TextEntry::make('catatan')
@@ -189,6 +193,7 @@ class LaporanStok extends Page implements HasForms
 
         $query = MutasiStok::query()
             ->join('bahan_bakus', 'mutasi_stok.bahan_id', '=', 'bahan_bakus.id')
+            ->leftJoin('satuans', 'bahan_bakus.satuan_id', '=', 'satuans.id')
             ->leftJoin('users', 'mutasi_stok.user_id', '=', 'users.id');
 
         if ($start && $end) {
@@ -205,6 +210,7 @@ class LaporanStok extends Page implements HasForms
                 'mutasi_stok.stok_akhir',
                 'mutasi_stok.catatan',
                 'bahan_bakus.nama as nama_bahan',
+                'satuans.nama as nama_satuan',
                 'users.name as nama_user',
             ])
             ->orderBy('mutasi_stok.created_at')
@@ -234,5 +240,13 @@ class LaporanStok extends Page implements HasForms
             new LaporanStokExport($start, $end),
             'laporan-stok-' . now()->format('Ymd_His') . '.xlsx'
         );
+    }
+
+    private function formatQuantity(int|float|string|null $value): string
+    {
+        $number = is_numeric($value) ? (float) $value : 0.0;
+        $formatted = number_format($number, 2, ',', '.');
+
+        return rtrim(rtrim($formatted, '0'), ',');
     }
 }

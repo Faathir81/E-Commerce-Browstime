@@ -196,24 +196,25 @@ class LaporanKeuangan extends Page implements HasForms
         $groupBy = $this->data['group_by'] ?? 'daily';
 
         $baseQuery = Pembayaran::query()
-            ->where('status', 'valid');
+            ->join('pesanans', 'pembayarans.pesanan_id', '=', 'pesanans.id')
+            ->where('pembayarans.status', 'valid');
 
         if ($start && $end) {
-            $baseQuery->whereBetween('created_at', [$start, $end]);
+            $baseQuery->whereBetween('pembayarans.created_at', [$start, $end]);
         }
 
         if ($groupBy === 'monthly') {
             $query = $baseQuery
-                ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as periode")
-                ->selectRaw('SUM(jumlah) as total_revenue')
+                ->selectRaw("DATE_FORMAT(pembayarans.created_at, '%Y-%m') as periode")
+                ->selectRaw('SUM(pesanans.subtotal) as total_revenue')
                 ->selectRaw('COUNT(*) as jumlah_transaksi')
                 ->groupBy('periode')
                 ->orderBy('periode');
         } else {
             // daily
             $query = $baseQuery
-                ->selectRaw('DATE(created_at) as periode')
-                ->selectRaw('SUM(jumlah) as total_revenue')
+                ->selectRaw('DATE(pembayarans.created_at) as periode')
+                ->selectRaw('SUM(pesanans.subtotal) as total_revenue')
                 ->selectRaw('COUNT(*) as jumlah_transaksi')
                 ->groupBy('periode')
                 ->orderBy('periode');

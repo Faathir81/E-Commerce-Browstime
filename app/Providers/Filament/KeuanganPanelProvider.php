@@ -2,6 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Admin\Widgets\GrafikCustomer;
+use App\Filament\Admin\Widgets\GrafikPenjualan;
+use App\Filament\Admin\Widgets\RingkasanStatistik;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -30,7 +33,7 @@ class KeuanganPanelProvider extends PanelProvider
             ->authGuard('web')
             ->homeUrl('/keuangan')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Blue,
             ])
             ->discoverResources(in: app_path('Filament/Keuangan/Resources'), for: 'App\Filament\Keuangan\Resources')
             ->discoverPages(in: app_path('Filament/Keuangan/Pages'), for: 'App\Filament\Keuangan\Pages')
@@ -41,6 +44,9 @@ class KeuanganPanelProvider extends PanelProvider
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,
+                RingkasanStatistik::class,
+                GrafikPenjualan::class,
+                GrafikCustomer::class,
             ])
             ->middleware([
                 EncryptCookies::class,
