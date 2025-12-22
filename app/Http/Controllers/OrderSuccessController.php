@@ -112,6 +112,9 @@ class OrderSuccessController extends Controller
                 'number' => $pembayaran->akunBank->nomor_rekening ?? null,
             ] : null,
         ];
+        $canRetryPayment = ($pesanan?->status === \App\Models\Pesanan::STATUS_PENDING)
+            && (($pembayaran?->status ?? null) === 'pending')
+            && (($pembayaran?->metode ?? null) === 'midtrans');
 
         $deliveryInfo = [
             'eta_text' => $etaText,
@@ -135,6 +138,7 @@ class OrderSuccessController extends Controller
             'customerName' => $customerName,
             'orderSummary' => $orderSummary,
             'deliveryInfo' => $deliveryInfo,
+            'canRetryPayment' => $canRetryPayment,
             'confirmationEmail' => $confirmationEmail,
             'orderCode' => $orderCode,
             'canConfirmCompletion' => $canConfirmCompletion,

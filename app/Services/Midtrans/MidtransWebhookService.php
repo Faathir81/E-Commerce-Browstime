@@ -24,6 +24,7 @@ class MidtransWebhookService
         $serverKey = $this->getServerKey();
 
         $orderId = (string) ($payload['order_id'] ?? '');
+        $orderCode = $this->normalizeOrderCode($orderId);
         $statusCode = (string) ($payload['status_code'] ?? '');
         $grossAmount = (string) ($payload['gross_amount'] ?? '');
         $signatureKey = (string) ($payload['signature_key'] ?? '');
@@ -33,6 +34,7 @@ class MidtransWebhookService
         if (! $this->isValidSignature($orderId, $statusCode, $grossAmount, $signatureKey, $serverKey)) {
             Log::warning('Midtrans webhook rejected: invalid signature', [
                 'order_id' => $orderId,
+                'order_code' => $orderCode,
                 'transaction_status' => $transactionStatus,
                 'payload' => $payload,
             ]);
@@ -41,11 +43,12 @@ class MidtransWebhookService
         }
 
         /** @var Pesanan $pesanan */
-        $pesanan = Pesanan::with('pembayaran')->where('kode', $orderId)->first();
+        $pesanan = Pesanan::with('pembayaran')->where('kode', $orderCode)->first();
 
         if (! $pesanan) {
             Log::warning('Midtrans webhook: order not found', [
                 'order_id' => $orderId,
+                'order_code' => $orderCode,
                 'payload' => $payload,
             ]);
 
@@ -60,6 +63,7 @@ class MidtransWebhookService
         if (! $shouldUpdate) {
             return [
                 'order_id' => $orderId,
+                'order_code' => $orderCode,
                 'status' => 'ignored',
                 'transaction_status' => $transactionStatus,
             ];
@@ -102,6 +106,20 @@ class MidtransWebhookService
         });
 
         return $result;
+    }
+
+    private function normalizeOrderCode(string $orderId): string
+    {
+        if (! str_starts_with($orderId, 'MID-')) {
+            return $orderId;
+        }
+
+        $rest = substr($orderId, 4);
+        if (! str_contains($rest, '-')) {
+            return $rest ?: $orderId;
+        }
+
+        return preg_replace('/-([^-]+)$/', '', $rest) ?: $orderId;
     }
 
     private function getServerKey(): string

@@ -35,6 +35,7 @@ Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.
 Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
 Route::post('/payments/midtrans/{kode}', [MidtransPaymentController::class, 'store'])->name('payments.midtrans');
+Route::post('/payments/midtrans/{kode}/retry', [MidtransPaymentController::class, 'retryPayment'])->name('payments.midtrans.retry');
 Route::post('/webhook/midtrans', [MidtransWebhookController::class, 'handle'])
     ->withoutMiddleware([VerifyCsrfToken::class])
     ->name('webhook.midtrans');
