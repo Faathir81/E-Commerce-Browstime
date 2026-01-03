@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -29,6 +30,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = $request->user();
+        $this->clearInvalidIntendedUrl($request, $user);
 
         $redirectRoute = match (true) {
             $user?->hasRole('admin') => route('filament.admin.pages.dashboard'),
@@ -52,5 +54,31 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    protected function clearInvalidIntendedUrl(Request $request, ?object $user): void
+    {
+        if (! $user) {
+            return;
+        }
+
+        $intended = $request->session()->get('url.intended');
+        if (! $intended) {
+            return;
+        }
+
+        $path = parse_url($intended, PHP_URL_PATH) ?: '';
+        $panelPrefixes = [
+            'admin' => '/admin',
+            'produksi' => '/produksi',
+            'keuangan' => '/keuangan',
+        ];
+
+        foreach ($panelPrefixes as $role => $prefix) {
+            if (Str::startsWith($path, $prefix) && ! $user->hasRole($role)) {
+                $request->session()->forget('url.intended');
+                break;
+            }
+        }
     }
 }

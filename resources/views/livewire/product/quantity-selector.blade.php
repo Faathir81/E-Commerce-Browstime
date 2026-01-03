@@ -2,6 +2,7 @@
     <h3 class="font-semibold text-base">Quantity</h3>
     <div class="flex items-center gap-3">
         <button type="button"
+                data-qty-minus
                 wire:click="decrement"
                 class="w-10 h-10 flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] transition {{ $inStock ? 'hover:bg-[#f5ece3]' : 'opacity-50 cursor-not-allowed' }}"
                 @disabled(! $inStock)>
@@ -10,6 +11,8 @@
             </svg>
         </button>
         <input type="number"
+               data-qty-input
+               data-max="{{ $max }}"
                wire:model.live="quantity"
                min="1"
                inputmode="numeric"
@@ -17,6 +20,7 @@
                class="no-spinner w-16 h-10 text-center border border-[#e4d6c6] rounded-lg focus:ring-[#bb936c] focus:border-[#bb936c]"
                @disabled(! $inStock) />
         <button type="button"
+                data-qty-plus
                 wire:click="increment"
                 class="w-10 h-10 flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] transition {{ $inStock ? 'hover:bg-[#f5ece3]' : 'opacity-50 cursor-not-allowed' }}"
                 @disabled(! $inStock)>
