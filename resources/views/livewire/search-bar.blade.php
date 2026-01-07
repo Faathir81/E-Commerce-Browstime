@@ -1,6 +1,5 @@
 <form wire:submit.prevent="goToResults"
-      wire:mouseenter="openDropdown"
-      wire:mouseleave="closeDropdown"
+      wire:click.outside="closeDropdown"
       class="relative z-[70] w-full max-w-[calc(100vw-2.5rem)] sm:max-w-md lg:max-w-xl mx-auto">
 
     <label class="relative flex items-center">

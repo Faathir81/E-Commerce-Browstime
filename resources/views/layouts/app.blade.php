@@ -16,6 +16,7 @@
     @unless (request()->routeIs('cart.index'))
         <livewire:navbar />
     @endunless
+    <x-toast />
 
     {{-- PAGE CONTENT --}}
     <main class="flex-1">

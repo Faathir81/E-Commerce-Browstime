@@ -78,8 +78,11 @@
                 Add to Cart
             </button>
 
-            <x-product.ingredients :items="$productDetail->ingredients" />
         </div>
+    </div>
+
+    <div class="mt-10 lg:mt-14">
+        <x-product.review-section :summary="$productReviews" />
     </div>
 </div>
 @endsection

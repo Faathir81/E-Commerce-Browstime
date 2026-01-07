@@ -39,6 +39,11 @@ class AuthenticatedSessionController extends Controller
             default => route('landing', absolute: false),
         };
 
+        $request->session()->flash('toast', [
+            'type' => 'success',
+            'message' => 'Welcome to BROWSTIME!',
+        ]);
+
         return redirect()->intended($redirectRoute);
     }
 
@@ -52,6 +57,11 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        $request->session()->flash('toast', [
+            'type' => 'success',
+            'message' => 'Logout berhasil.',
+        ]);
 
         return redirect('/');
     }

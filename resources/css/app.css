@@ -35,3 +35,26 @@
 .review-accordion[open] .chevron {
     transform: rotate(180deg);
 }
+
+@keyframes toast-slide {
+    0% {
+        opacity: 0;
+        transform: translateY(-16px);
+    }
+    12% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    85% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+.toast-slide {
+    animation: toast-slide 4s ease-in-out forwards;
+}

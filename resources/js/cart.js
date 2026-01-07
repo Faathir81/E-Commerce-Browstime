@@ -9,6 +9,28 @@ const updateCartBadge = (total) => {
     badge.classList.toggle('hidden', count === 0);
 };
 
+const showToast = (message) => {
+    if (!message) return;
+    const existing = document.querySelector('[data-toast]');
+    if (existing) existing.remove();
+
+    const wrapper = document.createElement('div');
+    wrapper.setAttribute('data-toast', 'true');
+    wrapper.className = 'fixed top-6 left-1/2 z-50 w-[92%] -translate-x-1/2 sm:w-auto';
+    wrapper.innerHTML = `
+        <div class="toast-slide flex items-center gap-3 rounded-2xl border border-[#f1e8df] bg-white px-4 py-3 text-sm text-[#3b241a] shadow-lg">
+            <span class="flex h-7 w-7 items-center justify-center rounded-full bg-[#7a4b24] text-white">
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <span class="font-medium">${message}</span>
+        </div>
+    `;
+    document.body.appendChild(wrapper);
+    window.setTimeout(() => wrapper.remove(), 4200);
+};
+
 const notifyLivewire = (total) => {
     // Use emit for compatibility; dispatch caused payload shape issues on some setups.
     if (window.Livewire?.emit) {
@@ -32,6 +54,7 @@ const addToCart = (productId, quantity = 1) => {
             const total = data?.totalQuantity ?? 0;
             notifyLivewire(total);
             updateCartBadge(total);
+            showToast('Produk ditambahkan ke keranjang.');
             return data;
         })
         .catch((err) => {

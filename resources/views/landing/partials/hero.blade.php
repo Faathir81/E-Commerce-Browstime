@@ -38,7 +38,7 @@
                        class="rounded-full bg-[#7b4a2f] px-6 py-3 text-base font-semibold text-white shadow-[0_14px_32px_rgba(123,74,47,0.35)] transition hover:bg-[#6b3f26]">
                         Shop Now
                     </a>
-                    <a href="#" class="rounded-full bg-white px-6 py-3 text-base font-semibold text-[#3b241a] shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(0,0,0,0.12)]">
+                    <a href="{{ route('learn-more') }}" class="rounded-full bg-white px-6 py-3 text-base font-semibold text-[#3b241a] shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(0,0,0,0.12)]">
                         Learn More
                     </a>
                 </div>
