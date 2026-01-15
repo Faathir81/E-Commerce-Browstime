@@ -31,6 +31,11 @@ class ReviewItem extends Component
     public ?int $reviewRating = null;
     public ?string $reviewKomentar = null;
 
+    protected $listeners = [
+        'review-email-verified' => 'applyGuestEmail',
+        'review-email-cleared' => 'clearGuestEmail',
+    ];
+
     public function mount(DetailPesanan $detail, bool $canReview, bool $hasReview, ?string $guestEmailForReview = null): void
     {
         $this->detailId = $detail->id;
@@ -44,6 +49,25 @@ class ReviewItem extends Component
             $this->reviewRating = (int) $detail->ulasan->rating;
             $this->reviewKomentar = $detail->ulasan->komentar;
         }
+    }
+
+    public function applyGuestEmail(?string $email): void
+    {
+        $detail = DetailPesanan::with(['pesanan', 'ulasan'])->find($this->detailId);
+        if (! $detail) {
+            return;
+        }
+
+        $this->guestEmailForReview = $email;
+        $this->hasReview = $detail->hasUlasan();
+        $this->canReview = $email
+            ? ReviewGuard::canReviewDetail($detail, Auth::user(), $email)
+            : false;
+    }
+
+    public function clearGuestEmail(): void
+    {
+        $this->applyGuestEmail(null);
     }
 
     public function submit(): void

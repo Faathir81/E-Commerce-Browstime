@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const endHeight = open ? content.scrollHeight : 0;
 
             if (!animate) {
-                content.style.maxHeight = open ? '2400px' : '0px';
+                content.style.maxHeight = open ? 'none' : '0px';
                 content.style.opacity = open ? '1' : '0';
                 content.style.overflow = open ? 'visible' : 'hidden';
                 accordion.toggleAttribute('open', open);
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const onEnd = () => {
                 content.style.overflow = open ? 'visible' : 'hidden';
                 if (open) {
-                    content.style.maxHeight = '2400px';
+                    content.style.maxHeight = 'none';
                 }
                 content.removeEventListener('transitionend', onEnd);
             };

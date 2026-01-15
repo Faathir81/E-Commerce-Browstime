@@ -8,6 +8,7 @@ use App\Support\ReviewGuard;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class OrderSuccessController extends Controller
 {
@@ -145,6 +146,45 @@ class OrderSuccessController extends Controller
             'isCompleted' => $isCompleted,
             'reviewPermissions' => $reviewPermissions,
             'guestEmailForReview' => $guestEmailForReview,
+        ]);
+    }
+
+    public function verifyGuestEmail(Request $request, string $kode)
+    {
+        $request->validate([
+            'guest_email' => ['required', 'email'],
+        ]);
+
+        $pesanan = Pesanan::where('kode', $kode)->first();
+
+        if (! $pesanan) {
+            return response()->json([
+                'valid' => false,
+                'message' => 'Pesanan tidak ditemukan.',
+            ], 404);
+        }
+
+        if ($pesanan->user_id) {
+            return response()->json([
+                'valid' => false,
+                'message' => 'Pesanan ini terhubung ke akun.',
+            ], 422);
+        }
+
+        $inputEmail = strtolower(trim($request->input('guest_email')));
+        $orderEmail = $pesanan->guest_email ? strtolower(trim($pesanan->guest_email)) : null;
+
+        if (! $orderEmail || $inputEmail !== $orderEmail) {
+            return response()->json([
+                'valid' => false,
+                'message' => 'Harap masukkan email yang benar.',
+            ], 422);
+        }
+
+        return response()->json([
+            'valid' => true,
+            'email' => $inputEmail,
+            'message' => 'Email terverifikasi. Anda dapat memberikan ulasan.',
         ]);
     }
 }

@@ -19,6 +19,8 @@ Route::get('/', [LandingController::class, 'index'])->name('landing');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::get('/checkout', CheckoutWizard::class)->name('checkout');
 Route::get('/order-success/{kode}', OrderSuccessController::class)->name('order.success');
+Route::post('/order-success/{kode}/verify-email', [OrderSuccessController::class, 'verifyGuestEmail'])
+    ->name('order.success.verify-email');
 Route::get('/orders/{order}/upload-proof', UploadProof::class)->name('order.upload-proof');
 Route::post('/ulasans', [UlasanController::class, 'store'])->name('ulasans.store');
 

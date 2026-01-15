@@ -2,6 +2,7 @@ import './bootstrap';
 
 import Alpine from 'alpinejs';
 import './review-accordion';
+import './review-email-verify';
 import './cart';
 import './product-card';
 import './landing-hero';
