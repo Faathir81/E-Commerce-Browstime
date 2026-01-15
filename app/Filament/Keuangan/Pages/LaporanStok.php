@@ -29,8 +29,8 @@ class LaporanStok extends Page implements HasForms
     use InteractsWithForms;
 
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-clipboard-document-list';
-    protected static ?string $navigationLabel = 'Laporan Stok Bahan Baku';
-    protected static ?string $title = 'Laporan Stok Bahan Baku';
+    protected static ?string $navigationLabel = 'Laporan Persediaan';
+    protected static ?string $title = 'Laporan Persediaan';
     protected static string | UnitEnum | null $navigationGroup = 'Laporan';
 
     public ?array $data = [];
