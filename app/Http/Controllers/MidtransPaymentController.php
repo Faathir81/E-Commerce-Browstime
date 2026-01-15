@@ -8,6 +8,7 @@ use App\Services\Midtrans\MidtransPaymentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class MidtransPaymentController extends Controller
 {
@@ -89,5 +90,75 @@ class MidtransPaymentController extends Controller
 
         return redirect()->route('order.success', ['kode' => $kode])
             ->with('info', 'Pembayaran sedang diproses. Silakan cek status pesanan Anda.');
+    }
+
+    public function retryPayment(string $kode): RedirectResponse
+    {
+        $pesanan = Pesanan::with(['detailPesanans.produk', 'pembayaran'])
+            ->where('kode', $kode)
+            ->first();
+
+        if (! $pesanan) {
+            abort(404);
+        }
+
+        if ($pesanan->status !== Pesanan::STATUS_PENDING) {
+            return redirect()->back()->with('error', 'Pesanan tidak dapat dibayar ulang.');
+        }
+
+        $pembayaran = $pesanan->pembayaran;
+        if (! $pembayaran || $pembayaran->status !== 'pending' || $pembayaran->metode !== 'midtrans') {
+            return redirect()->back()->with('error', 'Pembayaran tidak dapat diulang.');
+        }
+
+        $midtransOrderId = $this->generateMidtransOrderId($pesanan->kode);
+
+        try {
+            $transaction = $this->paymentService->createTransaction($pesanan, $midtransOrderId);
+        } catch (\Throwable $th) {
+            report($th);
+
+            return redirect()->back()->with('error', 'Gagal membuat transaksi Midtrans. Silakan coba lagi.');
+        }
+
+        $response = $transaction['response'] ?? [];
+        $redirectUrl = $response['redirect_url'] ?? null;
+
+        $pembayaranData = [
+            'jumlah' => $transaction['gross_amount'],
+            'status' => 'pending',
+            'midtrans_order_id' => $midtransOrderId,
+            'midtrans_transaction_id' => $response['transaction_id'] ?? null,
+            'akun_bank_id' => null,
+            'qris_setting_id' => null,
+        ];
+
+        if (Schema::hasColumn('pembayarans', 'snap_token')) {
+            $pembayaranData['snap_token'] = $response['token'] ?? null;
+        }
+
+        if (Schema::hasColumn('pembayarans', 'snap_redirect_url')) {
+            $pembayaranData['snap_redirect_url'] = $redirectUrl;
+        }
+
+        $pembayaran->update($pembayaranData);
+
+        if (! $redirectUrl) {
+            return redirect()->back()->with('error', 'URL pembayaran Midtrans tidak tersedia.');
+        }
+
+        Log::info('Midtrans payment retry initiated', [
+            'kode' => $pesanan->kode,
+            'pembayaran_id' => $pembayaran->id,
+            'midtrans_order_id' => $midtransOrderId,
+            'redirect_url' => $redirectUrl,
+        ]);
+
+        return redirect()->away($redirectUrl);
+    }
+
+    private function generateMidtransOrderId(string $kodePesanan): string
+    {
+        return 'MID-' . $kodePesanan . '-' . strtoupper(Str::random(4));
     }
 }

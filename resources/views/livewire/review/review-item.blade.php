@@ -62,16 +62,20 @@
             @endguest
 
             <div class="space-y-1">
-                <label class="text-xs font-semibold text-[#3b241a]" for="rating_{{ $detailId }}">Rating (1-5)</label>
-                <select id="rating_{{ $detailId }}"
-                        wire:model.defer="rating"
-                        class="w-full rounded-xl border border-[#e8dccf] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c79c68]"
-                        required>
-                    <option value="">Pilih rating</option>
+                <label class="text-xs font-semibold text-[#3b241a]">Rating</label>
+                <div class="flex items-center gap-1">
                     @for($i = 1; $i <= 5; $i++)
-                        <option value="{{ $i }}">{{ $i }}</option>
+                        <button type="button"
+                                wire:click="$set('rating', {{ $i }})"
+                                class="h-9 w-9 rounded-full flex items-center justify-center transition hover:scale-105"
+                                aria-label="Beri rating {{ $i }} dari 5">
+                            <svg viewBox="0 0 24 24" class="h-6 w-6 {{ ($rating ?? 0) >= $i ? 'text-[#f5a524]' : 'text-[#e0c8b0]' }}" fill="currentColor" aria-hidden="true">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                        </button>
                     @endfor
-                </select>
+                    <span class="ml-2 text-xs text-[#6f4c3b]">{{ $rating ? $rating . ' / 5' : 'Pilih rating' }}</span>
+                </div>
                 @error('rating')
                     <p class="text-xs text-red-600">{{ $message }}</p>
                 @enderror

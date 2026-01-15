@@ -24,23 +24,24 @@ class LaporanKeuanganExport implements FromQuery, WithHeadings, WithMapping
     public function query()
     {
         $baseQuery = Pembayaran::query()
-            ->where('status', 'valid');
+            ->join('pesanans', 'pembayarans.pesanan_id', '=', 'pesanans.id')
+            ->where('pembayarans.status', 'valid');
 
         if ($this->start && $this->end) {
-            $baseQuery->whereBetween('created_at', [$this->start, $this->end]);
+            $baseQuery->whereBetween('pembayarans.created_at', [$this->start, $this->end]);
         }
 
         if ($this->groupBy === 'monthly') {
             $query = $baseQuery
-                ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as periode")
-                ->selectRaw('SUM(jumlah) as total_revenue')
+                ->selectRaw("DATE_FORMAT(pembayarans.created_at, '%Y-%m') as periode")
+                ->selectRaw('SUM(pesanans.subtotal) as total_revenue')
                 ->selectRaw('COUNT(*) as jumlah_transaksi')
                 ->groupBy('periode')
                 ->orderBy('periode');
         } else {
             $query = $baseQuery
-                ->selectRaw('DATE(created_at) as periode')
-                ->selectRaw('SUM(jumlah) as total_revenue')
+                ->selectRaw('DATE(pembayarans.created_at) as periode')
+                ->selectRaw('SUM(pesanans.subtotal) as total_revenue')
                 ->selectRaw('COUNT(*) as jumlah_transaksi')
                 ->groupBy('periode')
                 ->orderBy('periode');

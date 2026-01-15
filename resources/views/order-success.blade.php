@@ -52,6 +52,11 @@
                                 </div>
                             </div>
                         </div>
+                        @if($canRetryPayment)
+                            <div class="rounded-xl border border-[#f1e8df] bg-white px-3 py-2 text-xs text-[#6f4c3b]">
+                                Pembayaran belum selesai. Silakan lanjutkan pembayaran.
+                            </div>
+                        @endif
 
                         <div class="flex flex-wrap items-center gap-2 text-sm text-[#3b241a]">
                             <span class="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-semibold text-[#7a4b24] shadow-sm capitalize">{{ $paymentInfo['method'] }}</span>
@@ -86,6 +91,14 @@
                                     <img src="{{ $paymentInfo['proof_image_url'] }}" alt="Payment Proof" class="max-h-56 object-contain rounded-xl">
                                 </div>
                             </div>
+                        @endif
+                        @if($canRetryPayment)
+                            <form method="POST" action="{{ route('payments.midtrans.retry', ['kode' => $orderCode]) }}" class="pt-2">
+                                @csrf
+                                <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#7a4b24] text-white px-5 py-3 text-sm font-semibold hover:bg-[#693f1d] transition">
+                                    Bayar Sekarang
+                                </button>
+                            </form>
                         @endif
                     </div>
                 </div>

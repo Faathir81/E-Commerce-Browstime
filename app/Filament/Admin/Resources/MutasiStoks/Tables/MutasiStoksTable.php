@@ -18,6 +18,9 @@ class MutasiStoksTable
                 TextColumn::make('bahan.nama')
                     ->label('Bahan'),
 
+                TextColumn::make('bahan.satuan.nama')
+                    ->label('Satuan'),
+
                 TextColumn::make('jenis_mutasi')
                     ->label('Mutasi')
                     ->badge()
@@ -25,16 +28,16 @@ class MutasiStoksTable
                     ->color(fn ($state) => StatusStyle::mutasiStok($state)['color'] ?? 'gray'),
 
                 TextColumn::make('qty')
-                    ->numeric()
-                    ->label('Qty'),
+                    ->label('Qty')
+                    ->formatStateUsing(fn ($state) => self::formatQuantity($state)),
 
                 TextColumn::make('stok_awal')
-                    ->numeric()
-                    ->label('Stok Awal'),
+                    ->label('Stok Awal')
+                    ->formatStateUsing(fn ($state) => self::formatQuantity($state)),
 
                 TextColumn::make('stok_akhir')
-                    ->numeric()
-                    ->label('Stok Akhir'),
+                    ->label('Stok Akhir')
+                    ->formatStateUsing(fn ($state) => self::formatQuantity($state)),
 
                 TextColumn::make('user.name')
                     ->label('User'),
@@ -48,5 +51,13 @@ class MutasiStoksTable
                 ViewAction::make(),
             ])
             ->defaultSort('created_at', 'desc');
+    }
+
+    private static function formatQuantity(int|float|string|null $value): string
+    {
+        $number = is_numeric($value) ? (float) $value : 0.0;
+        $formatted = number_format($number, 2, ',', '.');
+
+        return rtrim(rtrim($formatted, '0'), ',');
     }
 }

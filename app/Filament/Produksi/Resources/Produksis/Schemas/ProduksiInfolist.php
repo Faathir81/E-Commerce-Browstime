@@ -103,11 +103,27 @@ class ProduksiInfolist
 
                                         TextEntry::make('kebutuhan')
                                             ->label('Kebutuhan')
-                                            ->formatStateUsing(fn ($state, $record) =>
-                                                number_format($state, 2) . ' ' . ($record['satuan'] ?? '')
-                                            ),
+                                            ->formatStateUsing(function ($state, $record) {
+                                                if ($state === null) {
+                                                    return '-';
+                                                }
 
-                                        TextEntry::make('stok')->label('Stok'),
+                                                $formatted = number_format((float) $state, 2, '.', ',');
+                                                $formatted = rtrim(rtrim($formatted, '0'), '.');
+
+                                                return $formatted . ' ' . ($record['satuan'] ?? '');
+                                            }),
+
+                                        TextEntry::make('stok')
+                                            ->label('Stok')
+                                            ->formatStateUsing(function ($state) {
+                                                if ($state === null) {
+                                                    return '-';
+                                                }
+
+                                                $formatted = number_format((float) $state, 2, '.', ',');
+                                                return rtrim(rtrim($formatted, '0'), '.');
+                                            }),
 
                                         TextEntry::make('status')
                                             ->label('Status')

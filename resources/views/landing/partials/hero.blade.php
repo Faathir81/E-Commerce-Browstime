@@ -38,7 +38,7 @@
                        class="rounded-full bg-[#7b4a2f] px-6 py-3 text-base font-semibold text-white shadow-[0_14px_32px_rgba(123,74,47,0.35)] transition hover:bg-[#6b3f26]">
                         Shop Now
                     </a>
-                    <a href="#" class="rounded-full bg-white px-6 py-3 text-base font-semibold text-[#3b241a] shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(0,0,0,0.12)]">
+                    <a href="{{ route('learn-more') }}" class="rounded-full bg-white px-6 py-3 text-base font-semibold text-[#3b241a] shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(0,0,0,0.12)]">
                         Learn More
                     </a>
                 </div>
@@ -86,7 +86,22 @@
                 <div class="relative w-full max-w-[620px]">
                     <div class="overflow-hidden rounded-[32px] bg-white shadow-[0_28px_60px_rgba(0,0,0,0.12)]">
                         <div class="relative aspect-[4/5] bg-gradient-to-br from-[#d7c4b0] via-[#e9d7c4] to-[#c8ad96]">
-                            <img src="https://themeadowswildlifepark.co.uk/wp-content/uploads/2024/06/Meadows-Farm-Village-109.png" alt="Hero Cookies" class="absolute inset-0 h-full w-full object-cover object-center" />
+                            @if (!empty($heroSlides) && $heroSlides->isNotEmpty())
+                                <div class="absolute inset-0" data-hero-slider>
+                                    <div class="flex h-full w-full transition-transform duration-700 ease-in-out" data-hero-track>
+                                        @foreach ($heroSlides as $slide)
+                                            <img
+                                                src="{{ $slide->image_url }}"
+                                                alt="{{ $slide->name }}"
+                                                class="h-full w-full min-w-full object-cover object-center"
+                                                data-hero-slide
+                                            />
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @else
+                                <img src="https://themeadowswildlifepark.co.uk/wp-content/uploads/2024/06/Meadows-Farm-Village-109.png" alt="Hero Cookies" class="absolute inset-0 h-full w-full object-cover object-center" />
+                            @endif
                         </div>
                     </div>
 
@@ -100,17 +115,3 @@
         </div>
     </div>
 </section>
-
-@push('scripts')
-<script>
-document.addEventListener('click', (e) => {
-    const trigger = e.target.closest('[data-scroll-to]');
-    if (!trigger) return;
-    const targetSel = trigger.getAttribute('data-scroll-to');
-    const target = document.querySelector(targetSel);
-    if (!target) return;
-    e.preventDefault();
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-});
-</script>
-@endpush

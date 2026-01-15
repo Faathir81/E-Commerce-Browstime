@@ -32,6 +32,7 @@ class Navbar extends Component
     protected function shouldHideSearchOnMobile(): bool
     {
         return request()->routeIs('landing')
+            || request()->routeIs('learn-more')
             || request()->routeIs('search')
             || request()->routeIs('order.success')
             || request()->routeIs('product.show');
@@ -40,12 +41,17 @@ class Navbar extends Component
     protected function shouldShowBackButton(): bool
     {
         return request()->routeIs('search')
+            || request()->routeIs('learn-more')
             || request()->routeIs('product.show')
             || request()->routeIs('profile.*');
     }
 
     protected function resolveBackUrl(): string
     {
+        if (request()->routeIs('learn-more')) {
+            return route('landing');
+        }
+
         if ($this->shouldShowBackButton()) {
             $previous = url()->previous();
             return $previous ?: route('landing');

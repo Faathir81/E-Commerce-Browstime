@@ -3,6 +3,9 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Admin\Resources\MutasiStoks\MutasiStokResource;
+use App\Filament\Admin\Widgets\GrafikCustomer;
+use App\Filament\Admin\Widgets\GrafikPenjualan;
+use App\Filament\Admin\Widgets\RingkasanStatistik;
 use App\Models\User;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -30,11 +33,11 @@ class ProduksiPanelProvider extends PanelProvider
         return $panel
             ->id('produksi')
             ->path('produksi')
-            ->login()
+            ->login(null)
             ->authGuard('web')
             ->homeUrl('/produksi')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Blue,
             ])
             ->discoverResources(in: app_path('Filament/Produksi/Resources'), for: 'App\Filament\Produksi\Resources')
             ->resources([
@@ -48,6 +51,9 @@ class ProduksiPanelProvider extends PanelProvider
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,
+                RingkasanStatistik::class,
+                GrafikPenjualan::class,
+                GrafikCustomer::class,
             ])
             ->middleware([
                 EncryptCookies::class,

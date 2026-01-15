@@ -29,26 +29,27 @@
 
         <div class="accordion-content mt-4 space-y-4">
             @if(!Auth::check() && empty($pesanan?->user_id))
-                @if($guestEmailForReview)
-                    <div class="rounded-2xl border border-[#f1e8df] bg-[#fffaf5] p-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                        <div class="flex-1">
-                            <p class="text-xs text-[#6f4c3b] mb-1">Email pemesan</p>
-                            <input type="email" value="{{ $guestEmailForReview }}" class="w-full rounded-xl border border-[#e8dccf] px-3 py-2 text-sm bg-[#f6f0e8] text-[#6f4c3b] cursor-not-allowed" disabled>
-                            <p class="text-[11px] text-[#2f7a3d] font-semibold mt-1">Email terverifikasi. Anda dapat memberikan ulasan.</p>
-                        </div>
-                        <span class="inline-flex items-center rounded-full bg-[#e8f7e5] text-[#2f7a3d] px-3 py-1 text-xs font-semibold">Terverifikasi</span>
-                    </div>
-                @else
-                    <form method="GET" action="{{ route('order.success', ['kode' => $orderCode]) }}" class="rounded-2xl border border-[#f1e8df] bg-[#fffaf5] p-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                        <div class="flex-1">
+                <form method="GET" action="{{ route('order.success', ['kode' => $orderCode]) }}" class="rounded-2xl border border-[#f1e8df] bg-[#fffaf5] p-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="flex-1">
+                        @if($guestEmailForReview)
+                            <p class="text-xs text-[#6f4c3b] mb-1">Email pemesan (bisa diganti jika salah)</p>
+                        @else
                             <p class="text-xs text-[#6f4c3b] mb-1">Masukkan email yang dipakai saat memesan untuk membuka form ulasan.</p>
-                            <input type="email" name="guest_email" value="{{ $guestEmailForReview }}" class="w-full rounded-xl border border-[#e8dccf] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c79c68]" placeholder="you@mail.com" required>
-                        </div>
+                        @endif
+                        <input type="email" name="guest_email" value="{{ $guestEmailForReview }}" class="w-full rounded-xl border border-[#e8dccf] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#c79c68]" placeholder="you@mail.com" required>
+                        @if($guestEmailForReview)
+                            <p class="text-[11px] text-[#2f7a3d] font-semibold mt-1">Email terverifikasi. Anda dapat memberikan ulasan.</p>
+                        @endif
+                    </div>
+                    <div class="flex items-center gap-2">
+                        @if($guestEmailForReview)
+                            <span class="inline-flex items-center rounded-full bg-[#e8f7e5] text-[#2f7a3d] px-3 py-1 text-xs font-semibold">Terverifikasi</span>
+                        @endif
                         <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-full bg-[#7a4b24] text-white px-4 py-2 text-sm font-semibold hover:bg-[#693f1d] transition">
-                            Verifikasi
+                            {{ $guestEmailForReview ? 'Verifikasi ulang' : 'Verifikasi' }}
                         </button>
-                    </form>
-                @endif
+                    </div>
+                </form>
             @endif
 
             <div class="space-y-4">

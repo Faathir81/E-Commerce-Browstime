@@ -55,4 +55,9 @@ class MutasiStokResource extends Resource
             'view' => ViewMutasiStok::route('/{record}'),
         ];
     }
+
+    public static function canEdit($record): bool
+    {
+        return false;
+    }
 }

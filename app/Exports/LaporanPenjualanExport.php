@@ -36,7 +36,7 @@ class LaporanPenjualanExport implements FromQuery, WithHeadings, WithMapping
             'users.name as nama_customer',
             'pesanans.guest_email',
             'pembayarans.metode',
-            'pesanans.total as total_pesanan',
+            'pesanans.subtotal as total_pesanan',
             'pembayarans.jumlah',
             'pembayarans.status as status_pembayaran',
             'pesanans.status as status_pesanan',

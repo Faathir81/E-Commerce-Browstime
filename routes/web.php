@@ -30,11 +30,13 @@ Route::redirect('/products', '/search')->name('product.redirect');
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/products/{slug}', [ProductController::class, 'show'])->name('product.show');
+Route::view('/learn-more', 'pages.learn-more')->name('learn-more');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
 Route::post('/payments/midtrans/{kode}', [MidtransPaymentController::class, 'store'])->name('payments.midtrans');
+Route::post('/payments/midtrans/{kode}/retry', [MidtransPaymentController::class, 'retryPayment'])->name('payments.midtrans.retry');
 Route::post('/webhook/midtrans', [MidtransWebhookController::class, 'handle'])
     ->withoutMiddleware([VerifyCsrfToken::class])
     ->name('webhook.midtrans');

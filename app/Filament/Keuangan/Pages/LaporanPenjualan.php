@@ -221,14 +221,14 @@ class LaporanPenjualan extends Page implements HasForms
                 'pembayarans.created_at as tanggal_pembayaran',
                 'pesanans.kode as kode_pesanan',
                 'pesanans.status as status_pesanan',
-                'pesanans.total as total_pesanan',
+                'pesanans.subtotal as total_pesanan',
                 'users.name as nama_customer',
                 'pesanans.guest_email',
             ])
             ->orderBy('pembayarans.created_at')
             ->get();
 
-        $totalRevenue = $this->records->sum('jumlah');
+        $totalRevenue = $this->records->sum('total_pesanan');
         $transactionCount = $this->records->count();
 
         $this->summary = [

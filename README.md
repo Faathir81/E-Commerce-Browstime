@@ -287,9 +287,9 @@ Branch: feat/rajaongkir-wilayah
 
 **Branch:** `feat/midtrans-testing`
 
--   [ ] Test manual vs otomatis
--   [ ] Fix status mismatch
--   [ ] Cross-check laporan
+-   [x] Test manual vs otomatis
+-   [x] Fix status mismatch
+-   [x] Cross-check laporan
 
 ---
 

@@ -16,12 +16,13 @@ class MidtransPaymentService
      *
      * @return array{payload: array<string, mixed>, response: array<string, mixed>, gross_amount: int}
      */
-    public function createTransaction(Pesanan $pesanan): array
+    public function createTransaction(Pesanan $pesanan, ?string $orderId = null): array
     {
         $pesanan->loadMissing(['detailPesanans.produk']);
 
         $itemDetails = $this->buildItemDetails($pesanan);
         $grossAmount = $this->calculateGrossAmount($itemDetails);
+        $resolvedOrderId = $orderId ?: $pesanan->kode;
 
         $callbacks = [
             'finish' => route('payments.midtrans.finish', ['kode' => $pesanan->kode]),
@@ -31,7 +32,7 @@ class MidtransPaymentService
 
         $payload = [
             'transaction_details' => [
-                'order_id' => $pesanan->kode,
+                'order_id' => $resolvedOrderId,
                 'gross_amount' => $grossAmount,
             ],
             'item_details' => $itemDetails,
