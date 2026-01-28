@@ -20,26 +20,26 @@
                             </clipPath>
                         </defs>
                     </svg>
-                    <span>Freshly Baked Daily</span>
+                    <span>Dipanggang Segar Setiap Hari</span>
                 </div>
 
                 <h1 class="text-4xl font-semibold leading-[1.1] text-[#3b241a] sm:text-5xl">
-                    Handcrafted Cookies &amp; Brownies
+                    Cookies &amp; Brownies Buatan Tangan
                 </h1>
 
                 <p class="max-w-2xl text-lg text-[#5c463a]">
-                    Indulge in our premium selection of artisanal cookies and decadent brownies,
-                    baked fresh with love every day using the finest ingredients.
+                    Nikmati pilihan cookies artisan dan brownies premium, dipanggang setiap hari
+                    dengan bahan terbaik dan penuh kasih.
                 </p>
 
                 <div class="flex flex-wrap items-center gap-4 pt-2">
                     <a href="#category-section"
                        data-scroll-to="#category-section"
                        class="rounded-full bg-[#7b4a2f] px-6 py-3 text-base font-semibold text-white shadow-[0_14px_32px_rgba(123,74,47,0.35)] transition hover:bg-[#6b3f26]">
-                        Shop Now
+                        Belanja Sekarang
                     </a>
                     <a href="{{ route('learn-more') }}" class="rounded-full bg-white px-6 py-3 text-base font-semibold text-[#3b241a] shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(0,0,0,0.12)]">
-                        Learn More
+                        Pelajari Lebih Lanjut
                     </a>
                 </div>
 
@@ -59,8 +59,8 @@
                             </svg>
                         </div>
                         <div>
-                            <p class="text-sm font-semibold text-[#3b241a]">Quick Delivery</p>
-                            <p class="text-xs text-[#6d5749]">1-2 Days</p>
+                            <p class="text-sm font-semibold text-[#3b241a]">Pengiriman Cepat</p>
+                            <p class="text-xs text-[#6d5749]">1-2 Hari</p>
                         </div>
                     </div>
 
@@ -74,8 +74,8 @@
                             </svg>
                         </div>
                         <div>
-                            <p class="text-sm font-semibold text-[#3b241a]">Fresh Guarantee</p>
-                            <p class="text-xs text-[#6d5749]">100% Quality</p>
+                            <p class="text-sm font-semibold text-[#3b241a]">Jaminan Kesegaran</p>
+                            <p class="text-xs text-[#6d5749]">Kualitas 100%</p>
                         </div>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
                     </div>
 
                     <div class="absolute bottom-6 right-6 rounded-2xl bg-white px-5 py-4 text-right text-sm text-[#6d5749] shadow-[0_18px_38px_rgba(0,0,0,0.15)]">
-                        <p class="leading-tight">Starting from</p>
+                        <p class="leading-tight">Mulai dari</p>
                         <p class="text-2xl font-semibold text-[#8b5a2b]">Rp 15.000</p>
                     </div>
                 </div>

@@ -12,7 +12,7 @@
             <button type="button"
                     class="inline-flex items-center justify-center rounded-full border border-[#e4d6c6] text-[#3b241a] px-5 py-3 text-sm font-semibold hover:bg-[#f5ece3] transition"
                     wire:click="{{ $config['back_action'] }}">
-                {{ $config['back_label'] ?? 'Back' }}
+                {{ $config['back_label'] ?? 'Kembali' }}
             </button>
         @endif
         <button type="submit"

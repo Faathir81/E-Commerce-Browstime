@@ -37,7 +37,7 @@ class OrderSuccessController extends Controller
         $paymentBadge = OrderSuccessHelper::mapPaymentBadge($pembayaran?->status);
         $deliverySteps = OrderSuccessHelper::mapOrderSteps($pesanan?->status);
 
-        $guestEmailForReview = request()->input('guest_email');
+        $guestEmailForReview = request()->input('guest_email') ?: session('review_guest_email');
         $reviewPermissions = ($pesanan?->detailPesanans ?? collect())
             ->mapWithKeys(function ($detail) use ($authUser, $guestEmailForReview) {
                 return [
@@ -117,6 +117,9 @@ class OrderSuccessController extends Controller
             && (($pembayaran?->status ?? null) === 'pending')
             && (($pembayaran?->metode ?? null) === 'midtrans');
 
+        $canReuploadProof = ($pembayaran?->status ?? null) === 'invalid'
+            && ($pembayaran?->metode ?? null) !== 'midtrans';
+
         $deliveryInfo = [
             'eta_text' => $etaText,
             'tracking_number' => $pesanan?->no_resi ?: null,
@@ -140,6 +143,7 @@ class OrderSuccessController extends Controller
             'orderSummary' => $orderSummary,
             'deliveryInfo' => $deliveryInfo,
             'canRetryPayment' => $canRetryPayment,
+            'canReuploadProof' => $canReuploadProof,
             'confirmationEmail' => $confirmationEmail,
             'orderCode' => $orderCode,
             'canConfirmCompletion' => $canConfirmCompletion,
@@ -180,6 +184,9 @@ class OrderSuccessController extends Controller
                 'message' => 'Harap masukkan email yang benar.',
             ], 422);
         }
+
+        // Simpan ke sesi agar halaman berikutnya langsung mengenali email terverifikasi.
+        session(['review_guest_email' => $inputEmail]);
 
         return response()->json([
             'valid' => true,

@@ -5,7 +5,7 @@
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9.66675 12.6667L5.00008 8.00001L9.66675 3.33334" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <span>Back to Home</span>
+                <span>Kembali ke Beranda</span>
             </a>
         </div>
 
@@ -21,8 +21,8 @@
                 </svg>
             </div>
             <div class="space-y-1">
-                <h1 class="text-xl font-semibold text-[#3b241a]">Create Account</h1>
-                <p class="text-sm text-[#7a5b44]">Sign up to get started with BROWSTIME</p>
+                <h1 class="text-xl font-semibold text-[#3b241a]">Buat Akun</h1>
+                <p class="text-sm text-[#7a5b44]">Daftar untuk mulai belanja di BROWSTIME</p>
             </div>
 
             <form method="POST" action="{{ route('register') }}" class="space-y-5 text-left">
@@ -32,8 +32,8 @@
                     id="name"
                     name="name"
                     type="text"
-                    label="Full Name"
-                    placeholder="Enter your name"
+                    label="Nama Lengkap"
+                    placeholder="Masukkan nama lengkap"
                     :value="old('name')"
                     autofocus
                     required
@@ -45,7 +45,7 @@
                     name="email"
                     type="email"
                     label="Email"
-                    placeholder="your@email.com"
+                    placeholder="email@kamu.com"
                     :value="old('email')"
                     required
                     icon='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 7.5L12 13.5L3 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 7.5V16.5C21 17.3284 20.3284 18 19.5 18H4.5C3.67157 18 3 17.3284 3 16.5V7.5C3 6.67157 3.67157 6 4.5 6H19.5C20.3284 6 21 6.67157 21 7.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
@@ -56,7 +56,7 @@
                     name="password"
                     type="password"
                     label="Password"
-                    placeholder="Enter your password"
+                    placeholder="Masukkan kata sandi"
                     required
                     :show-toggle="true"
                     icon='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 10H7C5.89543 10 5 10.8954 5 12V17C5 18.1046 5.89543 19 7 19H17C18.1046 19 19 18.1046 19 17V12C19 10.8954 18.1046 10 17 10Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10V7C8 5.34315 9.34315 4 11 4H13C14.6569 4 16 5.34315 16 7V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
@@ -66,37 +66,38 @@
                     id="password_confirmation"
                     name="password_confirmation"
                     type="password"
-                    label="Confirm Password"
-                    placeholder="Re-enter your password"
+                    label="Konfirmasi Kata Sandi"
+                    placeholder="Masukkan ulang kata sandi"
                     required
                     :show-toggle="true"
                     icon='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 10H7C5.89543 10 5 10.8954 5 12V17C5 18.1046 5.89543 19 7 19H17C18.1046 19 19 18.1046 19 17V12C19 10.8954 18.1046 10 17 10Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10V7C8 5.34315 9.34315 4 11 4H13C14.6569 4 16 5.34315 16 7V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
                 />
 
-                <x-auth.button type="submit">Create Account</x-auth.button>
+                <x-auth.button type="submit">Buat Akun</x-auth.button>
 
                 <div class="flex items-center gap-3 text-xs text-[#9b7a64]">
                     <span class="flex-1 h-px bg-[#e8dccf]"></span>
-                    <span>or</span>
+                    <span>atau</span>
                     <span class="flex-1 h-px bg-[#e8dccf]"></span>
                 </div>
 
                 <x-auth.button type="button" variant="secondary" onclick="window.location='{{ route('landing') }}'">
-                    Continue as Guest
+                    Lanjut sebagai Tamu
                 </x-auth.button>
             </form>
 
             <div class="text-sm text-[#7a5b44]">
-                Already have an account?
-                <a href="{{ route('login') }}" class="font-semibold text-[#7a4b24] hover:text-[#5a3a1f]">Sign In</a>
+                Sudah punya akun?
+                <a href="{{ route('login') }}" class="font-semibold text-[#7a4b24] hover:text-[#5a3a1f]">Masuk</a>
             </div>
         </div>
 
         <p class="text-xs text-[#9b7a64]">
-            By continuing, you agree to BROWSTIME’s
-            <a href="#" class="underline hover:text-[#7a4b24]">Terms of Service</a>
-            and
-            <a href="#" class="underline hover:text-[#7a4b24]">Privacy Policy</a>
+            Dengan melanjutkan, kamu menyetujui
+            <a href="#" class="underline hover:text-[#7a4b24]">Syarat Layanan</a>
+            dan
+            <a href="#" class="underline hover:text-[#7a4b24]">Kebijakan Privasi</a>
+            BROWSTIME.
         </p>
     </div>
 </x-auth.layout>

@@ -16,7 +16,7 @@ class ProduksiInfolist
     {
         return $schema
             ->components([
-                Section::make('Detail Pesanan')
+                Section::make('Informasi Pelanggan')
                     ->schema([
                         Section::make('Detail Pesanan')
                             ->schema([
@@ -45,7 +45,8 @@ class ProduksiInfolist
                                 TextEntry::make('alamat_nama_penerima')
                                     ->label('Nama Penerima')
                                     ->state(function ($record) {
-                                        return $record->resolvedPelanggan()?->alamatPengiriman->first()?->nama_penerima ?? '-';
+                                        // Tampilkan nama yang diinput di langkah checkout (disimpan di pelanggan)
+                                        return $record->resolvedPelanggan()?->nama ?? '-';
                                     }),
 
                                 TextEntry::make('alamat_no_hp')

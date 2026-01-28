@@ -6,14 +6,14 @@
         <div class="mx-auto max-w-screen-2xl px-6 py-10 sm:px-8 lg:px-14">
             <div class="mt-8 text-center">
                 <span class="inline-flex items-center rounded-full bg-[#7a4b24] px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
-                    About Browstime
+                    Tentang Browstime
                 </span>
                 <h1 class="mt-4 text-3xl font-semibold text-[#3b241a] sm:text-4xl">
-                    Baking Happiness, One Treat at a Time
+                    Memanggang Kebahagiaan, Satu Gigitan Sekaligus
                 </h1>
                 <p class="mx-auto mt-3 max-w-2xl text-sm text-[#4b2f22] sm:text-base">
-                    Since 2020, we have been crafting premium cookies and brownies with love, using only
-                    the finest ingredients to bring joy to every bite.
+                    Sejak 2020, kami membuat cookies dan brownies premium dengan penuh kasih,
+                    memakai bahan terbaik agar setiap gigitan membawa rasa bahagia.
                 </p>
             </div>
         </div>
@@ -23,22 +23,20 @@
         <div class="mx-auto max-w-screen-2xl px-6 py-12 sm:px-8 lg:px-14">
             <div class="grid items-center gap-10 lg:grid-cols-[1.05fr,0.95fr]">
                 <div class="max-w-md">
-                    <p class="text-xs font-semibold uppercase tracking-widest text-[#9a6b4f]">Our Story</p>
+                    <p class="text-xs font-semibold uppercase tracking-widest text-[#9a6b4f]">Kisah Kami</p>
                     <h2 class="mt-3 text-2xl font-semibold text-[#3b241a]">BROWSTIME</h2>
                     <div class="mt-4 space-y-3 text-sm leading-relaxed text-[#4b2f22]">
                         <p>
-                            BROWSTIME began in a small home kitchen with a simple mission: to create cookies
-                            and brownies that taste like they came straight from your grandmother's oven.
+                            BROWSTIME berawal dari dapur rumah dengan misi sederhana: menghadirkan cookies
+                            dan brownies senikmat buatan nenek.
                         </p>
                         <p>
-                            What started as a passion project quickly grew into something special. Friends
-                            and family couldn't get enough of our treats, and word spread about our commitment
-                            to quality and authentic taste.
+                            Bermula dari hobi, kini menjadi usaha serius. Teman dan keluarga jatuh cinta
+                            dengan rasa otentik kami, lalu kabar menyebar tentang kualitas yang dijaga.
                         </p>
                         <p>
-                            Today, we're proud to serve hundreds of happy customers across Indonesia, but our
-                            values remain unchanged: fresh ingredients, handcrafted with care, and delivered
-                            with a smile.
+                            Kini kami melayani ratusan pelanggan di seluruh Indonesia, dengan nilai yang sama:
+                            bahan segar, dibuat manual dengan hati, dan dikirim dengan senyum.
                         </p>
                     </div>
                 </div>
@@ -54,9 +52,9 @@
     <section class="bg-[#f6ede4]">
         <div class="mx-auto max-w-screen-2xl px-6 py-10 sm:px-8 lg:px-14">
             <div class="text-center">
-                <h2 class="text-2xl font-semibold text-[#3b241a]">Why Choose BROWSTIME?</h2>
+                <h2 class="text-2xl font-semibold text-[#3b241a]">Kenapa Pilih BROWSTIME?</h2>
                 <p class="mt-2 text-sm text-[#4b2f22]">
-                    We're not just another bakery. Here's what makes us special.
+                    Kami bukan sekadar toko roti biasa. Ini yang membuat kami berbeda.
                 </p>
             </div>
 
@@ -68,9 +66,9 @@
                             <path d="M10 5V15" stroke="#7a4b24" stroke-width="1.6" stroke-linecap="round"/>
                         </svg>
                     </div>
-                    <h3 class="mt-4 text-sm font-semibold">Fresh Daily</h3>
+                    <h3 class="mt-4 text-sm font-semibold">Selalu Segar</h3>
                     <p class="mt-2 text-xs text-[#4b2f22]">
-                        Every batch is baked fresh to order, ensuring maximum freshness and flavor.
+                        Setiap adonan dipanggang setelah dipesan, menjaga rasa dan kesegaran maksimal.
                     </p>
                 </div>
                 <div class="rounded-2xl border border-[#efe3d7] bg-white p-5 text-center shadow-sm">
@@ -79,9 +77,9 @@
                             <path d="M6 14L10 6L14 14" stroke="#7a4b24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </div>
-                    <h3 class="mt-4 text-sm font-semibold">Premium Quality</h3>
+                    <h3 class="mt-4 text-sm font-semibold">Kualitas Premium</h3>
                     <p class="mt-2 text-xs text-[#4b2f22]">
-                        We use only the finest ingredients: Belgian chocolate, real butter, and premium nuts.
+                        Hanya memakai bahan pilihan: cokelat Belgia, butter asli, dan kacang premium.
                     </p>
                 </div>
                 <div class="rounded-2xl border border-[#efe3d7] bg-white p-5 text-center shadow-sm">
@@ -90,9 +88,9 @@
                             <path d="M10 17C10 17 4 12.5 4 8.5C4 6.01472 6.01472 4 8.5 4C9.88 4 11.16 4.68 12 5.7C12.84 4.68 14.12 4 15.5 4C17.9853 4 20 6.01472 20 8.5C20 12.5 14 17 14 17H10Z" fill="#7a4b24"/>
                         </svg>
                     </div>
-                    <h3 class="mt-4 text-sm font-semibold">Made with Love</h3>
+                    <h3 class="mt-4 text-sm font-semibold">Dibuat dengan Cinta</h3>
                     <p class="mt-2 text-xs text-[#4b2f22]">
-                        Every cookie and brownie is handcrafted by our skilled bakers with passion.
+                        Setiap cookies dan brownies dibuat manual oleh baker kami dengan penuh passion.
                     </p>
                 </div>
                 <div class="rounded-2xl border border-[#efe3d7] bg-white p-5 text-center shadow-sm">
@@ -102,9 +100,9 @@
                             <circle cx="10" cy="10" r="8" stroke="#7a4b24" stroke-width="1.6"/>
                         </svg>
                     </div>
-                    <h3 class="mt-4 text-sm font-semibold">Fast Delivery</h3>
+                    <h3 class="mt-4 text-sm font-semibold">Pengiriman Cepat</h3>
                     <p class="mt-2 text-xs text-[#4b2f22]">
-                        Quick and reliable delivery within 1-3 days, right to your doorstep.
+                        Pengiriman cepat dan terpercaya 1-3 hari langsung ke depan rumahmu.
                     </p>
                 </div>
             </div>
@@ -114,9 +112,9 @@
     <section class="bg-[#fbf6f1]">
         <div class="mx-auto max-w-screen-2xl px-6 py-10 sm:px-8 lg:px-14">
             <div class="text-center">
-                <h2 class="text-2xl font-semibold text-[#3b241a]">Our Commitment to You</h2>
+                <h2 class="text-2xl font-semibold text-[#3b241a]">Komitmen Kami untuk Kamu</h2>
                 <p class="mt-2 text-sm text-[#4b2f22]">
-                    These core values guide everything we do at BROWSTIME.
+                    Nilai inti ini selalu kami pegang di BROWSTIME.
                 </p>
             </div>
 
@@ -129,8 +127,8 @@
                         </svg>
                     </span>
                     <div>
-                        <p class="font-semibold text-[#3b241a]">Quality Assurance</p>
-                        <p class="mt-1 text-xs">Every product goes through rigorous quality checks to ensure it meets our high standards before reaching you.</p>
+                        <p class="font-semibold text-[#3b241a]">Jaminan Kualitas</p>
+                        <p class="mt-1 text-xs">Setiap produk melewati pengecekan ketat agar sampai ke kamu dengan standar terbaik kami.</p>
                     </div>
                 </div>
                 <div class="flex items-start gap-3">
@@ -141,8 +139,8 @@
                         </svg>
                     </span>
                     <div>
-                        <p class="font-semibold text-[#3b241a]">Customer First</p>
-                        <p class="mt-1 text-xs">Your satisfaction is our priority. We listen to feedback and continuously improve our products and service.</p>
+                        <p class="font-semibold text-[#3b241a]">Pelanggan Nomor Satu</p>
+                        <p class="mt-1 text-xs">Kepuasanmu prioritas kami. Kami dengarkan masukan dan terus meningkatkan produk serta layanan.</p>
                     </div>
                 </div>
                 <div class="flex items-start gap-3">
@@ -153,8 +151,8 @@
                         </svg>
                     </span>
                     <div>
-                        <p class="font-semibold text-[#3b241a]">Authenticity</p>
-                        <p class="mt-1 text-xs">No shortcuts, no artificial flavors. Just honest, homemade goodness in every bite.</p>
+                        <p class="font-semibold text-[#3b241a]">Keaslian Rasa</p>
+                        <p class="mt-1 text-xs">Tanpa jalan pintas, tanpa perasa buatan. Hanya rasa rumahan yang jujur di setiap gigitan.</p>
                     </div>
                 </div>
             </div>
@@ -166,19 +164,19 @@
             <div class="grid gap-6 text-center text-[#7a4b24] sm:grid-cols-2 lg:grid-cols-4">
                 <div>
                     <p class="text-2xl font-semibold text-[#6b3f26]">5000+</p>
-                    <p class="text-xs text-[#4b2f22]">Happy Customers</p>
+                    <p class="text-xs text-[#4b2f22]">Pelanggan Puas</p>
                 </div>
                 <div>
                     <p class="text-2xl font-semibold text-[#6b3f26]">15k+</p>
-                    <p class="text-xs text-[#4b2f22]">Orders Delivered</p>
+                    <p class="text-xs text-[#4b2f22]">Pesanan Terkirim</p>
                 </div>
                 <div>
                     <p class="text-2xl font-semibold text-[#6b3f26]">4.8</p>
-                    <p class="text-xs text-[#4b2f22]">Average Rating</p>
+                    <p class="text-xs text-[#4b2f22]">Rata-Rata Rating</p>
                 </div>
                 <div>
                     <p class="text-2xl font-semibold text-[#6b3f26]">20+</p>
-                    <p class="text-xs text-[#4b2f22]">Product Varieties</p>
+                    <p class="text-xs text-[#4b2f22]">Varian Produk</p>
                 </div>
             </div>
         </div>
@@ -187,16 +185,16 @@
     <section class="bg-[#fbf6f1]">
         <div class="mx-auto max-w-screen-2xl px-6 py-12 sm:px-8 lg:px-14">
             <div class="text-center">
-                <h2 class="text-2xl font-semibold text-[#3b241a]">Ready to Taste the Difference?</h2>
+                <h2 class="text-2xl font-semibold text-[#3b241a]">Siap Merasakan Bedanya?</h2>
                 <p class="mx-auto mt-2 max-w-xl text-sm text-[#4b2f22]">
-                    Join thousands of satisfied customers and experience the BROWSTIME difference today.
+                    Gabung bersama ribuan pelanggan puas dan rasakan pengalaman BROWSTIME hari ini.
                 </p>
                 <div class="mt-6 flex flex-wrap justify-center gap-3">
                     <a href="{{ route('landing') }}" class="rounded-full bg-[#7a4b24] px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(122,75,36,0.35)] transition hover:bg-[#6b3f26]">
-                        Start Shopping
+                        Mulai Belanja
                     </a>
                     <a href="{{ route('register') }}" class="rounded-full border border-[#e6d4c4] bg-white px-6 py-3 text-sm font-semibold text-[#7a4b24] transition hover:bg-[#fff8f1]">
-                        Create Account
+                        Buat Akun
                     </a>
                 </div>
             </div>

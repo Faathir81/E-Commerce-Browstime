@@ -6,8 +6,8 @@
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9.6665 12.6667L5.33317 8.33333L9.6665 4" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <span class="hidden sm:inline">Back to Cart</span>
-                <span class="sr-only sm:not-sr-only sm:hidden">Back</span>
+                <span class="hidden sm:inline">Kembali ke Keranjang</span>
+                <span class="sr-only sm:not-sr-only sm:hidden">Kembali</span>
             </a>
             <p class="flex-1 text-center text-sm font-semibold text-[#3b241a] truncate">Checkout</p>
             <span class="w-10 sm:w-[120px] flex-shrink-0"></span>
@@ -46,7 +46,7 @@
             </div>
 
             <div class="bg-white border border-[#f1e8df] rounded-2xl shadow-sm p-5 lg:p-6 space-y-4 sticky top-24">
-                <h2 class="text-sm font-semibold text-[#3b241a]">Order Summary</h2>
+                <h2 class="text-sm font-semibold text-[#3b241a]">Ringkasan Pesanan</h2>
 
                 <div class="space-y-4">
                     @foreach ($displayCartItems as $item)
@@ -62,11 +62,11 @@
 
                 <div class="text-xs text-[#6f4c3b] space-y-2">
                     @guest
-                        <p>Checking out as guest. We will send order info to your email.</p>
+                        <p>Checkout sebagai tamu. Info pesanan akan dikirim ke email kamu.</p>
                     @else
-                        <p>Signed in as {{ auth()->user()->email ?? 'customer' }}.</p>
+                        <p>Masuk sebagai {{ auth()->user()->email ?? 'pelanggan' }}.</p>
                     @endguest
-                    <p>By placing your order, you agree to our Terms &amp; Conditions.</p>
+                    <p>Dengan membuat pesanan, kamu menyetujui Syarat &amp; Ketentuan kami.</p>
                 </div>
             </div>
         </div>

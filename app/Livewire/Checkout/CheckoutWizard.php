@@ -36,10 +36,10 @@ class CheckoutWizard extends Component
 
     public int $step = 1;
     public array $steps = [
-        ['label' => 'Customer', 'index' => 1],
-        ['label' => 'Shipping', 'index' => 2],
-        ['label' => 'Payment', 'index' => 3],
-        ['label' => 'Confirm', 'index' => 4],
+        ['label' => 'Pelanggan', 'index' => 1],
+        ['label' => 'Pengiriman', 'index' => 2],
+        ['label' => 'Pembayaran', 'index' => 3],
+        ['label' => 'Konfirmasi', 'index' => 4],
     ];
 
     public string $nama_penerima = '';
@@ -820,31 +820,31 @@ class CheckoutWizard extends Component
         return match ($this->step) {
             1 => [
                 'submit_action' => 'nextStep',
-                'submit_label' => 'Continue to Shipping',
+                'submit_label' => 'Lanjut ke Pengiriman',
                 'show_back' => false,
                 'back_action' => null,
-                'back_label' => 'Back',
+                'back_label' => 'Kembali',
             ],
             2 => [
                 'submit_action' => 'nextStep',
-                'submit_label' => 'Continue to Payment',
+                'submit_label' => 'Lanjut ke Pembayaran',
                 'show_back' => true,
                 'back_action' => 'previousStep',
-                'back_label' => 'Back',
+                'back_label' => 'Kembali',
             ],
             3 => [
                 'submit_action' => 'nextStep',
-                'submit_label' => 'Confirm Payment',
+                'submit_label' => 'Konfirmasi Pembayaran',
                 'show_back' => true,
                 'back_action' => 'previousStep',
-                'back_label' => 'Back',
+                'back_label' => 'Kembali',
             ],
             default => [
                 'submit_action' => 'placeOrder',
-                'submit_label' => 'Place Order',
+                'submit_label' => 'Buat Pesanan',
                 'show_back' => true,
                 'back_action' => 'previousStep',
-                'back_label' => 'Back',
+                'back_label' => 'Kembali',
             ],
         };
     }

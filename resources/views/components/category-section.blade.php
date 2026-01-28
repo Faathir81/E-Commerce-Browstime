@@ -4,13 +4,13 @@
     <div class="mx-auto max-w-screen-2xl px-6 sm:px-8 lg:px-14">
 
         <h2 class="text-center mb-8 text-xl font-semibold text-[#3b241a]">
-            Browse by Category
+            Belanja Berdasarkan Kategori
         </h2>
 
         <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             
             <!-- All Products -->
-            <x-category-card label="All Products" keyword="">
+            <x-category-card label="Semua Produk" keyword="">
                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 4H5.33333C4.59695 4 4 4.59695 4 5.33333V12C4 12.7364 4.59695 13.3333 5.33333 13.3333H12C12.7364 13.3333 13.3333 12.7364 13.3333 12V5.33333C13.3333 4.59695 12.7364 4 12 4Z" stroke="#8B4513" stroke-width="2.66667" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M26.6666 4H20C19.2636 4 18.6666 4.59695 18.6666 5.33333V12C18.6666 12.7364 19.2636 13.3333 20 13.3333H26.6666C27.403 13.3333 28 12.7364 28 12V5.33333C28 4.59695 27.403 4 26.6666 4Z" stroke="#8B4513" stroke-width="2.66667" stroke-linecap="round" stroke-linejoin="round"/>

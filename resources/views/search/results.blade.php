@@ -15,29 +15,29 @@
         <div>
             @if ($keyword !== '')
                 <p class="text-base">
-                    Search results for
+                    Hasil pencarian untuk
                 </p>
                 <p class="text-2xl font-semibold leading-tight">
                     {{ $keyword }}
                 </p>
             @else
                 <p class="text-base">
-                    All Products
+                    Semua Produk
                 </p>
                 <p class="text-2xl font-semibold leading-tight">
-                    Browse All Products
+                    Jelajahi Semua Produk
                 </p>
             @endif
             <p class="text-base text-[#6f4c3b] mt-1">
                 {{ $results->total() }}
-                {{ $keyword === '' ? 'delicious treats available' : \Illuminate\Support\Str::plural('product', $results->total()) . ' found' }}
+                {{ $keyword === '' ? 'pilihan tersedia' : 'produk ditemukan' }}
             </p>
         </div>
     </div>
 
     @if ($results->isEmpty())
         <div class="rounded-xl border border-dashed border-gray-200 bg-white p-8 text-center text-gray-500">
-            No products found. Try another keyword.
+            Tidak ada produk ditemukan. Coba kata kunci lain.
         </div>
     @else
         <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">

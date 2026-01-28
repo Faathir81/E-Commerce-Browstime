@@ -4,12 +4,12 @@
     <div class="flex flex-col gap-6">
         <div class="flex flex-wrap items-start justify-between gap-6">
             <div class="min-w-[200px]">
-                <p class="text-sm text-[#6f4c3b]">Customer Reviews</p>
+                <p class="text-sm text-[#6f4c3b]">Ulasan Pelanggan</p>
                 <div class="mt-2 flex items-end gap-3">
                     <span class="text-4xl font-semibold">{{ number_format($summary->average_rating, 1) }}</span>
                     <x-product.star-rating :rating="$summary->average_rating" size="18" class="mb-1" />
                 </div>
-                <p class="mt-2 text-xs text-[#6f4c3b]">{{ $summary->total_reviews }} reviews</p>
+                <p class="mt-2 text-xs text-[#6f4c3b]">{{ $summary->total_reviews }} ulasan</p>
             </div>
 
             @if($summary->total_reviews > 0)

@@ -9,33 +9,33 @@
                     @include('components.logo')
                 </div>
                 <p class="mt-3 text-sm text-[#7c6a5a] leading-relaxed">
-                    Crafting delicious memories, one bite at a time.
+                    Menciptakan momen lezat, satu gigitan penuh kenangan.
                 </p>
             </div>
 
             {{-- SHOP --}}
             <div>
-                <h3 class="text-[#3b241a] font-semibold mb-3">Shop</h3>
+                <h3 class="text-[#3b241a] font-semibold mb-3">Belanja</h3>
                 <ul class="space-y-2 text-sm text-[#7c6a5a]">
                     <li><a href="#" class="hover:text-[#3b241a]">Cookies</a></li>
                     <li><a href="#" class="hover:text-[#3b241a]">Brownies</a></li>
-                    <li><a href="#" class="hover:text-[#3b241a]">Gift Boxes</a></li>
+                    <li><a href="#" class="hover:text-[#3b241a]">Kotak Hadiah</a></li>
                 </ul>
             </div>
 
             {{-- SUPPORT --}}
             <div>
-                <h3 class="text-[#3b241a] font-semibold mb-3">Support</h3>
+                <h3 class="text-[#3b241a] font-semibold mb-3">Bantuan</h3>
                 <ul class="space-y-2 text-sm text-[#7c6a5a]">
-                    <li><a href="#" class="hover:text-[#3b241a]">Contact Us</a></li>
+                    <li><a href="#" class="hover:text-[#3b241a]">Hubungi Kami</a></li>
                 </ul>
             </div>
 
             {{-- FOLLOW US --}}
             <div>
-                <h3 class="text-[#3b241a] font-semibold mb-3">Follow Us</h3>
+                <h3 class="text-[#3b241a] font-semibold mb-3">Ikuti Kami</h3>
                 <p class="text-sm text-[#7c6a5a]">
-                    Stay updated with our latest treats and offers!
+                    Dapatkan kabar terbaru soal promo dan kreasi kami!
                 </p>
             </div>
 
@@ -44,7 +44,7 @@
         {{-- COPYRIGHT --}}
         <div class="mt-10 pt-6 border-t border-[#e8ded3] text-center">
             <p class="text-xs text-[#7c6a5a]">
-                © 2025 BROWSTIME. All rights reserved.
+                © 2025 BROWSTIME. Hak cipta dilindungi.
             </p>
         </div>
 

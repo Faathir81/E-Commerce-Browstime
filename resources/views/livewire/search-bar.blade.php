@@ -17,7 +17,7 @@
             wire:keydown.enter.prevent="goToResults"
             wire:focus="openDropdown"
             wire:keydown.escape="$set('search','')"
-            placeholder="Search cookies & brownies..."
+            placeholder="Cari Cookies & Brownies..."
             class="w-full rounded-full border border-[#d3b495] bg-white pl-10 pr-10 py-2 text-sm text-[#4a2f22]
             focus:outline-none focus:ring-2 focus:ring-[#bb936c]"
         >
@@ -39,7 +39,7 @@
             <div wire:loading.class="opacity-50">
                 @if ($results->isEmpty())
                     <div class="p-4 text-center text-sm text-gray-500">
-                        No matching products.
+                        Tidak ada produk yang cocok.
                     </div>
                 @else
                     @foreach ($results as $item)

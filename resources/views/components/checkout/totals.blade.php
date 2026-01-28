@@ -6,7 +6,7 @@
         <span class="text-[#3b241a]">Rp {{ $subtotal }}</span>
     </div>
     <div class="flex items-center justify-between">
-        <span>Shipping Fee</span>
+        <span>Ongkos Kirim</span>
         <span class="text-[#3b241a]">{{ $shipping }}</span>
     </div>
 </div>

@@ -1,5 +1,5 @@
 <div class="space-y-3">
-    <h3 class="font-semibold text-base">Quantity</h3>
+    <h3 class="font-semibold text-base">Jumlah</h3>
     <div class="flex items-center gap-3">
         <button type="button"
                 data-qty-minus
@@ -29,6 +29,6 @@
                 <path d="M7.99481 3.33105V12.6583" stroke="#3E2723" stroke-width="1.33247" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </button>
-        <span class="text-xs text-[#6f4c3b]">Max: {{ $max }} units</span>
+        <span class="text-xs text-[#6f4c3b]">Maks: {{ $max }} unit</span>
     </div>
 </div>

@@ -1,7 +1,7 @@
 <div class="bg-white border border-[#f1e8df] rounded-2xl shadow-sm p-5 lg:p-6 space-y-4">
     <div>
-        <h3 class="text-base font-semibold text-[#3b241a]">Payment Method</h3>
-        <p class="text-xs text-[#6f4c3b]">Choose your preferred payment method.</p>
+        <h3 class="text-base font-semibold text-[#3b241a]">Metode Pembayaran</h3>
+        <p class="text-xs text-[#6f4c3b]">Pilih metode pembayaran yang diinginkan.</p>
     </div>
 
     <div class="space-y-3">
@@ -22,10 +22,10 @@
 
     @if ($paymentMethod === 'transfer')
         <div class="space-y-2">
-            <label class="text-xs text-[#6f4c3b]">Choose the bank account you want to transfer to *</label>
+            <label class="text-xs text-[#6f4c3b]">Pilih rekening tujuan transfer *</label>
             <select wire:model="akun_bank_id"
                     class="w-full rounded-xl border border-[#e4d6c6] bg-[#fffdfb] px-4 py-3 text-sm focus:border-[#bb936c] focus:ring-[#bb936c]">
-                <option value="">Select bank</option>
+                <option value="">Pilih bank</option>
                 @foreach ($banks as $bank)
                     <option value="{{ $bank['id'] }}">
                         {{ $bank['nama_bank'] }} — {{ $bank['nomor_rekening'] }} — {{ $bank['nama_pemilik'] ?? '' }}
@@ -50,11 +50,11 @@
                     @else
                         <p class="text-sm text-[#6f4c3b]">QRIS</p>
                     @endif
-                    <p class="text-xs text-[#6f4c3b]">Scan the QR code above to pay.</p>
+                    <p class="text-xs text-[#6f4c3b]">Scan kode QR di atas untuk membayar.</p>
                 </div>
                 <input type="hidden" wire:model.live="qris_setting_id" value="{{ $selectedQris['id'] }}">
             @else
-                <p class="text-sm text-[#b3261e]">QRIS is not available yet.</p>
+                <p class="text-sm text-[#b3261e]">QRIS belum tersedia.</p>
             @endif
             @error('qris_setting_id') <p class="text-xs text-[#b3261e]">{{ $message }}</p> @enderror
         </div>
@@ -62,7 +62,7 @@
 
     @if (in_array($paymentMethod, ['transfer', 'qris']))
         <div class="space-y-2">
-            <label class="text-xs text-[#6f4c3b]">Upload payment proof (JPG/PNG/PDF, max 5MB)</label>
+            <label class="text-xs text-[#6f4c3b]">Unggah bukti pembayaran (JPG/PNG/PDF, maks 5MB)</label>
             <input type="file"
                    wire:model="payment_proof"
                    accept=".jpg,.jpeg,.png,.pdf"
@@ -71,10 +71,10 @@
 
             @if(in_array($paymentMethod, ['transfer','qris']) && $payment_proof)
                 <div class="mt-2 rounded-xl border border-[#e4d6c6] bg-[#fffaf5] p-3 space-y-2 flex flex-col items-center">
-                    <p class="text-xs text-[#6f4c3b]">Payment proof preview:</p>
+                    <p class="text-xs text-[#6f4c3b]">Pratinjau bukti bayar:</p>
                     @if($isPaymentProofImage)
                         <img src="{{ $paymentProofPreviewUrl }}"
-                             alt="Payment proof"
+                             alt="Bukti pembayaran"
                              class="max-h-64 rounded-lg border border-[#f1e8df] object-contain">
                     @else
                         <p class="text-sm text-[#3b241a] text-center">{{ $paymentProofName }}</p>

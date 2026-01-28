@@ -30,6 +30,19 @@ document.addEventListener('DOMContentLoaded', () => {
             button.textContent = isVerified ? 'Verifikasi ulang' : 'Verifikasi';
         };
 
+        const dispatchEvent = (name, payload = null) => {
+            if (!window.Livewire) return;
+
+            if (typeof window.Livewire.dispatch === 'function') {
+                window.Livewire.dispatch(name, payload);
+                return;
+            }
+
+            if (typeof window.Livewire.emit === 'function') {
+                window.Livewire.emit(name, payload);
+            }
+        };
+
         button.addEventListener('click', async () => {
             const email = input.value.trim();
             if (!email) {
@@ -60,18 +73,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         || 'Email tidak valid.';
                     setMessage('error', errorMessage);
                     setVerified(false);
-                    if (window.Livewire && typeof window.Livewire.emit === 'function') {
-                        window.Livewire.emit('review-email-cleared');
-                    }
+                    dispatchEvent('review-email-cleared');
                     return;
                 }
 
                 setMessage('success', data.message || 'Email terverifikasi. Anda dapat memberikan ulasan.');
                 setVerified(true);
 
-                if (window.Livewire && typeof window.Livewire.emit === 'function') {
-                    window.Livewire.emit('review-email-verified', data.email || email);
-                }
+                dispatchEvent('review-email-verified', data.email || email);
             } catch (error) {
                 setMessage('error', 'Gagal memverifikasi email. Coba lagi.');
                 setVerified(false);

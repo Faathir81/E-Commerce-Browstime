@@ -41,12 +41,12 @@ class ProductCardViewModel
     {
         return $inStock
             ? [
-                'label' => 'In Stock',
+                'label' => 'Stok Tersedia',
                 'text_class' => 'text-[#7d6b5c]',
                 'dot_class' => 'inline-block w-2.5 h-2.5 rounded-full bg-green-600 flex-shrink-0',
             ]
             : [
-                'label' => 'Out of Stock',
+                'label' => 'Stok Habis',
                 'text_class' => 'text-[#8b5a2b]',
                 'dot_class' => 'inline-block w-2.5 h-2.5 rounded-full bg-red-500 flex-shrink-0',
             ];

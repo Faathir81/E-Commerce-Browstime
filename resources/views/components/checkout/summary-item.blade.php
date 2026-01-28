@@ -8,7 +8,7 @@
     </div>
     <div class="flex-1 text-sm text-[#3b241a]">
         <p class="font-semibold">{{ $item['name'] }}</p>
-        <p class="text-[#6f4c3b]">Qty: {{ $item['quantity'] }}</p>
+        <p class="text-[#6f4c3b]">Jumlah: {{ $item['quantity'] }}</p>
     </div>
     <div class="text-sm font-semibold text-[#3b241a]">
         Rp {{ $item['subtotal_formatted'] }}

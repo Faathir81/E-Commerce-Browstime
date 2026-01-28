@@ -5,7 +5,7 @@
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9.66675 12.6667L5.00008 8.00001L9.66675 3.33334" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <span>Back to Home</span>
+                <span>Kembali ke Beranda</span>
             </a>
         </div>
 
@@ -21,8 +21,8 @@
                 </svg>
             </div>
             <div class="space-y-1">
-                <h1 class="text-xl font-semibold text-[#3b241a]">Reset Password</h1>
-                <p class="text-sm text-[#7a5b44]">Set a new password for your BROWSTIME account.</p>
+                <h1 class="text-xl font-semibold text-[#3b241a]">Atur Ulang Kata Sandi</h1>
+                <p class="text-sm text-[#7a5b44]">Buat kata sandi baru untuk akun BROWSTIME.</p>
             </div>
 
             <form method="POST" action="{{ route('password.store') }}" class="space-y-5 text-left">
@@ -34,7 +34,7 @@
                     name="email"
                     type="email"
                     label="Email"
-                    placeholder="you@email.com"
+                    placeholder="email@kamu.com"
                     :value="old('email', $request->email)"
                     required
                     icon='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 7.5L12 13.5L3 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 7.5V16.5C21 17.3284 20.3284 18 19.5 18H4.5C3.67157 18 3 17.3284 3 16.5V7.5C3 6.67157 3.67157 6 4.5 6H19.5C20.3284 6 21 6.67157 21 7.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
@@ -45,7 +45,7 @@
                     name="password"
                     type="password"
                     label="Password"
-                    placeholder="Enter new password"
+                    placeholder="Masukkan kata sandi baru"
                     required
                     :show-toggle="true"
                     icon='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 10H7C5.89543 10 5 10.8954 5 12V17C5 18.1046 5.89543 19 7 19H17C18.1046 19 19 18.1046 19 17V12C19 10.8954 18.1046 10 17 10Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10V7C8 5.34315 9.34315 4 11 4H13C14.6569 4 16 5.34315 16 7V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
@@ -55,19 +55,19 @@
                     id="password_confirmation"
                     name="password_confirmation"
                     type="password"
-                    label="Confirm Password"
-                    placeholder="Confirm your new password"
+                    label="Konfirmasi Kata Sandi"
+                    placeholder="Ulangi kata sandi baru"
                     required
                     :show-toggle="true"
                     icon='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 10H7C5.89543 10 5 10.8954 5 12V17C5 18.1046 5.89543 19 7 19H17C18.1046 19 19 18.1046 19 17V12C19 10.8954 18.1046 10 17 10Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10V7C8 5.34315 9.34315 4 11 4H13C14.6569 4 16 5.34315 16 7V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
                 />
 
-                <x-auth.button type="submit">Reset Password</x-auth.button>
+                <x-auth.button type="submit">Simpan Kata Sandi</x-auth.button>
             </form>
         </div>
 
         <p class="text-xs text-[#9b7a64]">
-            Remembered your password? <a href="{{ route('login') }}" class="font-semibold text-[#7a4b24] hover:text-[#5a3a1f]">Sign In</a>
+            Sudah ingat kata sandi? <a href="{{ route('login') }}" class="font-semibold text-[#7a4b24] hover:text-[#5a3a1f]">Masuk</a>
         </p>
     </div>
 </x-auth.layout>

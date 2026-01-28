@@ -5,15 +5,15 @@
         {{-- HEADER --}}
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
             <div class="space-y-1">
-                <h2 class="text-xl font-semibold text-[#3b241a]">Our Products</h2>
-                <p class="text-sm text-[#7c6a5a]">Customer favorites you'll absolutely love</p>
+                <h2 class="text-xl font-semibold text-[#3b241a]">Produk Kami</h2>
+                <p class="text-sm text-[#7c6a5a]">Favorit pelanggan yang pasti kamu suka</p>
             </div>
 
             <a 
                 href="{{ route('search') }}" 
                 class="inline-flex items-center justify-center rounded-full border border-[#d3b58f] px-5 py-2 text-sm font-medium text-[#3b241a] transition-colors hover:bg-[#c79c68] hover:text-[#2b1a14] w-full sm:w-auto"
             >
-                View All Products
+                Lihat Semua Produk
             </a>
         </div>
 

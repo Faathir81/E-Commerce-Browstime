@@ -38,7 +38,7 @@
                 class="{{ $product->add_button_classes }}"
                 @disabled(! $product->in_stock)>
             <x-heroicon-o-shopping-cart class="w-4 h-4" />
-            Add
+            Tambah
         </button>
     </div>
 </div>

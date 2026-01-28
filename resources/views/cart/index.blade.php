@@ -9,10 +9,10 @@
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9.6665 12.6667L5.33317 8.33333L9.6665 4" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <span class="hidden sm:inline">Continue Shopping</span>
-                <span class="sr-only sm:not-sr-only sm:hidden">Back</span>
+                <span class="hidden sm:inline">Lanjut Belanja</span>
+                <span class="sr-only sm:not-sr-only sm:hidden">Kembali</span>
             </a>
-            <p class="flex-1 text-center text-sm font-semibold text-[#3b241a] truncate">Shopping Cart</p>
+            <p class="flex-1 text-center text-sm font-semibold text-[#3b241a] truncate">Keranjang Belanja</p>
             <span class="w-10 sm:w-[120px] flex-shrink-0"></span>
         </div>
     </div>
@@ -39,7 +39,7 @@
                                 data-id="{{ $item->id }}"
                                 data-action="decrease"
                                     data-update-url="{{ url('/cart/update/' . $item->id) }}">
-                                <span class="sr-only">Decrease</span>
+                                <span class="sr-only">Kurangi</span>
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M3.3335 8H12.6668" stroke="#3B241A" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
@@ -51,7 +51,7 @@
                                     data-id="{{ $item->id }}"
                                     data-action="increase"
                                     data-update-url="{{ url('/cart/update/' . $item->id) }}">
-                                <span class="sr-only">Increase</span>
+                                <span class="sr-only">Tambah</span>
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M3.3335 8H12.6668" stroke="#3B241A" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M8 3.33334V12.6667" stroke="#3B241A" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
@@ -63,7 +63,7 @@
                                 data-remove-btn
                                 data-id="{{ $item->id }}"
                                 data-remove-url="{{ url('/cart/remove/' . $item->id) }}">
-                            <span class="sr-only">Remove</span>
+                            <span class="sr-only">Hapus</span>
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M6.6665 7.33337V11.3334" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M9.3335 7.33337V11.3334" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
@@ -76,20 +76,20 @@
                 @endforeach
             </div>
             <div class="bg-white border border-[#f1e8df] rounded-xl shadow-sm px-4 py-6 text-center text-sm text-[#6f4c3b] {{ count($cartItems) > 0 ? 'hidden' : '' }}" data-empty-state>
-                Your cart is empty.
+                Keranjangmu kosong.
             </div>
 
             {{-- RIGHT: ORDER SUMMARY --}}
             <div class="bg-white border border-[#f1e8df] rounded-2xl shadow-sm p-5 lg:p-6 space-y-4 sticky top-20">
-                <h2 class="text-sm font-semibold text-[#3b241a]">Order Summary</h2>
+                <h2 class="text-sm font-semibold text-[#3b241a]">Ringkasan Pesanan</h2>
                 <div class="space-y-2 text-sm text-[#6f4c3b]">
                     <div class="flex items-center justify-between">
                         <span>Subtotal</span>
                         <span class="text-[#3b241a]" data-cart-subtotal>Rp {{ number_format($subtotal ?? 0, 0, ',', '.') }}</span>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span>Delivery Fee</span>
-                        <span class="text-[#3b241a]" data-cart-delivery>{{ $deliveryFeeLabel ?? 'Calculated at checkout' }}</span>
+                        <span>Ongkos Kirim</span>
+                        <span class="text-[#3b241a]" data-cart-delivery>{{ $deliveryFeeLabel ?? 'Dihitung saat checkout' }}</span>
                     </div>
                 </div>
                 <div class="border-t border-[#f1e8df] pt-3">
@@ -104,10 +104,10 @@
                        data-proceed-btn
                        class="block w-full text-center rounded-full bg-[#7a4b24] text-white py-3 text-sm font-semibold hover:bg-[#693f1d] transition {{ $totalQty > 0 ? '' : 'pointer-events-none opacity-60' }}"
                        aria-disabled="{{ $totalQty > 0 ? 'false' : 'true' }}">
-                        Proceed to Checkout
+                        Lanjut ke Pembayaran
                     </a>
                     <a href="{{ route('landing') }}" class="block w-full text-center rounded-full border border-[#e4d6c6] text-[#3b241a] py-3 text-sm font-medium hover:bg-[#f5ece3] transition">
-                        Continue Shopping
+                        Lanjut Belanja
                     </a>
                 </div>
             </div>

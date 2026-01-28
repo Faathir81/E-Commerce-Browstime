@@ -5,7 +5,7 @@
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9.66675 12.6667L5.00008 8.00001L9.66675 3.33334" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <span>Back to Home</span>
+                <span>Kembali ke Beranda</span>
             </a>
         </div>
 
@@ -21,8 +21,8 @@
                 </svg>
             </div>
             <div class="space-y-1">
-                <h1 class="text-xl font-semibold text-[#3b241a]">Welcome Back</h1>
-                <p class="text-sm text-[#7a5b44]">Sign in to your BROWSTIME account</p>
+                <h1 class="text-xl font-semibold text-[#3b241a]">Selamat Datang Kembali</h1>
+                <p class="text-sm text-[#7a5b44]">Masuk ke akun BROWSTIME kamu</p>
             </div>
 
             <x-auth-session-status class="mb-2 text-sm" :status="session('status')" />
@@ -35,7 +35,7 @@
                     name="email"
                     type="email"
                     label="Email"
-                    placeholder="your@email.com"
+                    placeholder="email@kamu.com"
                     :value="old('email')"
                     autofocus
                     required
@@ -48,7 +48,7 @@
                     name="password"
                     type="password"
                     label="Password"
-                    placeholder="Enter your password"
+                    placeholder="Masukkan kata sandi"
                     required
                     :show-toggle="true"
                     icon='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 10H7C5.89543 10 5 10.8954 5 12V17C5 18.1046 5.89543 19 7 19H17C18.1046 19 19 18.1046 19 17V12C19 10.8954 18.1046 10 17 10Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10V7C8 5.34315 9.34315 4 11 4H13C14.6569 4 16 5.34315 16 7V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
@@ -56,36 +56,37 @@
                     @if (Route::has('password.request'))
                         <div class="text-right">
                             <a class="text-xs font-semibold text-[#7a4b24] hover:text-[#5a3a1f]" href="{{ route('password.request') }}">
-                                Forgot password?
+                                Lupa kata sandi?
                             </a>
                         </div>
                     @endif
                 </div>
 
-                <x-auth.button type="submit">Sign In</x-auth.button>
+                <x-auth.button type="submit">Masuk</x-auth.button>
 
                 <div class="flex items-center gap-3 text-xs text-[#9b7a64]">
                     <span class="flex-1 h-px bg-[#e8dccf]"></span>
-                    <span>or</span>
+                    <span>atau</span>
                     <span class="flex-1 h-px bg-[#e8dccf]"></span>
                 </div>
 
                 <x-auth.button type="button" variant="secondary" onclick="window.location='{{ route('landing') }}'">
-                    Continue as Guest
+                    Lanjut sebagai Tamu
                 </x-auth.button>
             </form>
 
             <div class="text-sm text-[#7a5b44]">
-                Don’t have an account?
-                <a href="{{ route('register') }}" class="font-semibold text-[#7a4b24] hover:text-[#5a3a1f]">Sign Up</a>
+                Belum punya akun?
+                <a href="{{ route('register') }}" class="font-semibold text-[#7a4b24] hover:text-[#5a3a1f]">Daftar</a>
             </div>
         </div>
 
         <p class="text-xs text-[#9b7a64]">
-            By continuing, you agree to BROWSTIME’s
-            <a href="#" class="underline hover:text-[#7a4b24]">Terms of Service</a>
-            and
-            <a href="#" class="underline hover:text-[#7a4b24]">Privacy Policy</a>
+            Dengan melanjutkan, kamu menyetujui
+            <a href="#" class="underline hover:text-[#7a4b24]">Syarat Layanan</a>
+            dan
+            <a href="#" class="underline hover:text-[#7a4b24]">Kebijakan Privasi</a>
+            BROWSTIME.
         </p>
     </div>
 </x-auth.layout>

@@ -22,7 +22,7 @@
             <div class="text-3xl font-bold mb-4">Rp {{ $productDetail->price_formatted }}</div>
 
             <div class="space-y-3 mb-6">
-                <h3 class="font-semibold text-base">Description</h3>
+                <h3 class="font-semibold text-base">Deskripsi</h3>
                 <p class="text-sm leading-relaxed text-[#5a4135]">
                     {{ $productDetail->description }}
                 </p>
@@ -38,7 +38,7 @@
                             </svg>
                         </span>
                         <div class="leading-tight">
-                            <p class="text-xs text-[#6f4c3b]">Production Time</p>
+                            <p class="text-xs text-[#6f4c3b]">Waktu Produksi</p>
                             <p class="font-semibold">{{ $productDetail->delivery_time }}</p>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
                             </svg>
                         </span>
                         <div class="leading-tight">
-                            <p class="text-xs text-[#6f4c3b]">Available</p>
+                            <p class="text-xs text-[#6f4c3b]">Ketersediaan</p>
                             <p class="font-semibold">
                                 {{ $productDetail->available_units_text }}
                             </p>
@@ -75,7 +75,7 @@
                     class="{{ $productDetail->add_button_classes }}"
                     @disabled(! $productDetail->in_stock)>
                 <x-heroicon-o-shopping-cart class="w-5 h-5" />
-                Add to Cart
+                Tambah ke Keranjang
             </button>
 
         </div>

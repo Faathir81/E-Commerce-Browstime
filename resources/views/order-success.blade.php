@@ -12,9 +12,9 @@
                 </svg>
             </div>
             <div>
-                <h1 class="text-xl font-semibold text-[#3b241a]">Order Confirmed!</h1>
-                <p class="text-sm text-[#6f4c3b]">Thank you for your order, {{ $customerName }}.</p>
-                <p class="text-xs text-[#6f4c3b] mt-1">Order ID: <span class="font-semibold text-[#3b241a]">{{ $orderCode }}</span></p>
+                <h1 class="text-xl font-semibold text-[#3b241a]">Pesanan Dikonfirmasi!</h1>
+                <p class="text-sm text-[#6f4c3b]">Terima kasih atas pesananmu, {{ $customerName }}.</p>
+                <p class="text-xs text-[#6f4c3b] mt-1">ID Pesanan: <span class="font-semibold text-[#3b241a]">{{ $orderCode }}</span></p>
             </div>
             @if(session('status'))
                 <div class="rounded-xl bg-[#e8f7e5] text-[#2f7a3d] px-4 py-3 text-sm">
@@ -33,7 +33,7 @@
                 <div class="bg-white border border-[#f1e8df] rounded-3xl p-5 space-y-4 shadow-sm">
                     <div class="flex items-center gap-2 text-sm font-semibold text-[#3b241a]">
                         <span class="h-2 w-2 rounded-full bg-[#c79c68]"></span>
-                        <p>Payment Status</p>
+                        <p>Status Pembayaran</p>
                     </div>
                     <div class="rounded-2xl border border-[#f1e8df] bg-[#fff6ed] p-4 space-y-3">
                         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -45,7 +45,7 @@
                                     </svg>
                                 </span>
                                 <div>
-                                    <p class="text-[11px] uppercase tracking-wide text-[#9b7a64]">Payment Status</p>
+                                    <p class="text-[11px] uppercase tracking-wide text-[#9b7a64]">Status Pembayaran</p>
                                     <div class="flex items-center gap-2 text-sm font-semibold text-[#3b241a]">
                                         <span class="inline-flex items-center rounded-full {{ $paymentInfo['badge']['bg'] }} {{ $paymentInfo['badge']['text'] }} px-3 py-1 text-xs font-semibold">{{ $paymentInfo['badge']['label'] }}</span>
                                     </div>
@@ -86,10 +86,12 @@
                         @endif
                         @if(! empty($paymentInfo['proof_image_url']))
                             <div class="border-t border-[#f1e8df] pt-3 mt-2">
-                                <p class="text-[11px] uppercase tracking-wide text-[#9b7a64] mb-2">Payment Proof</p>
-                                <div class="rounded-2xl border border-[#f1e8df] bg-white p-4 flex items-center justify-center">
-                                    <img src="{{ $paymentInfo['proof_image_url'] }}" alt="Payment Proof" class="max-h-56 object-contain rounded-xl">
-                                </div>
+                                <p class="text-[11px] uppercase tracking-wide text-[#9b7a64] mb-2">Bukti Pembayaran</p>
+                                <livewire:payment.reupload-proof
+                                    :order-code="$orderCode"
+                                    :proof-url="$paymentInfo['proof_image_url']"
+                                    :can-reupload="$canReuploadProof"
+                                />
                             </div>
                         @endif
                         @if($canRetryPayment)
@@ -111,18 +113,18 @@
                                 <path d="M4 10H20" stroke="currentColor" stroke-width="1.5"/>
                             </svg>
                         </span>
-                        <p>Delivery Status</p>
+                        <p>Status Pengiriman</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-3 text-xs text-[#6f4c3b]">
                         <span class="inline-flex items-center rounded-full bg-[#f9e8c7] text-[#a36a0f] px-3 py-1 text-xs font-semibold whitespace-nowrap">
-                            Processing Order
+                            Pesanan Diproses
                         </span>
                         <span class="flex items-center gap-1">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M12 8V12L14 14" stroke="#6f4c3b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#6f4c3b" stroke-width="1.5"/>
                             </svg>
-                            <span class="whitespace-nowrap">Estimated Time of Arrival: {{ $deliveryInfo['eta_text'] }}</span>
+                            <span class="whitespace-nowrap">Estimasi Tiba: {{ $deliveryInfo['eta_text'] }}</span>
                         </span>
                     </div>
                     <div class="space-y-3 text-sm text-[#3b241a]">
@@ -150,10 +152,10 @@
                             </div>
                         @endforeach
                     </div>
-                    @if(! empty($deliveryInfo['tracking_number']))
-                        <div class="rounded-2xl border border-[#f1e8df] bg-[#fffaf5] p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                            <div class="flex items-start gap-3">
-                                <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white text-[#7a4b24] shadow-sm">
+                        @if(! empty($deliveryInfo['tracking_number']))
+                            <div class="rounded-2xl border border-[#f1e8df] bg-[#fffaf5] p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <div class="flex items-start gap-3">
+                                    <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white text-[#7a4b24] shadow-sm">
                                     <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="#794b24" stroke="#794b24">
                                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -167,17 +169,17 @@
                                     </svg>
                                 </span>
                                 <div>
-                                    <p class="text-sm font-semibold text-[#3b241a]">Receipt Information</p>
+                                    <p class="text-sm font-semibold text-[#3b241a]">Info Resi</p>
                                     <p class="text-xs text-[#6f4c3b]">
-                                        {{ $deliveryInfo['is_shipped'] ? 'Order is on the way.' : 'Tracking number is available.' }}
+                                        {{ $deliveryInfo['is_shipped'] ? 'Pesanan sedang dikirim.' : 'Nomor resi tersedia.' }}
                                     </p>
                                 </div>
                             </div>
                             <div class="text-sm text-[#3b241a] space-y-1 sm:text-right">
-                                <p class="font-semibold">Tracking: {{ $deliveryInfo['tracking_number'] }}</p>
+                                <p class="font-semibold">Resi: {{ $deliveryInfo['tracking_number'] }}</p>
                                 @if(! empty($deliveryInfo['tracking_url']))
                                     <a href="{{ $deliveryInfo['tracking_url'] }}" target="_blank" class="inline-flex items-center gap-1 text-xs sm:text-sm text-[#7a4b24] font-semibold hover:text-[#5f3817]">
-                                        Track here →
+                                        Lacak di sini →
                                     </a>
                                 @endif
                             </div>
@@ -199,12 +201,12 @@
                             Pesanan sudah selesai dikonfirmasi.
                         </div>
                     @endif
-                    <div class="pt-2 text-sm text-[#3b241a] space-y-1 border-t border-[#f1e8df] mt-2">
-                        <p class="font-semibold">Delivery Address:</p>
+                        <div class="pt-2 text-sm text-[#3b241a] space-y-1 border-t border-[#f1e8df] mt-2">
+                        <p class="font-semibold">Alamat Pengiriman:</p>
                         <div class="text-[#6f4c3b] space-y-1">
                             <p class="font-semibold text-[#3b241a]">{{ $customerName }}</p>
                             @if($fullAddress)
-                                <p class="text-xs text-[#9b7a64]">Complete: {{ $fullAddress }}</p>
+                                <p class="text-xs text-[#9b7a64]">Lengkap: {{ $fullAddress }}</p>
                             @endif
                         </div>
                     </div>
@@ -214,10 +216,10 @@
             <div class="bg-white border border-[#f1e8df] rounded-3xl p-5 space-y-4 shadow-sm w-full">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-semibold text-[#3b241a]">Order Summary</p>
-                        <p class="text-xs text-[#6f4c3b]">Item details and cost calculations</p>
+                        <p class="text-sm font-semibold text-[#3b241a]">Ringkasan Pesanan</p>
+                        <p class="text-xs text-[#6f4c3b]">Detail item dan perhitungan biaya</p>
                     </div>
-                    <span class="rounded-full bg-[#fff3e6] text-[#7a4b24] px-3 py-1 text-xs font-semibold">Total {{ $orderSummary['items_count'] }} items</span>
+                    <span class="rounded-full bg-[#fff3e6] text-[#7a4b24] px-3 py-1 text-xs font-semibold">Total {{ $orderSummary['items_count'] }} item</span>
                 </div>
 
                 <div class="rounded-2xl border border-[#f1e8df] bg-[#fffdfb] divide-y divide-[#f1e8df]">
@@ -225,7 +227,7 @@
                         <div class="grid grid-cols-[1fr,auto] gap-3 p-3">
                             <div>
                                 <p class="text-sm font-semibold text-[#3b241a]">{{ $detail['product_name'] }}</p>
-                                <p class="text-xs text-[#6f4c3b]">Price</p>
+                                <p class="text-xs text-[#6f4c3b]">Harga</p>
                             </div>
                             <div class="text-right text-sm text-[#3b241a]">
                                 <p>x{{ $detail['qty'] }}</p>
@@ -241,7 +243,7 @@
                         <span class="font-semibold text-[#3b241a]">Rp {{ $orderSummary['subtotal_display'] }}</span>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span class="text-[#6f4c3b]">Shipping Fee</span>
+                        <span class="text-[#6f4c3b]">Ongkos Kirim</span>
                         <span class="font-semibold text-[#3b241a]">Rp {{ $orderSummary['shipping_display'] }}</span>
                     </div>
                     <div class="flex items-center justify-between text-base font-semibold text-[#3b241a] pt-2 border-t border-[#f1e8df]">
@@ -258,11 +260,11 @@
                             <path d="M5 10.9999V19.9999H19V10.9999" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M9 15.9999H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        Back to Home
+                        Kembali ke Beranda
                     </a>
 
                     <div class="rounded-2xl bg-[#f8f1e7] px-3 py-2 text-xs text-[#6f4c3b] text-center">
-                        Order confirmation has been sent to {{ $confirmationEmail }}
+                        Konfirmasi pesanan telah dikirim ke {{ $confirmationEmail }}
                     </div>
                 </div>
             </div>

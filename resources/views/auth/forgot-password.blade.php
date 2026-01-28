@@ -5,7 +5,7 @@
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9.66675 12.6667L5.00008 8.00001L9.66675 3.33334" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <span>Back to Home</span>
+                <span>Kembali ke Beranda</span>
             </a>
         </div>
 
@@ -21,8 +21,8 @@
                 </svg>
             </div>
             <div class="space-y-1">
-                <h1 class="text-xl font-semibold text-[#3b241a]">Forgot Password</h1>
-                <p class="text-sm text-[#7a5b44]">Enter your email to receive the reset link.</p>
+                <h1 class="text-xl font-semibold text-[#3b241a]">Lupa Kata Sandi</h1>
+                <p class="text-sm text-[#7a5b44]">Masukkan email untuk menerima tautan reset.</p>
             </div>
 
             <x-auth-session-status class="mb-2 text-sm" :status="session('status')" />
@@ -35,18 +35,18 @@
                     name="email"
                     type="email"
                     label="Email"
-                    placeholder="you@email.com"
+                    placeholder="email@kamu.com"
                     :value="old('email')"
                     required
                     icon='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 7.5L12 13.5L3 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 7.5V16.5C21 17.3284 20.3284 18 19.5 18H4.5C3.67157 18 3 17.3284 3 16.5V7.5C3 6.67157 3.67157 6 4.5 6H19.5C20.3284 6 21 6.67157 21 7.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
                 />
 
-                <x-auth.button type="submit">Email Password Reset Link</x-auth.button>
+                <x-auth.button type="submit">Kirim Tautan Reset Kata Sandi</x-auth.button>
             </form>
 
             <div class="text-xs text-[#9b7a64] text-center">
-                Remembered your password?
-                <a href="{{ route('login') }}" class="font-semibold text-[#7a4b24] hover:text-[#5a3a1f]">Sign In</a>
+                Sudah ingat kata sandi?
+                <a href="{{ route('login') }}" class="font-semibold text-[#7a4b24] hover:text-[#5a3a1f]">Masuk</a>
             </div>
         </div>
     </div>
