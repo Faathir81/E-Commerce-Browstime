@@ -39,13 +39,13 @@ BROWSTIME adalah sistem e-commerce berbasis **Make-to-Order** untuk UMKM yang me
 - 🧾 Manajemen Pesanan
 - 📈 Laporan dengan Export Excel
 
-### Multi-Role
-| Role | Akses |
-|------|-------|
-| **Admin** | Full access |
-| **Produksi** | Pesanan, produksi, stok |
-| **Keuangan** | Verifikasi pembayaran, laporan |
-| **Pelanggan** | Customer frontend |
+### Multi-Role & Panel Access
+| Role | URL Panel | Akses |
+|------|-----------|-------|
+| **Admin** | `/admin` | Full access: Produk, Kategori, Bahan Baku, BOM, Satuan, Mutasi Stok, Pesanan, Akun Bank, Wilayah Pengiriman, Pengaturan Midtrans & QRIS |
+| **Produksi** | `/produksi` | Pesanan siap produksi (status: paid/produksi/dikirim/selesai), Mutasi Stok, Dashboard statistik |
+| **Keuangan** | `/keuangan` | Laporan Keuangan, Laporan Penjualan, Laporan Stok (dengan Export Excel), Dashboard statistik |
+| **Pelanggan** | `/` | Customer frontend (katalog, keranjang, checkout, tracking) |
 
 ---
 
@@ -213,9 +213,12 @@ php artisan queue:listen
 
 | URL | Deskripsi |
 |-----|-----------|
-| http://127.0.0.1:8000 | Frontend Customer |
-| http://127.0.0.1:8000/admin | Admin Panel |
-| http://127.0.0.1:8000/login | Login Customer |
+| http://127.0.0.1:8000 | Landing Page / Customer Frontend |
+| http://127.0.0.1:8000/login | **Login (semua role)** |
+| http://127.0.0.1:8000/register | Register Customer baru |
+| http://127.0.0.1:8000/admin | Panel Admin |
+| http://127.0.0.1:8000/produksi | Panel Staf Produksi |
+| http://127.0.0.1:8000/keuangan | Panel Bagian Keuangan |
 
 ---
 
@@ -259,21 +262,35 @@ php artisan migrate:fresh --seed
 
 ---
 
-## 🔑 Akun Demo
+## � Login & Akun Demo
 
-### Admin Panel (`/admin`)
+### Sistem Login
 
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@demo.com | password |
-| Produksi | produksi@demo.com | password |
-| Keuangan | keuangan@demo.com | password |
+> **Semua user login di satu tempat yang sama:** `/login`
 
-### Customer Frontend
+Setelah login berhasil, sistem akan **otomatis redirect** ke panel sesuai role:
 
-| Email | Password |
-|-------|----------|
-| pelanggan1@demo.com | password |
+```
+Login (/login) → Cek Role → Redirect ke Dashboard sesuai role
+```
+
+| Role | Redirect setelah Login |
+|------|------------------------|
+| Admin | `/admin` |
+| Produksi | `/produksi` |
+| Keuangan | `/keuangan` |
+| Pelanggan | `/` (Landing Page) |
+
+### Akun Demo
+
+Setelah menjalankan seeder, gunakan akun berikut untuk testing:
+
+| Role | Email | Password | Redirect ke |
+|------|-------|----------|-------------|
+| **Admin** | admin@demo.com | password | `/admin` |
+| **Produksi** | produksi@demo.com | password | `/produksi` |
+| **Keuangan** | keuangan@demo.com | password | `/keuangan` |
+| **Pelanggan** | pelanggan1@demo.com | password | `/` (landing) |
 
 ---
 
