@@ -319,4 +319,4 @@ php artisan storage:link
 
 ---
 
-**Developed with ❤️ for BROWSTIME**
+**Developed by Silver Capybara**
