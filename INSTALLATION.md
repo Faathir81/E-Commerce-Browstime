@@ -1,0 +1,305 @@
+# 🍪 BROWSTIME E-Commerce — Dokumentasi Instalasi
+
+> **Panduan lengkap untuk menjalankan aplikasi BROWSTIME dari awal hingga berjalan sempurna.**
+
+---
+
+## 📋 Daftar Isi
+
+- [Spesifikasi Aplikasi](#-spesifikasi-aplikasi)
+- [Tech Stack](#-tech-stack)
+- [Persyaratan Sistem](#-persyaratan-sistem)
+- [Instalasi](#-instalasi)
+- [Konfigurasi Environment](#-konfigurasi-environment)
+- [Menjalankan Aplikasi](#-menjalankan-aplikasi)
+- [Data Seeder](#-data-seeder)
+- [Akun Demo](#-akun-demo)
+- [Troubleshooting](#-troubleshooting)
+
+---
+
+## 📖 Spesifikasi Aplikasi
+
+BROWSTIME adalah sistem e-commerce berbasis **Make-to-Order** untuk UMKM yang memproduksi makanan sesuai pesanan. Fitur utama:
+
+### Customer Frontend
+- 🏪 Katalog Produk dengan filter kategori dan pencarian
+- 🛒 Keranjang Belanja (session-based)
+- 📦 Checkout (Guest & Member)
+- 💳 Multi Payment: Transfer Bank, QRIS Static, Midtrans
+- 🚚 Kalkulasi Ongkir via RajaOngkir API
+- 📍 Tracking Pesanan via kode booking
+- ⭐ Review & Rating
+
+### Admin Panel (Filament)
+- 📊 Dashboard Analytics
+- 📦 Manajemen Produk & Kategori
+- 📝 Bill of Material (BOM) / Resep
+- 📉 Mutasi Stok (pemakaian, masuk, rusak, penyesuaian)
+- 🧾 Manajemen Pesanan
+- 📈 Laporan dengan Export Excel
+
+### Multi-Role
+| Role | Akses |
+|------|-------|
+| **Admin** | Full access |
+| **Produksi** | Pesanan, produksi, stok |
+| **Keuangan** | Verifikasi pembayaran, laporan |
+| **Pelanggan** | Customer frontend |
+
+---
+
+## 🛠 Tech Stack
+
+| Kategori | Teknologi |
+|----------|-----------|
+| **Framework** | Laravel 12 |
+| **PHP Version** | 8.2+ |
+| **Admin Panel** | Filament 4.2 |
+| **Frontend** | Livewire 3.7, Alpine.js 3.4 |
+| **Styling** | TailwindCSS 4.0 |
+| **Build Tool** | Vite 7.0 |
+| **Database** | MySQL |
+| **Authentication** | Laravel Breeze |
+| **Authorization** | Spatie Laravel Permission 6.23 |
+| **Media Library** | Spatie Media Library (Filament Plugin) |
+| **Payment Gateway** | Midtrans PHP SDK 2.6 |
+| **Shipping API** | RajaOngkir API |
+| **Export** | Maatwebsite Excel 3.1 |
+
+---
+
+## 💻 Persyaratan Sistem
+
+- **PHP** >= 8.2 dengan extensions: BCMath, Ctype, cURL, DOM, Fileinfo, JSON, Mbstring, OpenSSL, PCRE, PDO, Tokenizer, XML, GD/Imagick
+- **Composer** >= 2.0
+- **Node.js** >= 18.x
+- **NPM** >= 9.x
+- **MySQL** >= 8.0 atau **MariaDB** >= 10.6
+- **Git**
+
+### Rekomendasi:
+- **Laragon** (Windows)
+- **Laravel Valet** (macOS)
+- **Docker** dengan Laravel Sail
+
+---
+
+## 🚀 Instalasi
+
+### 1️⃣ Clone Repository
+
+```bash
+git clone https://github.com/Faathir81/E-Commerce-Browstime.git
+cd E-Commerce-Browstime
+```
+
+### 2️⃣ Install Dependency PHP
+
+```bash
+composer install
+```
+
+### 3️⃣ Install Dependency JavaScript
+
+```bash
+npm install
+```
+
+### 4️⃣ Konfigurasi Environment
+
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+### 5️⃣ Setup Database
+
+Buat database MySQL:
+
+```sql
+CREATE DATABASE browstime_ecommerce;
+```
+
+Edit `.env`:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=browstime_ecommerce
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+### 6️⃣ Jalankan Migration & Seeder
+
+```bash
+php artisan migrate
+php artisan db:seed
+```
+
+Atau sekaligus:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+### 7️⃣ Setup Storage Link
+
+```bash
+php artisan storage:link
+```
+
+### 8️⃣ Build Asset Frontend
+
+```bash
+npm run build
+```
+
+---
+
+## ⚙️ Konfigurasi Environment
+
+Edit `.env` sesuai kebutuhan:
+
+```env
+# Aplikasi
+APP_NAME=BROWSTIME
+APP_URL=http://127.0.0.1:8000
+
+# Database
+DB_DATABASE=browstime_ecommerce
+DB_USERNAME=root
+DB_PASSWORD=
+
+# RajaOngkir API
+RAJAONGKIR_API_KEY=your_api_key_here
+RAJAONGKIR_BASE_URL=https://rajaongkir.komerce.id/api/v1
+RAJAONGKIR_ORIGIN_SUBDISTRICT_ID=763
+RAJAONGKIR_COURIER=jne
+```
+
+---
+
+## ▶️ Menjalankan Aplikasi
+
+### Quick Start (Rekomendasi)
+
+```bash
+composer dev
+```
+
+Ini menjalankan secara paralel:
+- PHP Server (`php artisan serve`)
+- Queue Worker (`php artisan queue:listen`)
+- Log Viewer (`php artisan pail`)
+- Vite Dev Server (`npm run dev`)
+
+### Manual
+
+```bash
+# Terminal 1
+php artisan serve
+
+# Terminal 2
+npm run dev
+
+# Terminal 3 (opsional)
+php artisan queue:listen
+```
+
+### Akses URL
+
+| URL | Deskripsi |
+|-----|-----------|
+| http://127.0.0.1:8000 | Frontend Customer |
+| http://127.0.0.1:8000/admin | Admin Panel |
+| http://127.0.0.1:8000/login | Login Customer |
+
+---
+
+## 🌱 Data Seeder
+
+### Menjalankan Semua Seeder
+
+```bash
+php artisan db:seed
+```
+
+### Seeder Spesifik
+
+```bash
+# Main seeder (roles, users, produk, bahan baku, BOM)
+php artisan db:seed --class=BrowstimeSeeder
+
+# Pesanan dummy untuk testing
+php artisan db:seed --class=DummyOrderSeeder
+```
+
+### Reset Database + Seeder
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+### Data yang Di-seed
+
+| Data | Jumlah | Keterangan |
+|------|--------|------------|
+| Roles | 4 | admin, produksi, keuangan, pelanggan |
+| Users | 4 | 1 per role |
+| Kategori | 2 | Cookies, Brownies |
+| Satuan | 3 | Gram, Pcs, Milligram |
+| Bahan Baku | 14 | Matcha, Butter, Telur, dll |
+| Produk | 10 | 8 Cookies + 2 Brownies |
+| BOM/Resep | 10 | 1 resep per produk |
+| Metode Pembayaran | 3 | Transfer, QRIS, Midtrans |
+| Akun Bank | 1 | BCA - Browstime |
+
+---
+
+## 🔑 Akun Demo
+
+### Admin Panel (`/admin`)
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@demo.com | password |
+| Produksi | produksi@demo.com | password |
+| Keuangan | keuangan@demo.com | password |
+
+### Customer Frontend
+
+| Email | Password |
+|-------|----------|
+| pelanggan1@demo.com | password |
+
+---
+
+## 🐛 Troubleshooting
+
+### Database tidak ditemukan
+```bash
+mysql -u root -e "CREATE DATABASE browstime_ecommerce"
+```
+
+### Class not found
+```bash
+composer dump-autoload
+php artisan optimize:clear
+```
+
+### Vite manifest not found
+```bash
+npm run build
+```
+
+### Storage images tidak tampil
+```bash
+php artisan storage:link
+```
+
+---
+
+**Developed with ❤️ for BROWSTIME**
