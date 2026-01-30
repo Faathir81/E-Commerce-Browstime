@@ -1,0 +1,315 @@
+@startuml BROWSTIME Class Diagram
+
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+top to bottom direction
+
+title Class Diagram - E-Commerce Make-to-Order BROWSTIME
+
+' ==========================================
+' BOUNDARY - CONTROLLERS
+' ==========================================
+class LandingController <<boundary>> {
+    + index()
+}
+
+class ProductController <<boundary>> {
+    + show()
+}
+
+class SearchController <<boundary>> {
+    + index()
+}
+
+class CartController <<boundary>> {
+    + index()
+    + add()
+    + update()
+    + remove()
+}
+
+class CheckoutWizard <<boundary>> {
+    + mount()
+    + nextStep()
+    + placeOrder()
+}
+
+class MidtransPaymentController <<boundary>> {
+    + store()
+    + finish()
+}
+
+class OrderSuccessController <<boundary>> {
+    + __invoke()
+}
+
+class UlasanController <<boundary>> {
+    + store()
+}
+
+' ==========================================
+' ENTITY - PRODUK & KATEGORI
+' ==========================================
+class Kategori <<entity>> {
+    - id
+    - nama
+    - slug
+    --
+    + produks()
+}
+
+class Produk <<entity>> {
+    - id
+    - nama
+    - slug
+    - kategori_id
+    - harga
+    - gambar
+    - is_active
+    --
+    + kategori()
+    + resep()
+    + hasSufficientStock()
+    + scopeActive()
+}
+
+' ==========================================
+' ENTITY - BOM & INVENTORY (CORE!)
+' ==========================================
+class Satuan <<entity>> {
+    - id
+    - nama
+    - symbol
+    --
+    + bahan()
+}
+
+class BahanBaku <<entity>> {
+    - id
+    - nama
+    - satuan_id
+    - stok_awal
+    - stok_minimum
+    --
+    + satuan()
+    + mutasi()
+    + getCurrentStokAttribute()
+}
+
+class ResepBOM <<entity>> {
+    - id
+    - produk_id
+    - deskripsi
+    --
+    + produk()
+    + detail()
+}
+
+class DetailResep <<entity>> {
+    - id
+    - resep_id
+    - bahan_id
+    - jumlah
+    --
+    + resep()
+    + bahan()
+}
+
+class MutasiStok <<entity>> {
+    - id
+    - bahan_id
+    - jenis_mutasi
+    - qty
+    - stok_awal
+    - stok_akhir
+    --
+    + bahan()
+}
+
+' ==========================================
+' ENTITY - WILAYAH & PENGIRIMAN
+' ==========================================
+class Provinsi <<entity>> {
+    - id
+    - nama
+    --
+    + kota()
+}
+
+class Kota <<entity>> {
+    - id
+    - nama
+    - provinsi_id
+    --
+    + provinsi()
+    + kecamatan()
+}
+
+class Kecamatan <<entity>> {
+    - id
+    - nama
+    - kota_id
+    --
+    + kota()
+}
+
+class WilayahPengiriman <<entity>> {
+    - id
+    - nama
+    - provinsi_id
+    - kota_id
+    - aktif
+    --
+    + kota()
+    + provinsi()
+}
+
+' ==========================================
+' ENTITY - PELANGGAN & ALAMAT
+' ==========================================
+class Pelanggan <<entity>> {
+    - id
+    - nama
+    - email
+    - no_hp
+    --
+    + alamatPengiriman()
+}
+
+class AlamatPengiriman <<entity>> {
+    - id
+    - pelanggan_id
+    - nama_penerima
+    - alamat_lengkap
+    --
+    + pelanggan()
+    + wilayah()
+}
+
+' ==========================================
+' ENTITY - PESANAN
+' ==========================================
+class Pesanan <<entity>> {
+    - id
+    - kode
+    - subtotal
+    - ongkir
+    - total
+    - status
+    --
+    + detailPesanans()
+    + pembayaran()
+    + wilayahPengiriman()
+}
+
+class DetailPesanan <<entity>> {
+    - id
+    - pesanan_id
+    - produk_id
+    - qty
+    - harga
+    --
+    + pesanan()
+    + produk()
+    + ulasan()
+}
+
+' ==========================================
+' ENTITY - PEMBAYARAN
+' ==========================================
+class Pembayaran <<entity>> {
+    - id
+    - pesanan_id
+    - metode
+    - jumlah
+    - status
+    --
+    + pesanan()
+    + akunBank()
+    + qrisSetting()
+}
+
+class AkunBank <<entity>> {
+    - id
+    - nama_bank
+    - nama_pemilik
+    - nomor_rekening
+}
+
+class QrisSetting <<entity>> {
+    - id
+    - gambar_qris
+}
+
+' ==========================================
+' ENTITY - ULASAN
+' ==========================================
+class Ulasan <<entity>> {
+    - id
+    - pelanggan_id
+    - detail_pesanan_id
+    - rating
+    - komentar
+    --
+    + pelanggan()
+    + detailPesanan()
+}
+
+' ==========================================
+' CONTROLLER -> MODEL
+' ==========================================
+LandingController ..> Produk
+ProductController ..> Produk
+SearchController ..> Produk
+CartController ..> Produk
+CheckoutWizard ..> Pesanan
+MidtransPaymentController ..> Pembayaran
+OrderSuccessController ..> Pesanan
+UlasanController ..> Ulasan
+
+' ==========================================
+' MODEL RELATIONSHIPS - Produk & Kategori
+' ==========================================
+Kategori "1" -- "*" Produk
+
+' ==========================================
+' MODEL RELATIONSHIPS - BOM & Inventory (CORE!)
+' ==========================================
+Produk "1" -- "0..1" ResepBOM
+ResepBOM "1" -- "*" DetailResep
+Satuan "1" -- "*" BahanBaku
+BahanBaku "1" -- "*" DetailResep
+BahanBaku "1" -- "*" MutasiStok
+
+' ==========================================
+' MODEL RELATIONSHIPS - Wilayah
+' ==========================================
+Provinsi "1" -- "*" Kota
+Kota "1" -- "*" Kecamatan
+Provinsi "1" -- "*" WilayahPengiriman
+Kota "1" -- "*" WilayahPengiriman
+
+' ==========================================
+' MODEL RELATIONSHIPS - Pelanggan & Pesanan
+' ==========================================
+Pelanggan "1" -- "*" AlamatPengiriman
+WilayahPengiriman "1" -- "*" AlamatPengiriman
+Pesanan "1" -- "*" DetailPesanan
+Pesanan "1" -- "1" Pembayaran
+WilayahPengiriman "1" -- "*" Pesanan
+Produk "1" -- "*" DetailPesanan
+
+' ==========================================
+' MODEL RELATIONSHIPS - Pembayaran & Ulasan
+' ==========================================
+AkunBank "1" -- "*" Pembayaran
+QrisSetting "1" -- "*" Pembayaran
+Pelanggan "1" -- "*" Ulasan
+DetailPesanan "1" -- "0..1" Ulasan
+
+@enduml
