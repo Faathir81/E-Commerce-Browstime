@@ -7,3 +7,4 @@ vendor/
 npm-debug.log
 yarn-error.log
 storage/logs/*
+public/storage
