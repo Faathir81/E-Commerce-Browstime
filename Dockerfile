@@ -1,4 +1,4 @@
-FROM dunglas/frankenphp:php8.3
+FROM dunglas/frankenphp:php8.3-alpine
 
 # Set default working directory (expected by FrankenPHP Caddy defaults)
 WORKDIR /app
@@ -13,15 +13,12 @@ RUN install-php-extensions \
     gd \
     intl \
     zip \
-    && apt-get update && apt-get install -y \
+    && apk add --no-cache \
     unzip \
     git \
     curl \
-    && rm -rf /var/lib/apt/lists/*
+    nodejs \
+    npm
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Install Node.js (Version 20)
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs
