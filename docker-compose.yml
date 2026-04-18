@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   app:
     build:
@@ -11,7 +10,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./:/app
+      - ./.env:/app/.env
       - ./docker/frankenphp/Caddyfile:/etc/frankenphp/Caddyfile
     networks:
       - laravel-network
