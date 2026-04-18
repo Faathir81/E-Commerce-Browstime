@@ -1,19 +1,18 @@
-version: '3.8'
+version: "3.8"
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    image: laravel-ecommerce
+    image: faathir81/browstime-app:latest
     container_name: laravel_app
     restart: unless-stopped
     working_dir: /app
     ports:
-      - "80:80"
-      - "443:443"
+      - "8080:80"
     volumes:
       - ./:/app
-      - ./docker/frankenphp/Caddyfile:/etc/caddy/Caddyfile
+      - ./docker/frankenphp/Caddyfile:/etc/frankenphp/Caddyfile
     networks:
       - laravel-network
     depends_on:

@@ -1,7 +1,8 @@
 {
     frankenphp
-    # Disable admin endpoint (not needed in production)
     admin off
+    # Matikan otomatis HTTPS biar nggak maksa redirect
+    auto_https off
 }
 
 :80 {

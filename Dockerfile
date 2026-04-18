@@ -22,3 +22,9 @@ RUN install-php-extensions \
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Bake the Caddyfile into the image so it works even without source code
+COPY docker/frankenphp/Caddyfile /etc/frankenphp/Caddyfile
+
+# Apply custom PHP configuration (increase execution time, memory limit, etc.)
+COPY docker/php/local.ini /usr/local/etc/php/conf.d/local.ini
