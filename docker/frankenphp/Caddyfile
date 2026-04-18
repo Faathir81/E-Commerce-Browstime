@@ -1,0 +1,17 @@
+{
+    frankenphp
+    admin off
+    # Matikan otomatis HTTPS biar nggak maksa redirect
+    auto_https off
+}
+
+:80 {
+    # Laravel's document root is the /public folder
+    root * /app/public
+
+    # Enable compression
+    encode zstd br gzip
+
+    # Serve PHP files via FrankenPHP
+    php_server
+}

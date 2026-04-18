@@ -1,0 +1,40 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: faathir81/browstime-app:latest
+    container_name: laravel_app
+    restart: unless-stopped
+    working_dir: /app
+    ports:
+      - "8080:80"
+    volumes:
+      - ./.env:/app/.env
+      - ./docker/frankenphp/Caddyfile:/etc/frankenphp/Caddyfile
+    networks:
+      - laravel-network
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: laravel_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-browstime_ecommerce}
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    volumes:
+      - dbdata:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - laravel-network
+
+networks:
+  laravel-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local

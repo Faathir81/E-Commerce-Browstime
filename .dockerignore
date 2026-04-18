@@ -1,0 +1,10 @@
+node_modules/
+vendor/
+.env
+.git
+.gitignore
+.vscode/
+npm-debug.log
+yarn-error.log
+storage/logs/*
+public/storage
