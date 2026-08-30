@@ -38,5 +38,7 @@ COPY docker/frankenphp/Caddyfile /etc/frankenphp/Caddyfile
 # Apply custom PHP configuration (increase execution time, memory limit, etc.)
 COPY docker/php/local.ini /usr/local/etc/php/conf.d/local.ini
 
-# Fix permissions
-RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
+# Symlink public/storage -> storage/app/public.
+# Dibuat manual (bukan `artisan storage:link`) karena artisan butuh bootstrap
+# Laravel sementara .env sengaja tidak ikut ke image (.dockerignore).
+RUN ln -s /app/storage/app/public /app/public/storage && chown -R www-data:www-data /app/storage /app/bootstrap/cache

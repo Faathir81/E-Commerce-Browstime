@@ -669,7 +669,7 @@ class CheckoutWizard extends Component
                 'name' => $product->nama,
                 'price' => (int) $product->harga,
                 'quantity' => (int) $qty,
-                'image_url' => $product->gambar ? asset('storage/' . $product->gambar) : 'https://via.placeholder.com/80x80',
+                'image_url' => $product->gambar ? asset('storage/' . $product->gambar) : asset('img/placeholder.svg'),
                 'production_time' => (int) ($product->waktu_produksi ?? 0),
                 'weight_gram' => (int) ($product->berat ?? 0),
             ];
@@ -858,7 +858,7 @@ class CheckoutWizard extends Component
                 'id' => $item['id'],
                 'name' => $item['name'],
                 'quantity' => $item['quantity'],
-                'image_url' => $item['image_url'] ?? 'https://via.placeholder.com/120x120',
+                'image_url' => $item['image_url'] ?? asset('img/placeholder.svg'),
                 'price_formatted' => formatRupiah($item['price'] ?? 0, false),
                 'subtotal_formatted' => formatRupiah($subtotal, false),
             ];

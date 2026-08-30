@@ -17,7 +17,7 @@ use App\Models\Kategori;
 use App\Models\Satuan;
 use App\Models\BahanBaku;
 use App\Models\Produk;
-use App\Models\ResepBom;
+use App\Models\ResepBOM;
 use App\Models\DetailResep;
 
 class BrowstimeSeeder extends Seeder
@@ -222,6 +222,7 @@ class BrowstimeSeeder extends Seeder
             'berat'         => 90,
             'deskripsi'     => 'Enjoy the rich, authentic taste. | 10 pcs',
             'waktu_produksi'=> 120,
+            'gambar'        => 'produk/01KEZSAAMNTBSSWCSXNWT6W5KT.jpg',
         ]);
 
         // 2. Classic Dark Chocolate – Jar (180g)
@@ -233,6 +234,7 @@ class BrowstimeSeeder extends Seeder
             'berat'         => 180,
             'deskripsi'     => 'Dive into the rich. | 18–20 pcs',
             'waktu_produksi'=> 120,
+            'gambar'        => 'produk/01KEZSCQH94WBKWQ3R6AJV3Z76.jpg',
         ]);
 
         // 3. Dark Chocolate Golden Raisin – Pouch (90g)
@@ -244,6 +246,7 @@ class BrowstimeSeeder extends Seeder
             'berat'         => 90,
             'deskripsi'     => 'Experience the natural sweetness. | 10 pcs',
             'waktu_produksi'=> 120,
+            'gambar'        => 'produk/01KEZSFEPNR9EMAGV06QJMV3BB.jpg',
         ]);
 
         // 4. Dark Chocolate Golden Raisin – Jar (180g)
@@ -255,6 +258,7 @@ class BrowstimeSeeder extends Seeder
             'berat'         => 180,
             'deskripsi'     => 'A delicious blend. | 18–20 pcs',
             'waktu_produksi'=> 120,
+            'gambar'        => 'produk/01KEZSHRD6JETWK2BS9XJP97B2.jpg',
         ]);
 
         // 5. Matcha Green Tea – Pouch (90g)
@@ -266,6 +270,7 @@ class BrowstimeSeeder extends Seeder
             'berat'         => 90,
             'deskripsi'     => 'Experience the calming. | 10 pcs',
             'waktu_produksi'=> 120,
+            'gambar'        => 'produk/01KEZSKM3CRMS0J59BTBGR6DN0.jpg',
         ]);
 
         // 6. Matcha Green Tea – Jar (180g)
@@ -277,6 +282,7 @@ class BrowstimeSeeder extends Seeder
             'berat'         => 180,
             'deskripsi'     => 'Savor the rich aroma. | 18–20 pcs',
             'waktu_produksi'=> 120,
+            'gambar'        => 'produk/01KEZSNVECTK35AM2TRERBRSB2.jpg',
         ]);
 
         // 7. Warm Ginger Spice – Pouch (90g)
@@ -288,6 +294,7 @@ class BrowstimeSeeder extends Seeder
             'berat'         => 90,
             'deskripsi'     => 'Enjoy the warm. | 10 pcs',
             'waktu_produksi'=> 120,
+            'gambar'        => 'produk/01KEZSRJDNK6AQP5EAAWDA0A0R.jpg',
         ]);
 
         // 8. Warm Ginger Spice – Jar (180g)
@@ -299,6 +306,7 @@ class BrowstimeSeeder extends Seeder
             'berat'         => 180,
             'deskripsi'     => 'Delight in the harmonious blend. | 18–20 pcs',
             'waktu_produksi'=> 120,
+            'gambar'        => 'produk/01KEZSTSX278NZ54GA950XTB95.jpg',
         ]);
 
         // 9. Brownies Crispy Chocolate – Ziplock (50g)
@@ -310,6 +318,7 @@ class BrowstimeSeeder extends Seeder
             'berat'         => 50,
             'deskripsi'     => 'Enjoy the irresistible crunch.',
             'waktu_produksi'=> 120,
+            'gambar'        => 'produk/01KEZSX9ZRRVSX80M7QZBXPGMX.jpg',
         ]);
 
         // 10. Brownies Crispy Matcha – Ziplock (50g)
@@ -321,6 +330,7 @@ class BrowstimeSeeder extends Seeder
             'berat'         => 50,
             'deskripsi'     => 'Delight in the fragrant.',
             'waktu_produksi'=> 120,
+            'gambar'        => 'produk/01KEZT0AS17EKDZ3E5X93XEQR0.jpg',
         ]);
 
         /* ============================
@@ -328,7 +338,7 @@ class BrowstimeSeeder extends Seeder
          * ============================*/
 
         // Classic Dark Chocolate – Pouch
-        $bomClassicPouch = ResepBom::create([
+        $bomClassicPouch = ResepBOM::create([
             'produk_id'  => $classicPouch->id,
             'deskripsi'  => 'Resep Classic Dark Chocolate – Pouch (90g)',
         ]);
@@ -397,7 +407,7 @@ class BrowstimeSeeder extends Seeder
         ]);
 
         // Classic Dark Chocolate – Jar (≈ 2x pouch)
-        $bomClassicJar = ResepBom::create([
+        $bomClassicJar = ResepBOM::create([
             'produk_id'  => $classicJar->id,
             'deskripsi'  => 'Resep Classic Dark Chocolate – Jar (180g)',
         ]);
@@ -466,7 +476,7 @@ class BrowstimeSeeder extends Seeder
         ]);
 
         // Dark Chocolate Golden Raisin – Pouch
-        $bomRaisinPouch = ResepBom::create([
+        $bomRaisinPouch = ResepBOM::create([
             'produk_id'  => $raisinPouch->id,
             'deskripsi'  => 'Resep Dark Chocolate Golden Raisin – Pouch (90g)',
         ]);
@@ -541,7 +551,7 @@ class BrowstimeSeeder extends Seeder
         ]);
 
         // Dark Chocolate Golden Raisin – Jar
-        $bomRaisinJar = ResepBom::create([
+        $bomRaisinJar = ResepBOM::create([
             'produk_id'  => $raisinJar->id,
             'deskripsi'  => 'Resep Dark Chocolate Golden Raisin – Jar (180g)',
         ]);
@@ -616,7 +626,7 @@ class BrowstimeSeeder extends Seeder
         ]);
 
         // Matcha Green Tea – Pouch
-        $bomMatchaPouch = ResepBom::create([
+        $bomMatchaPouch = ResepBOM::create([
             'produk_id'  => $matchaPouch->id,
             'deskripsi'  => 'Resep Matcha Green Tea – Pouch (90g)',
         ]);
@@ -685,7 +695,7 @@ class BrowstimeSeeder extends Seeder
         ]);
 
         // Matcha Green Tea – Jar
-        $bomMatchaJar = ResepBom::create([
+        $bomMatchaJar = ResepBOM::create([
             'produk_id'  => $matchaJar->id,
             'deskripsi'  => 'Resep Matcha Green Tea – Jar (180g)',
         ]);
@@ -754,7 +764,7 @@ class BrowstimeSeeder extends Seeder
         ]);
 
         // Warm Ginger Spice – Pouch
-        $bomGingerPouch = ResepBom::create([
+        $bomGingerPouch = ResepBOM::create([
             'produk_id'  => $gingerPouch->id,
             'deskripsi'  => 'Resep Warm Ginger Spice – Pouch (90g)',
         ]);
@@ -823,7 +833,7 @@ class BrowstimeSeeder extends Seeder
         ]);
 
         // Warm Ginger Spice – Jar
-        $bomGingerJar = ResepBom::create([
+        $bomGingerJar = ResepBOM::create([
             'produk_id'  => $gingerJar->id,
             'deskripsi'  => 'Resep Warm Ginger Spice – Jar (180g)',
         ]);
@@ -892,7 +902,7 @@ class BrowstimeSeeder extends Seeder
         ]);
 
         // Brownies Crispy Chocolate – Pouch
-        $bomBrowniesChoco = ResepBom::create([
+        $bomBrowniesChoco = ResepBOM::create([
             'produk_id'  => $browniesChocoPouch->id,
             'deskripsi'  => 'Resep Brownies Crispy Chocolate – Ziplock (50g)',
         ]);
@@ -967,7 +977,7 @@ class BrowstimeSeeder extends Seeder
         ]);
 
         // Brownies Crispy Matcha – Pouch
-        $bomBrowniesMatcha = ResepBom::create([
+        $bomBrowniesMatcha = ResepBOM::create([
             'produk_id'  => $browniesMatchaPouch->id,
             'deskripsi'  => 'Resep Brownies Crispy Matcha – Ziplock (50g)',
         ]);

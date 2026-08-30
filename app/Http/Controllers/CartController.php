@@ -22,7 +22,7 @@ class CartController extends Controller
                 'name'      => $product->nama,
                 'price'     => $product->harga,
                 'quantity'  => $qty,
-                'image_url' => $product->gambar ? asset('storage/' . $product->gambar) : 'https://via.placeholder.com/120x120',
+                'image_url' => $product->gambar ? asset('storage/' . $product->gambar) : asset('img/placeholder.svg'),
             ];
         })->values();
 
