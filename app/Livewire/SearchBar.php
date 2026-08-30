@@ -55,7 +55,7 @@ class SearchBar extends Component
                     'url' => route('product.show', $product->slug),
                     'image_url' => $product->gambar
                         ? Storage::disk('public')->url($product->gambar)
-                        : 'https://via.placeholder.com/60',
+                        : asset('img/placeholder.svg'),
                     'price' => formatCurrency($product->harga),
                     'category' => $product->kategori->nama ?? 'Produk',
                 ];

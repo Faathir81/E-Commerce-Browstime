@@ -24,7 +24,7 @@
                 @foreach ($cartItems as $item)
                     <div class="bg-white border border-[#f1e8df] rounded-xl shadow-sm px-4 py-3 flex gap-3 sm:gap-4 items-center" data-cart-item>
                         <div class="h-16 w-16 sm:h-20 sm:w-20 rounded-lg overflow-hidden bg-[#f9f2eb] border border-[#f1e8df] flex-shrink-0">
-                            <img src="{{ $item->image_url ?? 'https://via.placeholder.com/120x120' }}"
+                            <img src="{{ $item->image_url ?? asset('img/placeholder.svg') }}"
                                  alt="{{ $item->name }}"
                                  class="h-full w-full object-cover">
                         </div>

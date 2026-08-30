@@ -60,7 +60,7 @@ class ProductCardViewModel
             return $disk->url($product->gambar);
         }
 
-        return 'https://via.placeholder.com/400x300';
+        return asset('img/placeholder.svg');
     }
 
     protected static function buildAddButtonClasses(bool $inStock): string

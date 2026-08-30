@@ -1,40 +1,55 @@
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
     image: faathir81/browstime-app:latest
-    container_name: laravel_app
+    # Image dibuild manual di server (`docker build`), bukan ditarik dari
+    # registry. `never` bikin `up -d` gagal terang-terangan kalau image belum
+    # ada, bukan diam-diam narik versi lama dari Docker Hub.
+    pull_policy: never
+    container_name: browstime-app
     restart: unless-stopped
     working_dir: /app
+    mem_limit: 384M
+    cpus: 1.0
     ports:
-      - "8080:80"
+      - "127.0.0.1:3014:80"
     volumes:
       - ./.env:/app/.env
-      - ./docker/frankenphp/Caddyfile:/etc/frankenphp/Caddyfile
+      # Upload (gambar produk, bukti bayar) harus survive `pull && up -d`.
+      # Volume kosong diisi otomatis dari isi image saat pertama dibuat.
+      - storage_public:/app/storage/app/public
     networks:
       - laravel-network
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
-    image: mysql:8.0
-    container_name: laravel_db
+    image: mariadb:lts
+    container_name: browstime-db
     restart: unless-stopped
+    mem_limit: 256M
+    cpus: 1.0
+    command: --innodb-buffer-pool-size=64M
     environment:
       MYSQL_DATABASE: ${DB_DATABASE:-browstime_ecommerce}
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
     volumes:
       - dbdata:/var/lib/mysql
-    ports:
-      - "3306:3306"
     networks:
       - laravel-network
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
   laravel-network:
+    name: browstime-network
     driver: bridge
 
 volumes:
   dbdata:
+    driver: local
+  storage_public:
     driver: local

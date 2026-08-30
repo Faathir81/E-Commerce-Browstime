@@ -51,7 +51,7 @@ class ProductDetailViewModel
             return $disk->url($product->gambar);
         }
 
-        return 'https://via.placeholder.com/800x800';
+        return asset('img/placeholder.svg');
     }
 
     protected static function formatDeliveryTime(mixed $rawTime): string

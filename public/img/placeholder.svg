@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Gambar produk belum tersedia">
+  <rect width="400" height="400" fill="#f3e9dd"/>
+  <g fill="none" stroke="#c2a488" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="118" y="132" width="164" height="128" rx="12"/>
+    <path d="M118 222l44-40 34 30 30-26 56 46"/>
+  </g>
+  <circle cx="168" cy="174" r="13" fill="#c2a488"/>
+  <text x="200" y="308" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="26" fill="#a0866c">Browstime</text>
+</svg>
